@@ -18,7 +18,9 @@ Say ONE short sentence to Agent {listener.id}.
 """
 
 def interact(speaker, listener, context):
-    msg = llm_generate(build_prompt(speaker, listener, context))
+    a = build_prompt(speaker, listener, context)
+    print(a)
+    msg = llm_generate(a)
     speaker.remember(msg)
     listener.remember(msg)
     return msg
