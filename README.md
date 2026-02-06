@@ -1,1 +1,185 @@
-# ETHOX-simulator-engine
+# Agentic Society — Minimal Multi-Agent Simulation Engine
+
+This repository contains a **minimal, deterministic skeleton** for building and testing a multi-agent, LLM-driven social simulation.
+
+The goal is to model how opinions, reactions, and network structure emerge when agents:
+
+* have persistent memory,
+* interact pairwise over time,
+* experience an external “trigger” event,
+* and update beliefs under social influence.
+
+This is intentionally **barebones**. No graphs, no analytics, no visualizations yet. The focus is on **correct control flow, state mutation, and prompt wiring** before adding complexity.
+
+---
+
+## High-level idea
+
+We simulate a small society of agents (default: 20) where:
+
+1. Agents are initialized with slightly different personalities.
+2. They talk to each other in random pairwise conversations over multiple rounds.
+3. Each agent forms opinions (initially implicit, later explicit via ratings).
+4. A trigger event occurs (e.g. “price doubled”).
+5. Agents react individually.
+6. Agents continue interacting, potentially influencing each other.
+7. Post-event opinions are compared to pre-event opinions.
+
+Right now, this repo covers **steps 1–2** (warm-up interactions). Rating, triggers, and network construction come later.
+
+---
+
+## Repository structure
+
+```
+agentic-society/
+├── main.py                  # Entry point, runs the simulation loop
+├── config.py                # Global configuration (single source of truth)
+├── agents/
+│   └── agent.py             # Agent state (traits + memory)
+├── llm/
+│   └── client.py            # LLM stub (replace later with real API)
+├── simulation/
+│   ├── interaction.py       # Pairwise interaction logic + prompts
+│   └── init_network.py      # Agent initialization
+```
+
+Design principle: **each file has one job**. No file should “know” more than it needs to.
+
+---
+
+## Design principles (important)
+
+* **Stub before API**
+  The LLM client is intentionally fake at first. You must be able to run the entire loop without external dependencies.
+
+* **State over cleverness**
+  Agents only store traits and short memory. No hidden magic.
+
+* **Deterministic first**
+  Fixed seeds and hardcoded traits make debugging tractable.
+
+* **Validate flow before features**
+  If prompts, memory updates, or turn-taking are wrong, nothing else matters.
+
+---
+
+## How it works (current state)
+
+### Agents
+
+Each agent has:
+
+* an `id`
+* a small trait dictionary
+* a rolling memory buffer (last *k* messages)
+
+No decision logic lives in the agent class.
+
+### Interactions
+
+* Two agents are randomly sampled each round.
+* One speaks, one listens.
+* The speaker generates a single short message via the LLM client.
+* Both agents store the message in memory.
+
+### LLM client
+
+Currently a stub:
+
+```python
+def llm_generate(prompt):
+    print(prompt)
+    return "Hello, I think things are fine."
+```
+
+This lets you:
+
+* inspect prompts,
+* test memory updates,
+* validate the interaction loop.
+
+---
+
+## Running the simulation
+
+From the repo root:
+
+```bash
+python main.py
+```
+
+You should see:
+
+* prompts printed to stdout,
+* repeated interactions,
+* no errors.
+
+If this doesn’t work, **do not move on**.
+
+---
+
+## Sanity check (mandatory)
+
+After warm-up rounds, inspect agent memory:
+
+```python
+for a in agents[:3]:
+    print(a.id, a.memory)
+```
+
+If:
+
+* all agents have identical memories → something is wrong
+* memories are empty → interaction loop is broken
+* prompts look nonsensical → fix prompt construction first
+
+---
+
+## What is intentionally missing (for now)
+
+* Agent-to-agent ratings
+* Explicit opinion objects
+* Trigger events
+* Network / graph construction
+* Analytics or plotting
+* Optimization or performance work
+
+Adding these too early will hide bugs.
+
+---
+
+## Planned next steps
+
+Once the warm-up loop is solid:
+
+1. Add **rating prompts** (agent → agent, agent → event).
+2. Introduce a **trigger event** and capture initial reactions.
+3. Run **post-event interaction rounds**.
+4. Compare pre/post opinions.
+5. Construct a weighted network graph from ratings.
+
+Only after that:
+
+* visualization,
+* metrics,
+* calibration,
+* realism.
+
+---
+
+## Who this is for
+
+* Hackathon projects exploring agentic behavior
+* Research prototypes for social / economic simulations
+* People who care about **mechanics before narratives**
+
+This is not a product. It’s a **foundation**.
+
+---
+
+## Ground rules if you extend this
+
+* Don’t add features without a testable hypothesis.
+* Don’t touch visuals until behavior makes sense.
+* Don’t trust “interesting outputs” without control experiments.
