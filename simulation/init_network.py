@@ -1,9 +1,10 @@
 # simulation/init_network.py
 from agents.agent import Agent
+from config import NUM_AGENTS
 
 def init_agents():
     agents = []
-    for i in range(20):
+    for i in range(NUM_AGENTS):
         traits = {
             "openness": round(i / 20, 2),
             "agreeableness": round(1 - i / 20, 2)
