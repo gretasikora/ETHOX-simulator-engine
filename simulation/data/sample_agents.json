@@ -1,0 +1,5 @@
+[
+  {"id": 1, "archetype": "early_adopter", "traits": {"price_sensitivity": 0.3, "loyalty": 0.8, "social_influence": 0.9}, "state": {"sentiment": 0.7, "active": true}, "memory": [], "neighbors": [], "influence_score": 0.85},
+  {"id": 2, "archetype": "value_seeker", "traits": {"price_sensitivity": 0.9, "loyalty": 0.4, "social_influence": 0.3}, "state": {"sentiment": -0.2, "active": true}, "memory": [], "neighbors": [], "influence_score": 0.35},
+  {"id": 3, "archetype": "follower", "traits": {"price_sensitivity": 0.5, "loyalty": 0.6, "social_influence": 0.6}, "state": {"sentiment": 0.4, "active": true}, "memory": [], "neighbors": [], "influence_score": 0.5}
+]
