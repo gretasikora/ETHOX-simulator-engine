@@ -21,10 +21,44 @@ CLUSTER_COLORS = [
 
 def _get_layout(network: "SocialNetwork", layout: str = "spring") -> dict[Any, tuple[float, float]]:
     G = network.graph
+    n = G.number_of_nodes()
+    k = 3.0 if n <= 50 else (4.0 if n <= 150 else 5.0)
     if layout == "spring":
-        pos = nx.spring_layout(G, k=2.5, iterations=80, seed=42)
+        pos = nx.spring_layout(G, k=k, iterations=100, seed=42)
     else:
-        pos = nx.spring_layout(G, k=2.5, iterations=80, seed=42)
+        pos = nx.spring_layout(G, k=k, iterations=100, seed=42)
+    return pos
+
+
+def _get_layout_by_cluster(network: "SocialNetwork") -> dict[Any, tuple[float, float]]:
+    """Place each cluster in its own region (circle) so segments are visually distinct."""
+    G = network.graph
+    nodes = list(G.nodes())
+    cluster_of = {n: G.nodes[n].get("cluster", -1) for n in nodes}
+    cids = sorted(set(c for c in cluster_of.values() if c is not None and c >= 0))
+    if not cids:
+        return _get_layout(network, "spring")
+    # Center each cluster on a circle; layout nodes within each cluster
+    radius = 2.2
+    pos = {}
+    for i, c in enumerate(cids):
+        members = [n for n in nodes if cluster_of[n] == c]
+        if not members:
+            continue
+        sub = G.subgraph(members)
+        local = nx.spring_layout(sub, k=0.8, iterations=80, seed=42)
+        angle = 2 * np.pi * i / max(1, len(cids))
+        cx, cy = radius * np.cos(angle), radius * np.sin(angle)
+        scale = 0.5
+        for n in members:
+            pos[n] = (cx + local[n][0] * scale, cy + local[n][1] * scale)
+    # Unclustered nodes in center
+    unclustered = [n for n in nodes if cluster_of[n] not in cids]
+    if unclustered:
+        sub = G.subgraph(unclustered)
+        local = nx.spring_layout(sub, k=0.5, iterations=50, seed=42)
+        for n in unclustered:
+            pos[n] = (local[n][0] * 0.3, local[n][1] * 0.3)
     return pos
 
 
@@ -33,73 +67,138 @@ def plot_network(
     color_by: str = "cluster",
     size_by: str = "degree",
     layout: str = "spring",
+    min_edge_weight: float = 0.0,
+    layout_by_cluster: bool = True,
 ) -> "Any":
-    """Interactive Plotly scatter of the network. Returns plotly.graph_objects.Figure."""
+    """
+    Interactive Plotly scatter of the network. Returns plotly.graph_objects.Figure.
+
+    layout_by_cluster: if True (default), place each cluster in its own region so
+    segments are clearly visible. min_edge_weight: only draw edges >= this.
+    """
     import plotly.graph_objects as go
 
     G = network.graph
-    pos = _get_layout(network, layout)
+    n = G.number_of_nodes()
+    pos = _get_layout_by_cluster(network) if layout_by_cluster else _get_layout(network, layout)
     nodes = list(G.nodes())
     x = [pos[n][0] for n in nodes]
     y = [pos[n][1] for n in nodes]
     degrees = [G.degree(n) for n in nodes]
-    sizes = [10 + d * 2.5 if size_by == "degree" else 12 for d in degrees]
+    sizes = [min(18, 5 + d * 0.35) for d in degrees] if size_by == "degree" else [9] * len(nodes)
 
+    profiles = getattr(network, "_cluster_profiles", None) or {}
     if color_by == "cluster":
         clusters = [G.nodes[n].get("cluster", -1) for n in nodes]
         uniq = sorted(set(c for c in clusters if c is not None and c >= 0))
         color_idx = [uniq.index(c) if c in uniq else len(uniq) for c in clusters]
         colors = [CLUSTER_COLORS[i % len(CLUSTER_COLORS)] for i in color_idx]
+        legend_labels = {c: profiles.get(c, {}).get("label", f"Segment {c}") for c in uniq}
     else:
         colors = [float(G.degree(n)) for n in nodes]
-        # will use continuous color scale
+        legend_labels = {}
 
     traits_str = []
-    for n in nodes:
-        data = G.nodes[n]
+    for node in nodes:
+        data = G.nodes[node]
         tr = data.get("traits") or {}
         top3 = sorted(tr.items(), key=lambda x: -x[1])[:3]
         traits_str.append(", ".join(f"{k}: {v:.2f}" for k, v in top3))
     hover = [
-        f"ID: {n}<br>Cluster: {G.nodes[n].get('cluster', '—')}<br>Degree: {G.degree(n)}<br>Traits: {t}"
+        f"<b>Agent {n}</b><br>Segment: {G.nodes[n].get('cluster', '—')}<br>Connections: {G.degree(n)}<br>Top traits: {t}"
         for n, t in zip(nodes, traits_str)
     ]
 
     edge_x, edge_y = [], []
     for u, v in G.edges():
         w = G.edges[u, v].get("weight", 0.5)
+        if w < min_edge_weight:
+            continue
         edge_x.extend([pos[u][0], pos[v][0], None])
         edge_y.extend([pos[u][1], pos[v][1], None])
     edge_trace = go.Scatter(
         x=edge_x, y=edge_y,
-        line=dict(width=0.8, color="rgba(150,150,150,0.4)"),
+        line=dict(width=1.0, color="rgba(100,100,100,0.5)"),
         hoverinfo="none",
         mode="lines",
     )
-    # Make edge opacity proportional to weight (per edge we'd need segments; simplify with single trace)
-    node_trace = go.Scatter(
-        x=x, y=y,
-        mode="markers+text",
-        text=[str(n) for n in nodes],
-        textposition="top center",
-        textfont=dict(size=8),
-        marker=dict(
-            size=sizes,
-            color=colors if color_by != "degree" else None,
-            colorscale="Viridis" if color_by == "degree" else None,
-            line=dict(width=0.5, color="gray"),
-        ),
-        hovertext=hover,
-        hoverinfo="text",
-    )
+
+    # For large graphs, don't draw node IDs on the plot (IDs only on hover)
+    show_text = n <= 60
+    if show_text:
+        node_trace = go.Scatter(
+            x=x, y=y,
+            mode="markers+text",
+            text=[str(n) for n in nodes],
+            textposition="top center",
+            textfont=dict(size=7),
+            marker=dict(
+                size=sizes,
+                color=colors if color_by != "degree" else None,
+                colorscale="Viridis" if color_by == "degree" else None,
+                line=dict(width=0.5, color="gray"),
+            ),
+            hovertext=hover,
+            hoverinfo="text",
+            name="",
+        )
+    else:
+        node_trace = go.Scatter(
+            x=x, y=y,
+            mode="markers",
+            marker=dict(
+                size=sizes,
+                color=colors if color_by != "degree" else None,
+                colorscale="Viridis" if color_by == "degree" else None,
+                line=dict(width=0.5, color="gray"),
+            ),
+            hovertext=hover,
+            hoverinfo="text",
+            name="",
+        )
+
     fig = go.Figure(data=[edge_trace, node_trace])
+
+    # Legend: one trace per cluster with segment label (for client readability)
+    if color_by == "cluster" and legend_labels and uniq:
+        for c in uniq:
+            label = legend_labels.get(c, f"Segment {c}")
+            fig.add_trace(go.Scatter(
+                x=[None], y=[None],
+                mode="markers",
+                marker=dict(size=12, color=CLUSTER_COLORS[c % len(CLUSTER_COLORS)], symbol="circle"),
+                name=label,
+                legendgroup=str(c),
+            ))
+
+    num_edges_drawn = len(edge_x) // 3  # each edge adds 3 points (x, x, None)
+    subtitle = f"{n} agents · {len(legend_labels) or 1} segments · {G.number_of_edges()} total links"
+    if min_edge_weight > 0:
+        subtitle += f" (showing links with strength ≥ {min_edge_weight})"
+
     fig.update_layout(
-        title="Customer Society Network",
-        showlegend=False,
+        title=dict(text="Customer Society Network", font=dict(size=18)),
+        annotations=[dict(
+            text=subtitle,
+            xref="paper", yref="paper",
+            x=0.5, y=1.02,
+            xanchor="center", yanchor="bottom",
+            showarrow=False,
+            font=dict(size=11, color="gray"),
+        )],
+        showlegend=bool(legend_labels),
+        legend=dict(
+            title="Segment",
+            orientation="v",
+            yanchor="top", y=1,
+            xanchor="left", x=1.02,
+            font=dict(size=10),
+        ),
         xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
         yaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
         plot_bgcolor="white",
-        height=650,
+        height=700,
+        margin=dict(r=280),
     )
     return fig
 
