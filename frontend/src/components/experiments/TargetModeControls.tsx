@@ -99,7 +99,7 @@ export function TargetModeControls({
 
   return (
     <div className="space-y-3">
-      <label className="block text-xs font-medium uppercase tracking-wider text-gray-400">
+      <label className="block text-xs font-medium uppercase tracking-wider text-aurora-text2">
         Target audience
       </label>
       <div className="flex flex-wrap gap-2">
@@ -111,7 +111,7 @@ export function TargetModeControls({
             className={`rounded-lg border px-3 py-2 text-sm ${
               targetMode === value
                 ? "border-accent bg-accent/20 text-white"
-                : "border-dark-700 bg-dark-800 text-gray-400 hover:border-dark-600 hover:text-gray-200"
+                : "border-aurora-border bg-aurora-surface1 text-aurora-text2 hover:border-aurora-border-strong hover:text-aurora-text0"
             }`}
           >
             {label}
@@ -121,12 +121,12 @@ export function TargetModeControls({
 
       {/* Mode-specific controls */}
       {targetMode === "all" && (
-        <p className="text-sm text-gray-500">Targets: {nodes.length} agents</p>
+        <p className="text-sm text-aurora-text2">Targets: {nodes.length} agents</p>
       )}
 
       {targetMode === "clusters" && (
         <div className="space-y-2">
-          <p className="text-xs text-gray-500">Select clusters</p>
+          <p className="text-xs text-aurora-text2">Select clusters</p>
           <div className="flex flex-wrap gap-2">
             {clusterList.map((c) => {
               const selected = (params.clusters ?? []).includes(c.id);
@@ -141,7 +141,7 @@ export function TargetModeControls({
                     onExperimentUpdate({ targetParams: { ...params, clusters: next } });
                   }}
                   className={`flex items-center gap-2 rounded-lg border px-2 py-1.5 text-sm ${
-                    selected ? "border-accent bg-accent/20" : "border-dark-700 bg-dark-800"
+                    selected ? "border-aurora-accent1 bg-aurora-accent1/20" : "border-aurora-border bg-aurora-surface1"
                   }`}
                 >
                   <span
@@ -153,14 +153,14 @@ export function TargetModeControls({
               );
             })}
           </div>
-          <p className="text-sm text-gray-500">Targets: {clusterTargetCount} agents</p>
+          <p className="text-sm text-aurora-text2">Targets: {clusterTargetCount} agents</p>
         </div>
       )}
 
       {targetMode === "top_influencers" && (
         <div className="space-y-2">
           <div>
-            <label className="text-xs text-gray-500">Metric</label>
+            <label className="text-xs text-aurora-text2">Metric</label>
             <select
               value={params.metric ?? "social_influence"}
               onChange={(e) =>
@@ -171,7 +171,7 @@ export function TargetModeControls({
                   },
                 })
               }
-              className="mt-1 w-full rounded border border-dark-700 bg-dark-800 px-2 py-1.5 text-sm text-gray-200"
+              className="mt-1 w-full rounded border border-aurora-border bg-aurora-surface1 px-2 py-1.5 text-sm text-aurora-text0"
             >
               <option value="social_influence">Social influence (trait)</option>
               <option value="degree_centrality">Degree centrality</option>
@@ -179,7 +179,7 @@ export function TargetModeControls({
             </select>
           </div>
           <div>
-            <label className="text-xs text-gray-500">Top N (1–50)</label>
+            <label className="text-xs text-aurora-text2">Top N (1–50)</label>
             <input
               type="number"
               min={1}
@@ -193,10 +193,10 @@ export function TargetModeControls({
                   },
                 })
               }
-              className="mt-1 w-full rounded border border-dark-700 bg-dark-800 px-2 py-1.5 text-sm text-gray-200"
+              className="mt-1 w-full rounded border border-aurora-border bg-aurora-surface1 px-2 py-1.5 text-sm text-aurora-text0"
             />
           </div>
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-aurora-text2">
             Preview: {topInfluencerPreview.slice(0, 5).join(", ")}
             {topInfluencerPreview.length > 5 ? "…" : ""}
           </p>
@@ -206,7 +206,7 @@ export function TargetModeControls({
       {targetMode === "bridge_nodes" && (
         <div className="space-y-2">
           <div>
-            <label className="text-xs text-gray-500">Method</label>
+            <label className="text-xs text-aurora-text2">Method</label>
             <select
               value={params.bridgeMethod ?? "betweenness"}
               onChange={(e) =>
@@ -217,14 +217,14 @@ export function TargetModeControls({
                   },
                 })
               }
-              className="mt-1 w-full rounded border border-dark-700 bg-dark-800 px-2 py-1.5 text-sm text-gray-200"
+              className="mt-1 w-full rounded border border-aurora-border bg-aurora-surface1 px-2 py-1.5 text-sm text-aurora-text0"
             >
               <option value="betweenness">Betweenness centrality</option>
               <option value="cross_cluster_edges">Cross-cluster edges</option>
             </select>
           </div>
           <div>
-            <label className="text-xs text-gray-500">Top N (1–50)</label>
+            <label className="text-xs text-aurora-text2">Top N (1–50)</label>
             <input
               type="number"
               min={1}
@@ -238,10 +238,10 @@ export function TargetModeControls({
                   },
                 })
               }
-              className="mt-1 w-full rounded border border-dark-700 bg-dark-800 px-2 py-1.5 text-sm text-gray-200"
+              className="mt-1 w-full rounded border border-aurora-border bg-aurora-surface1 px-2 py-1.5 text-sm text-aurora-text0"
             />
           </div>
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-aurora-text2">
             Preview: {topBridgePreview.slice(0, 5).join(", ")}
             {topBridgePreview.length > 5 ? "…" : ""}
           </p>
@@ -250,34 +250,34 @@ export function TargetModeControls({
 
       {targetMode === "manual" && (
         <div className="space-y-2">
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-aurora-text2">
             Click nodes in the graph to add or remove them from the target list.
           </p>
           <div className="flex flex-wrap items-center gap-2">
             <button
               type="button"
               onClick={onClearManual}
-              className="rounded border border-dark-700 px-2 py-1 text-xs text-gray-400 hover:bg-dark-700"
+              className="rounded border border-aurora-border px-2 py-1 text-xs text-aurora-text2 hover:bg-aurora-surface2"
             >
               Clear selection
             </button>
           </div>
-          <div className="max-h-32 overflow-y-auto rounded border border-dark-700 p-2">
+          <div className="max-h-32 overflow-y-auto rounded border border-aurora-border p-2">
             {manualTargetIds.length === 0 ? (
-              <p className="text-xs text-gray-500">No agents selected</p>
+              <p className="text-xs text-aurora-text2">No agents selected</p>
             ) : (
               <div className="flex flex-wrap gap-1">
                 {manualTargetIds.map((id) => (
                   <span
                     key={id}
-                    className="inline-flex items-center gap-1 rounded bg-dark-700 px-2 py-0.5 text-xs"
+                    className="inline-flex items-center gap-1 rounded bg-aurora-surface2 px-2 py-0.5 text-xs"
                   >
                     {id}
                     {onToggleManual && (
                       <button
                         type="button"
                         onClick={() => onToggleManual(id)}
-                        className="text-gray-400 hover:text-red-400"
+                        className="text-aurora-text2 hover:text-aurora-danger"
                         title="Remove from selection"
                       >
                         ×
@@ -287,7 +287,7 @@ export function TargetModeControls({
                       <button
                         type="button"
                         onClick={() => onSelectAgent(id)}
-                        className="text-gray-400 hover:text-white"
+                        className="text-aurora-text2 hover:text-aurora-text0"
                         title="View profile"
                       >
                         ↗
@@ -298,12 +298,12 @@ export function TargetModeControls({
               </div>
             )}
           </div>
-          <p className="text-sm text-gray-500">Targets: {manualTargetIds.length} agents</p>
+          <p className="text-sm text-aurora-text2">Targets: {manualTargetIds.length} agents</p>
         </div>
       )}
 
       {targetMode !== "all" && targetMode !== "manual" && targetMode !== "clusters" && (
-        <p className="text-sm text-gray-500">Targets: {previewTargets.length} agents</p>
+        <p className="text-sm text-aurora-text2">Targets: {previewTargets.length} agents</p>
       )}
     </div>
   );

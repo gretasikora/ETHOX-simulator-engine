@@ -20,10 +20,10 @@ export default function App() {
 
   if (loading) {
     return (
-      <div className="flex h-screen w-screen items-center justify-center bg-dark-900">
+      <div className="flex h-screen w-screen items-center justify-center bg-aurora-bg0">
         <div className="flex flex-col items-center gap-4">
-          <div className="h-12 w-12 animate-spin rounded-full border-4 border-accent border-t-transparent" />
-          <p className="text-gray-400">Loading graph...</p>
+          <div className="h-12 w-12 animate-spin rounded-full border-4 border-aurora-accent1 border-t-transparent" />
+          <p className="text-aurora-text1">Loading graph...</p>
         </div>
       </div>
     );
@@ -31,16 +31,16 @@ export default function App() {
 
   if (error) {
     return (
-      <div className="flex h-screen w-screen items-center justify-center bg-dark-900">
-        <div className="max-w-md rounded-lg border border-dark-700 bg-dark-800 p-6 text-center">
-          <p className="text-red-400">{error}</p>
-          <p className="mt-2 text-sm text-gray-500">
+      <div className="flex h-screen w-screen items-center justify-center bg-aurora-bg0">
+        <div className="surface-elevated max-w-md rounded-lg p-6 text-center">
+          <p className="text-aurora-danger">{error}</p>
+          <p className="mt-2 text-sm text-aurora-text2">
             Ensure the backend is running at http://127.0.0.1:8000
           </p>
           <button
             type="button"
             onClick={() => loadGraph()}
-            className="mt-4 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white hover:bg-accent-light"
+            className="aurora-gradient mt-4 rounded-lg px-4 py-2 text-sm font-medium text-aurora-bg0 shadow-aurora-glow-sm"
           >
             Retry
           </button>

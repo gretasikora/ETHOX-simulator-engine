@@ -13,7 +13,8 @@ import {
   applyVisualAttributes,
   type GraphUIState,
 } from "../utils/graph";
-import { CLUSTER_COLORS, hexToRgba, getOpinionColor } from "../utils/color";
+import { hexToRgba, getOpinionColor } from "../utils/color";
+import { NodeSquareProgram, NodeTriangleProgram, NodeDiamondProgram } from "../sigma-shapes/NodeShapePrograms";
 import { edgeKey } from "../utils/graphAlgorithms";
 
 interface GraphCanvasProps {
@@ -35,10 +36,13 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
   const setSelectedNode = useUIStore((s) => s.setSelectedNode);
   const setHoveredNode = useUIStore((s) => s.setHoveredNode);
   const setVisibleNodeIds = useUIStore((s) => s.setVisibleNodeIds);
+  const visibleNodeIds = useUIStore((s) => s.visibleNodeIds);
   const colorBy = useUIStore((s) => s.colorBy);
   const sizeBy = useUIStore((s) => s.sizeBy);
   const selectedTrait = useUIStore((s) => s.selectedTrait);
   const showLabels = useUIStore((s) => s.showLabels);
+  const showAgeEncoding = useUIStore((s) => s.showAgeEncoding);
+  const showGenderEncoding = useUIStore((s) => s.showGenderEncoding);
   const filters = useUIStore((s) => s.filters);
   const exploreMode = useUIStore((s) => s.exploreMode);
   const pathFrom = useUIStore((s) => s.pathFrom);
@@ -124,6 +128,8 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
       selectedTrait: selectedTrait || traitKeys[0] || "",
       traitKeys,
       filters,
+      showAgeEncoding,
+      showGenderEncoding,
     };
     const graph = buildGraphology(nodes, edges, uiState);
 
@@ -151,19 +157,25 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
       labelFont: string;
       labelSize: number;
       labelRenderedSizeThreshold: number;
+      nodeProgramClasses: Record<string, unknown>;
       nodeReducer: (node: string, data: Record<string, unknown>) => Record<string, unknown>;
       edgeReducer: (edge: string, data: Record<string, unknown>) => Record<string, unknown>;
     }> = {
       renderEdgeLabels: false,
       defaultEdgeType: "line",
-      defaultNodeColor: "#6366f1",
-      defaultEdgeColor: "rgba(255,255,255,0.06)",
+      defaultNodeColor: "#2AFADF",
+      defaultEdgeColor: "rgba(234,242,242,0.18)",
       minCameraRatio: 0.08,
       maxCameraRatio: 3,
-      labelColor: { color: "#e5e7eb" },
+      labelColor: { color: "#EAF2F2" },
       labelFont: "Inter, system-ui, sans-serif",
       labelSize: 12,
       labelRenderedSizeThreshold: showLabels ? 0 : 999,
+      nodeProgramClasses: {
+        square: NodeSquareProgram,
+        triangle: NodeTriangleProgram,
+        diamond: NodeDiamondProgram,
+      },
       nodeReducer: (node, data) => {
         const attrs = graph.getNodeAttributes(node);
         if (attrs.hidden) return { ...data, hidden: true };
@@ -262,22 +274,23 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
           const [source, target] = graph.extremities(edge);
           const key = edgeKey(source, target);
           const inHighlight = edgeKeysSet.includes(key);
-          if (inHighlight) return { ...data, color: "rgba(255,255,255,0.7)" };
-          return { ...data, color: "rgba(255,255,255,0.03)" };
+          if (inHighlight) return { ...data, color: "rgba(38,198,255,0.55)" };
+          return { ...data, color: "rgba(234,242,242,0.06)" };
         }
         const [source, target] = graph.extremities(edge);
         const focus = selectedRef.current || hoveredRef.current;
         const connected =
           focus && (source === focus || target === focus);
         if (connected)
-          return { ...data, color: "rgba(255,255,255,0.4)" };
+          return { ...data, color: "rgba(38,198,255,0.55)" };
         if (focus)
-          return { ...data, color: "rgba(255,255,255,0.02)" };
+          return { ...data, color: "rgba(234,242,242,0.06)" };
         return data;
       },
     };
 
-    const sigma = new Sigma(graph, containerRef.current, settings);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const sigma = new Sigma(graph, containerRef.current, settings as any);
     sigmaRef.current = sigma;
 
     sigma.on("enterNode", ({ node }) => setHoveredNode(node));
@@ -315,7 +328,7 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
   }, [nodes, edges]);
 
   const effectiveColorBy =
-    playbackAgentState && playbackColorMode === "cluster" ? "cluster" : colorBy;
+    playbackAgentState && playbackColorMode === "cluster" ? "age" : colorBy;
 
   useEffect(() => {
     const graph = graphInstanceRef.current;
@@ -329,14 +342,17 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
       sizeBy,
       selectedTrait || traitKeys[0] || "",
       traitKeys,
-      CLUSTER_COLORS
+      [],
+      showAgeEncoding,
+      showGenderEncoding
     );
+    sigma.refresh();
     const visibleIds: string[] = [];
     graph.forEachNode((node) => {
       if (!graph.getNodeAttribute(node, "hidden")) visibleIds.push(node);
     });
     setVisibleNodeIds(visibleIds);
-  }, [effectiveColorBy, sizeBy, selectedTrait, traitKeys, filters, setVisibleNodeIds]);
+  }, [effectiveColorBy, sizeBy, selectedTrait, traitKeys, filters, showAgeEncoding, showGenderEncoding, setVisibleNodeIds]);
 
   useEffect(() => {
     const sigma = sigmaRef.current;
@@ -356,13 +372,34 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
   // made the rest of the network disappear. The selected node is still highlighted
   // by the node reducer; the drawer shows details without changing the view.
 
+  const showEmptyState = nodes.length > 0 && visibleNodeIds.length === 0;
+
   return (
-    <div className="absolute inset-0">
-      <div
-        ref={containerRef}
-        className="absolute inset-0 bg-dark-900"
-        style={{ width: "100%", height: "100%" }}
-      />
+    <div className="surface-card absolute inset-0 flex flex-col overflow-hidden rounded-2xl">
+      <div className="relative min-h-0 flex-1">
+        <div
+          ref={containerRef}
+          className="absolute inset-0"
+          style={{
+            width: "100%",
+            height: "100%",
+            background: "radial-gradient(ellipse 80% 80% at 50% 50%, rgba(10, 29, 36, 0.4) 0%, #050B10 70%)",
+          }}
+        />
+      </div>
+      {showEmptyState && (
+        <div className="absolute inset-0 flex items-center justify-center bg-aurora-bg0/90 backdrop-blur-[1px]">
+          <div className="surface-elevated flex flex-col items-center gap-3 rounded-2xl px-8 py-6 text-center">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-aurora-surface2 text-aurora-text2">
+              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+              </svg>
+            </div>
+            <p className="text-sm font-medium text-aurora-text0">No agents match your filters</p>
+            <p className="text-xs text-aurora-text2">Adjust filters in the sidebar to see nodes</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

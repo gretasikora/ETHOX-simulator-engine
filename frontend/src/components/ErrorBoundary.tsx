@@ -25,11 +25,11 @@ export class ErrorBoundary extends Component<Props, State> {
     if (this.state.hasError && this.state.error) {
       if (this.props.fallback) return this.props.fallback;
       return (
-        <div className="flex h-screen w-screen items-center justify-center bg-dark-900 p-4">
-          <div className="max-w-lg rounded-lg border border-red-900/50 bg-dark-800 p-6">
+        <div className="flex h-screen w-screen items-center justify-center bg-aurora-bg0 p-4">
+          <div className="max-w-lg rounded-lg border border-aurora-danger/50 bg-aurora-surface1 p-6">
             <h2 className="text-lg font-semibold text-red-400">Something went wrong</h2>
-            <p className="mt-2 text-sm text-gray-300">{this.state.error.message}</p>
-            <pre className="mt-3 max-h-40 overflow-auto rounded bg-dark-900 p-2 text-xs text-gray-500">
+            <p className="mt-2 text-sm text-aurora-text1">{this.state.error.message}</p>
+            <pre className="mt-3 max-h-40 overflow-auto rounded bg-aurora-surface0 p-2 text-xs text-aurora-text2">
               {this.state.error.stack}
             </pre>
             <button

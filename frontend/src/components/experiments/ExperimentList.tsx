@@ -64,7 +64,7 @@ export function ExperimentList() {
 
   if (experiments.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-12 text-gray-500">
+      <div className="flex flex-col items-center justify-center py-12 text-aurora-text2">
         <p className="text-sm">No saved experiments yet.</p>
         <p className="mt-1 text-xs">Use the Builder tab to create one.</p>
       </div>
@@ -84,21 +84,21 @@ export function ExperimentList() {
             key={exp.id}
             className={`rounded-lg border p-4 ${
               isActive
-                ? "border-accent bg-accent/10"
-                : "border-dark-700 bg-dark-800"
+                ? "border-aurora-accent1 bg-aurora-accent1/10"
+                : "border-aurora-border bg-aurora-surface1"
             }`}
           >
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0 flex-1">
-                <p className="font-medium text-white truncate">{exp.name}</p>
+                <p className="font-medium text-aurora-text0 truncate">{exp.name}</p>
                 <div className="mt-1 flex flex-wrap gap-1">
-                  <span className="rounded bg-dark-700 px-1.5 py-0.5 text-xs text-gray-300">
+                  <span className="rounded bg-aurora-surface2 px-1.5 py-0.5 text-xs text-aurora-text1">
                     {TYPE_LABELS[exp.interventionType]}
                   </span>
-                  <span className="rounded bg-dark-700 px-1.5 py-0.5 text-xs text-gray-400">
+                  <span className="rounded bg-aurora-surface2 px-1.5 py-0.5 text-xs text-aurora-text1">
                     {TARGET_MODE_LABELS[exp.targetMode]}
                   </span>
-                  <span className="text-xs text-gray-500">
+                  <span className="text-xs text-aurora-text2">
                     {targetCount} targets · {Math.round((exp.intensity ?? 0.5) * 100)}% intensity
                   </span>
                 </div>
@@ -108,28 +108,28 @@ export function ExperimentList() {
               <button
                 type="button"
                 onClick={() => handleLoad(exp.id)}
-                className="rounded border border-dark-600 px-2 py-1 text-xs text-gray-300 hover:bg-dark-700"
+                className="rounded border border-aurora-border px-2 py-1 text-xs text-aurora-text1 hover:bg-aurora-surface2"
               >
                 Load
               </button>
               <button
                 type="button"
                 onClick={() => handleApply(exp.id)}
-                className="rounded bg-accent/20 px-2 py-1 text-xs text-accent hover:bg-accent/30"
+                className="rounded bg-aurora-accent1/20 px-2 py-1 text-xs text-aurora-accent1 hover:bg-aurora-accent1/30"
               >
                 Apply to graph
               </button>
               <button
                 type="button"
                 onClick={() => handleExport(exp)}
-                className="rounded border border-dark-600 px-2 py-1 text-xs text-gray-300 hover:bg-dark-700"
+                className="rounded border border-aurora-border px-2 py-1 text-xs text-aurora-text1 hover:bg-aurora-surface2"
               >
                 Export JSON
               </button>
               <button
                 type="button"
                 onClick={() => deleteExperiment(exp.id)}
-                className="rounded border border-red-900/50 px-2 py-1 text-xs text-red-400 hover:bg-red-900/20"
+                className="rounded border border-aurora-danger/50 px-2 py-1 text-xs text-aurora-danger hover:bg-aurora-danger/20"
               >
                 Delete
               </button>

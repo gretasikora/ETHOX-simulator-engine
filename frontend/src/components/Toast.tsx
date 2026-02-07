@@ -11,18 +11,18 @@ export function ToastContainer() {
       {toasts.map((t) => (
         <div
           key={t.id}
-          className={`min-w-[280px] rounded-lg border px-4 py-3 shadow-lg ${
+          className={`min-w-[280px] rounded-lg border px-4 py-3 shadow-card ${
             t.type === "error"
-              ? "border-red-500/60 bg-dark-800"
-              : "border-emerald-500/60 bg-dark-800"
+              ? "border-aurora-danger/50 bg-aurora-surface1"
+              : "border-aurora-success/50 bg-aurora-surface1"
           }`}
         >
           <div className="flex items-center justify-between gap-3">
-            <span className="text-sm text-gray-200">{t.message}</span>
+            <span className="text-sm text-aurora-text0">{t.message}</span>
             <button
               type="button"
               onClick={() => removeToast(t.id)}
-              className="shrink-0 text-gray-400 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              className="shrink-0 text-aurora-text1 hover:text-aurora-text0 focus:outline-none focus-visible:ring-2 focus-visible:ring-aurora-accent1"
               aria-label="Dismiss"
             >
               ×

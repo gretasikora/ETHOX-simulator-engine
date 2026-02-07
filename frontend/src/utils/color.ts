@@ -1,47 +1,68 @@
+/** Aurora Graph Lab cluster palette (used for cluster filters/experiments, not node color) */
 export const CLUSTER_COLORS = [
-  "#6366f1",
-  "#f59e0b",
-  "#10b981",
-  "#ef4444",
-  "#8b5cf6",
-  "#ec4899",
-  "#06b6d4",
-  "#84cc16",
-  "#f97316",
-  "#14b8a6",
+  "#2AFADF", // teal
+  "#26C6FF", // cyan
+  "#7C3AED", // violet
+  "#34D399", // mint
+  "#FB7185", // rose
+  "#60A5FA", // blue
+  "#A78BFA", // light violet
 ];
 
 export function getClusterColor(clusterId: number): string {
   return CLUSTER_COLORS[clusterId % CLUSTER_COLORS.length];
 }
 
-/** Convert HSL to hex so WebGL (Sigma) can render it. */
-function hslToHex(h: number, s: number, l: number): string {
-  s /= 100;
-  l /= 100;
-  const c = (1 - Math.abs(2 * l - 1)) * s;
-  const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
-  const m = l - c / 2;
-  let r = 0, g = 0, b = 0;
-  if (h < 60) { r = c; g = x; b = 0; }
-  else if (h < 120) { r = x; g = c; b = 0; }
-  else if (h < 180) { r = 0; g = c; b = x; }
-  else if (h < 240) { r = 0; g = x; b = c; }
-  else if (h < 300) { r = x; g = 0; b = c; }
-  else { r = c; g = 0; b = x; }
-  const toHex = (n: number) => {
-    const v = Math.round((n + m) * 255);
-    return Math.max(0, Math.min(255, v)).toString(16).padStart(2, "0");
-  };
-  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+/** Age → color: young = cool teal/cyan, middle = blue/violet, older = amber/orange. Missing/invalid = neutral. */
+const AGE_COLOR_LOW = "#2DD4BF";   // teal (young)
+const AGE_COLOR_MID = "#7C3AED";   // violet (middle)
+const AGE_COLOR_HIGH = "#F59E0B";  // amber (older)
+const AGE_NEUTRAL = "#64748B";     // muted slate when missing
+
+export const AGE_COLOR_MIN = 18;
+export const AGE_COLOR_MAX = 80;
+
+export function getAgeColor(age: number | undefined | null): string {
+  if (age == null || !Number.isFinite(age)) return AGE_NEUTRAL;
+  const t = Math.max(0, Math.min(1, (age - AGE_COLOR_MIN) / (AGE_COLOR_MAX - AGE_COLOR_MIN)));
+  if (t <= 0.5) return lerpHex(t * 2, AGE_COLOR_LOW, AGE_COLOR_MID);
+  return lerpHex((t - 0.5) * 2, AGE_COLOR_MID, AGE_COLOR_HIGH);
 }
+
+/** Gender → shape for Sigma node type. */
+export type NodeShapeType = "circle" | "square" | "triangle" | "diamond";
+
+export function getGenderShape(gender: string | undefined | null): NodeShapeType {
+  if (gender == null || typeof gender !== "string") return "diamond";
+  const g = gender.toLowerCase().trim();
+  if (g === "male") return "circle";
+  if (g === "female") return "square";
+  if (g === "non_binary" || g === "non-binary") return "triangle";
+  return "diamond";
+}
+
+/** Interpolate between aurora accent-0 (teal) and accent-2 (violet) for trait/centrality */
+function lerpHex(t: number, hexA: string, hexB: string): string {
+  const parse = (hex: string) => {
+    const h = hex.replace(/^#/, "");
+    return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)];
+  };
+  const [r1, g1, b1] = parse(hexA);
+  const [r2, g2, b2] = parse(hexB);
+  const r = Math.round(r1 + (r2 - r1) * t);
+  const g = Math.round(g1 + (g2 - g1) * t);
+  const b = Math.round(b1 + (b2 - b1) * t);
+  return `#${[r, g, b].map((x) => Math.max(0, Math.min(255, x)).toString(16).padStart(2, "0")).join("")}`;
+}
+
+const AURORA_LOW = "#2AFADF";
+const AURORA_HIGH = "#7C3AED";
 
 export function getGradientColor(value: number, min: number, max: number): string {
   const range = max - min;
   const normalized = range === 0 ? 0.5 : (value - min) / range;
   const clamped = Math.max(0, Math.min(1, normalized));
-  const hue = 240 - clamped * 180;
-  return hslToHex(hue, 70, 55);
+  return lerpHex(clamped, AURORA_LOW, AURORA_HIGH);
 }
 
 export function hexToRgba(hex: string, alpha: number): string {
@@ -53,16 +74,9 @@ export function hexToRgba(hex: string, alpha: number): string {
   return `rgba(${r},${g},${b},${alpha})`;
 }
 
-/** Diverging scale for opinion -1..+1: blue (negative) -> neutral -> orange/amber (positive) */
+/** Diverging scale for opinion -1..+1: blue/teal (negative) -> neutral -> violet (positive) - aurora themed */
 export function getOpinionColor(opinion: number): string {
   const t = Math.max(-1, Math.min(1, opinion));
-  const normalized = (t + 1) / 2; // 0..1
-  if (normalized <= 0.5) {
-    const s = normalized * 2; // 0..1 from neg to neutral
-    const hue = 220 - s * 40; // 220 -> 180 (blue to cyan)
-    return hslToHex(hue, 75, 50);
-  }
-  const s = (normalized - 0.5) * 2; // 0..1 from neutral to pos
-  const hue = 25 + s * 25; // 25 -> 50 (orange to amber)
-  return hslToHex(hue, 80, 52);
+  const normalized = (t + 1) / 2;
+  return lerpHex(normalized, AURORA_LOW, AURORA_HIGH);
 }

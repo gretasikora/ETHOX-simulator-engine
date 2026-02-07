@@ -1,5 +1,7 @@
 const BASE = "";
 
+export type GenderLabel = "male" | "female" | "non_binary" | "unknown";
+
 export interface NodeData {
   agent_id: string;
   degree: number;
@@ -7,6 +9,10 @@ export interface NodeData {
   traits: Record<string, number>;
   degree_centrality: number;
   betweenness_centrality: number;
+  /** Age in years (e.g. 18–80). Optional; missing uses neutral color. */
+  age?: number;
+  /** Gender for shape encoding. Optional; missing uses "unknown" (diamond). */
+  gender?: string;
 }
 
 export interface EdgeData {

@@ -31,34 +31,36 @@ export function MultiSelect({ options, selected, onChange }: MultiSelectProps) {
   };
 
   return (
-    <div className="space-y-2 rounded-lg border border-dark-700 bg-dark-800/50 p-2">
-      <button
-        type="button"
-        onClick={selectAll}
-        className="w-full rounded px-2 py-1.5 text-left text-xs font-medium text-gray-300 hover:bg-dark-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-      >
-        {allSelected ? "Deselect all" : "Select all"}
-      </button>
+    <div className="space-y-2 rounded-lg border border-aurora-border bg-aurora-surface1 p-2">
+      <label className="flex cursor-pointer items-center gap-2 rounded px-2 py-1.5 text-xs font-medium text-aurora-text2 hover:bg-aurora-surface2">
+        <input
+          type="checkbox"
+          checked={allSelected}
+          onChange={selectAll}
+          className="h-3.5 w-3.5 rounded border-aurora-border bg-aurora-surface2 text-aurora-accent1 focus:ring-aurora-accent1"
+        />
+        <span>{allSelected ? "Deselect all" : "Select all"}</span>
+      </label>
       <div className="max-h-40 space-y-1 overflow-y-auto">
         {options.map((opt) => {
           const isChecked = selected.includes(opt.id);
           return (
             <label
               key={opt.id}
-              className="flex cursor-pointer items-center gap-2 rounded px-2 py-1.5 hover:bg-dark-700"
+              className="flex cursor-pointer items-center gap-2 rounded px-2 py-1.5 hover:bg-aurora-surface2"
             >
               <input
                 type="checkbox"
                 checked={isChecked}
                 onChange={() => toggle(opt.id)}
-                className="h-4 w-4 rounded border-dark-600 bg-dark-700 text-accent focus:ring-accent"
+                className="h-3.5 w-3.5 rounded border-aurora-border bg-aurora-surface2 text-aurora-accent1 focus:ring-aurora-accent1"
               />
               <span
                 className="h-2 w-2 shrink-0 rounded-full"
                 style={{ backgroundColor: opt.color }}
               />
-              <span className="flex-1 text-sm text-gray-200">Cluster {opt.id}</span>
-              <span className="text-xs text-gray-500">{opt.count}</span>
+              <span className="flex-1 text-sm text-aurora-text0">Cluster {opt.id}</span>
+              <span className="text-right text-xs tabular-nums text-aurora-text2">{opt.count}</span>
             </label>
           );
         })}

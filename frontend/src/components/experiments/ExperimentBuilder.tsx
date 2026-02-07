@@ -56,7 +56,7 @@ export function ExperimentBuilder() {
 
   if (!experiment) {
     return (
-      <div className="flex flex-col items-center justify-center py-12 text-gray-500">
+      <div className="flex flex-col items-center justify-center py-12 text-aurora-text2">
         <p className="text-sm">No experiment selected.</p>
         <p className="mt-1 text-xs">Create one from the Saved tab or close and click &quot;New Experiment&quot;.</p>
       </div>
@@ -82,17 +82,17 @@ export function ExperimentBuilder() {
     <div className="space-y-6">
       {/* Header */}
       <div className="space-y-2">
-        <h2 className="text-lg font-semibold text-white">Experiment Builder</h2>
+        <h2 className="text-lg font-semibold text-aurora-text0">Experiment Builder</h2>
         <input
           type="text"
           value={experiment.name}
           onChange={(e) => setExperiment({ name: e.target.value })}
           placeholder="Experiment name"
-          className="w-full rounded border border-dark-700 bg-dark-800 px-3 py-2 text-sm text-gray-200 placeholder-gray-500 focus:border-accent focus:outline-none"
+          className="w-full rounded border border-aurora-border bg-aurora-surface1 px-3 py-2 text-sm text-aurora-text0 placeholder-aurora-text2 focus:border-aurora-accent1 focus:ring-1 focus:ring-aurora-accent1 focus:outline-none"
         />
         <span
           className={`inline-block rounded px-2 py-0.5 text-xs font-medium ${
-            isApplied ? "bg-emerald-500/20 text-emerald-400" : "bg-dark-700 text-gray-400"
+            isApplied ? "bg-aurora-success/20 text-aurora-success" : "bg-aurora-surface2 text-aurora-text2"
           }`}
         >
           {isApplied ? "Applied" : "Not applied"}
@@ -101,7 +101,7 @@ export function ExperimentBuilder() {
 
       {/* Intervention type */}
       <div>
-        <label className="mb-2 block text-xs font-medium uppercase tracking-wider text-gray-400">
+        <label className="mb-2 block text-xs font-medium uppercase tracking-wider text-aurora-text2">
           Intervention type
         </label>
         <div className="grid grid-cols-2 gap-2">
@@ -112,12 +112,12 @@ export function ExperimentBuilder() {
               onClick={() => setExperiment({ interventionType: value })}
               className={`rounded-lg border p-3 text-left ${
                 experiment.interventionType === value
-                  ? "border-accent bg-accent/10"
-                  : "border-dark-700 bg-dark-800 hover:border-dark-600"
+                  ? "border-aurora-accent1 bg-aurora-accent1/10"
+                  : "border-aurora-border bg-aurora-surface1 hover:border-aurora-border-strong"
               }`}
             >
-              <span className="block font-medium text-white">{label}</span>
-              <span className="mt-0.5 block text-xs text-gray-500">{oneLiner}</span>
+              <span className="block font-medium text-aurora-text0">{label}</span>
+              <span className="mt-0.5 block text-xs text-aurora-text2">{oneLiner}</span>
             </button>
           ))}
         </div>
@@ -125,7 +125,7 @@ export function ExperimentBuilder() {
 
       {/* Content */}
       <div className="space-y-2">
-        <label className="block text-xs font-medium uppercase tracking-wider text-gray-400">
+        <label className="block text-xs font-medium uppercase tracking-wider text-aurora-text2">
           Content
         </label>
         {(experiment.interventionType === "message" ||
@@ -137,7 +137,7 @@ export function ExperimentBuilder() {
             }
             placeholder="Copy / Message"
             rows={3}
-            className="w-full rounded border border-dark-700 bg-dark-800 px-3 py-2 text-sm text-gray-200 placeholder-gray-500 focus:border-accent focus:outline-none"
+            className="w-full rounded border border-aurora-border bg-aurora-surface1 px-3 py-2 text-sm text-aurora-text0 placeholder-aurora-text2 focus:border-aurora-accent1 focus:ring-1 focus:ring-aurora-accent1 focus:outline-none"
           />
         )}
         {experiment.interventionType === "feature" && (
@@ -148,7 +148,7 @@ export function ExperimentBuilder() {
               setExperiment({ content: { ...experiment.content, featureName: e.target.value } })
             }
             placeholder="Feature name"
-            className="w-full rounded border border-dark-700 bg-dark-800 px-3 py-2 text-sm text-gray-200 placeholder-gray-500 focus:border-accent focus:outline-none"
+            className="w-full rounded border border-aurora-border bg-aurora-surface1 px-3 py-2 text-sm text-aurora-text0 placeholder-aurora-text2 focus:border-aurora-accent1 focus:ring-1 focus:ring-aurora-accent1 focus:outline-none"
           />
         )}
         {experiment.interventionType === "pricing" && (
@@ -159,7 +159,7 @@ export function ExperimentBuilder() {
               setExperiment({ content: { ...experiment.content, pricingNote: e.target.value } })
             }
             placeholder="Price change summary"
-            className="w-full rounded border border-dark-700 bg-dark-800 px-3 py-2 text-sm text-gray-200 placeholder-gray-500 focus:border-accent focus:outline-none"
+            className="w-full rounded border border-aurora-border bg-aurora-surface1 px-3 py-2 text-sm text-aurora-text0 placeholder-aurora-text2 focus:border-aurora-accent1 focus:ring-1 focus:ring-aurora-accent1 focus:outline-none"
           />
         )}
       </div>
@@ -179,7 +179,7 @@ export function ExperimentBuilder() {
 
       {/* Intensity */}
       <div className="space-y-2">
-        <label className="block text-xs font-medium uppercase tracking-wider text-gray-400">
+        <label className="block text-xs font-medium uppercase tracking-wider text-aurora-text2">
           Intensity: {Math.round((experiment.intensity ?? 0) * 100)}%
         </label>
         <input
@@ -189,26 +189,26 @@ export function ExperimentBuilder() {
           step={0.05}
           value={experiment.intensity ?? 0.5}
           onChange={(e) => setExperiment({ intensity: Number(e.target.value) })}
-          className="w-full accent-accent"
+          className="w-full [accent-color:var(--accent-1)]"
         />
-        <p className="text-xs text-gray-500">
+        <p className="text-xs text-aurora-text2">
           Controls how strongly the intervention affects targeted agents (simulation coming soon).
         </p>
       </div>
 
       {/* Apply / Clear */}
-      <div className="flex gap-2 border-t border-dark-700 pt-4">
+      <div className="flex gap-2 border-t border-aurora-border pt-4">
         <button
           type="button"
           onClick={handleApply}
-          className="flex-1 rounded-lg bg-accent py-2 text-sm font-medium text-white hover:bg-accent-light"
+          className="flex-1 rounded-lg bg-accent py-2 text-sm font-medium text-aurora-text0 hover:bg-accent-light"
         >
           Apply to graph
         </button>
         <button
           type="button"
           onClick={handleClear}
-          className="rounded-lg border border-dark-700 py-2 px-4 text-sm text-gray-300 hover:bg-dark-700"
+          className="rounded-lg border border-aurora-border py-2 px-4 text-sm text-aurora-text1 hover:bg-aurora-surface2"
         >
           Clear from graph
         </button>

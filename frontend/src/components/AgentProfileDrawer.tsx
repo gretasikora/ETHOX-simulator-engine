@@ -1,7 +1,6 @@
 import { useEffect, useCallback, useMemo } from "react";
 import { formatTraitLabel, sortTraits } from "../utils/traits";
 import { useGraphStore } from "../store/useGraphStore";
-import { usePlaybackStore } from "../store/usePlaybackStore";
 
 interface AgentProfileDrawerProps {
   open: boolean;
@@ -16,12 +15,12 @@ function TraitRow({ label, value }: { label: string; value: number }) {
   return (
     <div className="space-y-1">
       <div className="flex justify-between text-sm">
-        <span className="text-gray-400">{formatTraitLabel(label ?? "")}</span>
-        <span className="text-gray-200 tabular-nums">{safe.toFixed(2)}</span>
+        <span className="text-aurora-text1">{formatTraitLabel(label ?? "")}</span>
+        <span className="text-aurora-text0 tabular-nums">{safe.toFixed(2)}</span>
       </div>
-      <div className="h-2 overflow-hidden rounded bg-dark-700">
+      <div className="h-2 overflow-hidden rounded bg-aurora-surface2">
         <div
-          className="h-full rounded bg-accent"
+          className="aurora-gradient h-full rounded"
           style={{ width: `${pct}%` }}
         />
       </div>
@@ -40,19 +39,6 @@ export function AgentProfileDrawer({
     return nodes.find((n) => String(n.agent_id) === String(selectedNodeId)) ?? null;
   }, [selectedNodeId, nodes]);
 
-  const playbackRunId = usePlaybackStore((s) => s.activeRunId);
-  const playbackT = usePlaybackStore((s) => s.t);
-  const playbackRuns = usePlaybackStore((s) => s.runs);
-
-  const currentFrameState = useMemo(() => {
-    if (!selectedNodeId) return null;
-    const run = playbackRunId ? playbackRuns.find((r) => r.id === playbackRunId) : null;
-    if (!run?.frames?.length) return null;
-    const frame = run.frames[Math.min(playbackT, run.frames.length - 1)];
-    const agents = frame?.agents;
-    return agents?.[selectedNodeId] ?? null;
-  }, [selectedNodeId, playbackRunId, playbackT, playbackRuns]);
-
   const handleClose = useCallback(() => onOpenChange(false), [onOpenChange]);
 
   useEffect(() => {
@@ -70,29 +56,32 @@ export function AgentProfileDrawer({
   return (
     <>
       <div
-        className="fixed inset-0 z-30 bg-black/50 transition-opacity"
+        className="fixed inset-0 z-30 bg-aurora-bg0/60 transition-opacity"
         aria-hidden
         onClick={handleClose}
       />
       <div
-        className="fixed right-0 top-0 z-40 flex h-full w-[min(100%,28rem)] min-w-[320px] flex-col border-l border-dark-700 bg-dark-800 shadow-xl transition-transform duration-200 ease-out"
+        className="fixed right-0 top-0 z-40 flex h-full w-[min(100%,28rem)] min-w-[320px] flex-col border-l border-aurora-border bg-aurora-bg1 shadow-xl transition-transform duration-200 ease-out"
         role="dialog"
         aria-labelledby="drawer-title"
       >
-        {/* Header */}
-        <div className="flex items-start justify-between border-b border-dark-700 p-4">
+        <div className="flex items-start justify-between border-b border-aurora-border p-4">
           <div>
-            <h2 id="drawer-title" className="text-lg font-semibold text-white">
+            <h2 id="drawer-title" className="text-lg font-semibold text-aurora-text0">
               Agent {agent?.agent_id ?? selectedNodeId ?? ""}
             </h2>
-            <p className="mt-0.5 text-sm text-gray-400">
-              Cluster {agent?.cluster ?? "—"}
-            </p>
+            <div className="mt-1 flex flex-wrap gap-x-4 gap-y-0.5 text-sm text-aurora-text1">
+              <span>Cluster {agent?.cluster ?? "—"}</span>
+              {agent?.age != null && <span>Age {agent.age}</span>}
+              {agent?.gender != null && agent.gender !== "" && (
+                <span className="capitalize">{agent.gender.replace(/_/g, " ")}</span>
+              )}
+            </div>
           </div>
           <button
             type="button"
             onClick={handleClose}
-            className="rounded p-1.5 text-gray-400 hover:bg-dark-700 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            className="rounded-lg p-1.5 text-aurora-text1 hover:bg-aurora-surface2 hover:text-aurora-text0 focus:outline-none focus-visible:ring-2 focus-visible:ring-aurora-accent1"
             aria-label="Close"
           >
             <span className="text-xl leading-none">×</span>
@@ -100,79 +89,48 @@ export function AgentProfileDrawer({
         </div>
 
         {!agent ? (
-          <div className="flex flex-1 items-center justify-center p-4 text-gray-500">
+          <div className="flex flex-1 items-center justify-center p-4 text-aurora-text2">
             No agent selected
           </div>
         ) : (
           <div className="flex-1 overflow-y-auto p-4">
-            {currentFrameState != null && (
-              <section className="mb-6 rounded-lg border border-dark-600 bg-dark-700/50 p-3">
-                <h3 className="mb-2 text-xs font-medium uppercase tracking-wider text-gray-400">
-                  Current state (Day {playbackT})
-                </h3>
-                <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
-                  <div className="rounded bg-dark-800 p-2">
-                    <div className="text-xs text-gray-500">Opinion</div>
-                    <div className="text-sm font-medium tabular-nums text-white">
-                      {currentFrameState.opinion.toFixed(2)}
-                    </div>
-                  </div>
-                  <div className="rounded bg-dark-800 p-2">
-                    <div className="text-xs text-gray-500">Adoption</div>
-                    <div className="text-sm font-medium tabular-nums text-white">
-                      {currentFrameState.adoption.toFixed(2)}
-                    </div>
-                  </div>
-                  <div className="rounded bg-dark-800 p-2">
-                    <div className="text-xs text-gray-500">Sentiment</div>
-                    <div className="text-sm font-medium tabular-nums text-white">
-                      {currentFrameState.sentiment.toFixed(2)}
-                    </div>
-                  </div>
-                </div>
-              </section>
-            )}
-
-            {/* Persona */}
             <section className="mb-6">
-              <h3 className="mb-2 text-xs font-medium uppercase tracking-wider text-gray-400">
+              <h3 className="mb-2 text-xs font-medium uppercase tracking-wider text-aurora-text2">
                 Likely persona
               </h3>
-              <p className="text-sm text-gray-200">
+              <p className="text-sm text-aurora-text0">
                 this is where blurb will be
               </p>
             </section>
 
-            {/* Network stats */}
             <section className="mb-6">
-              <h3 className="mb-3 text-xs font-medium uppercase tracking-wider text-gray-400">
+              <h3 className="mb-3 text-xs font-medium uppercase tracking-wider text-aurora-text2">
                 Network stats
               </h3>
               <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
-                <div className="rounded-lg bg-dark-700 p-3">
-                  <div className="text-xs text-gray-500">Degree</div>
-                  <div className="text-lg font-semibold text-white">
+                <div className="rounded-lg border border-aurora-border bg-aurora-surface1 p-3">
+                  <div className="text-xs text-aurora-text2">Degree</div>
+                  <div className="text-lg font-semibold text-aurora-text0">
                     {agent.degree ?? 0}
                   </div>
                 </div>
-                <div className="rounded-lg bg-dark-700 p-3">
-                  <div className="text-xs text-gray-500">Degree centrality</div>
-                  <div className="text-lg font-semibold text-white tabular-nums">
+                <div className="rounded-lg border border-aurora-border bg-aurora-surface1 p-3">
+                  <div className="text-xs text-aurora-text2">Degree centrality</div>
+                  <div className="text-lg font-semibold text-aurora-text0 tabular-nums">
                     {(agent.degree_centrality ?? 0).toFixed(4)}
                   </div>
                 </div>
-                <div className="rounded-lg bg-dark-700 p-3">
-                  <div className="text-xs text-gray-500">Betweenness centrality</div>
-                  <div className="text-lg font-semibold text-white tabular-nums">
+                <div className="rounded-lg border border-aurora-border bg-aurora-surface1 p-3">
+                  <div className="text-xs text-aurora-text2">Betweenness centrality</div>
+                  <div className="text-lg font-semibold text-aurora-text0 tabular-nums">
                     {(agent.betweenness_centrality ?? 0).toFixed(4)}
                   </div>
                 </div>
               </div>
             </section>
 
-            {/* Traits */}
             <section>
-              <h3 className="mb-3 text-xs font-medium uppercase tracking-wider text-gray-400">
+              <h3 className="mb-3 text-xs font-medium uppercase tracking-wider text-aurora-text2">
                 Traits
               </h3>
               {(() => {
@@ -182,7 +140,7 @@ export function AgentProfileDrawer({
                 return (
                   <div className="space-y-4">
                     <div>
-                      <h4 className="mb-2 text-sm font-medium text-gray-300">
+                      <h4 className="mb-2 text-sm font-medium text-aurora-text1">
                         Top traits
                       </h4>
                       <div className="space-y-3">
@@ -193,7 +151,7 @@ export function AgentProfileDrawer({
                     </div>
                     {bottom3.length > 0 && (
                       <div>
-                        <h4 className="mb-2 text-sm font-medium text-gray-300">
+                        <h4 className="mb-2 text-sm font-medium text-aurora-text1">
                           Lowest traits
                         </h4>
                         <div className="space-y-3">

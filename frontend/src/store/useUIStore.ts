@@ -22,10 +22,12 @@ interface UIState {
   highlightedEdgeKeys: string[];
   exploreStatus: string;
   searchQuery: string;
-  colorBy: "cluster" | "trait" | "centrality";
+  colorBy: "age" | "trait" | "centrality";
   sizeBy: "degree" | "centrality";
   selectedTrait: string;
   showLabels: boolean;
+  showAgeEncoding: boolean;
+  showGenderEncoding: boolean;
   filters: {
     clusters: number[];
     degreeRange: [number, number];
@@ -34,6 +36,8 @@ interface UIState {
   toasts: ToastItem[];
   societyViewOpen: boolean;
   setSocietyViewOpen: (open: boolean) => void;
+  setShowAgeEncoding: (v: boolean) => void;
+  setShowGenderEncoding: (v: boolean) => void;
   setSelectedNode: (id: string | null) => void;
   setHoveredNode: (id: string | null) => void;
   setVisibleNodeIds: (ids: string[]) => void;
@@ -49,7 +53,7 @@ interface UIState {
   clearHighlight: () => void;
   setExploreStatus: (msg: string) => void;
   setSearchQuery: (q: string) => void;
-  setColorBy: (v: "cluster" | "trait" | "centrality") => void;
+  setColorBy: (v: "age" | "trait" | "centrality") => void;
   setSizeBy: (v: "degree" | "centrality") => void;
   setSelectedTrait: (trait: string) => void;
   toggleLabels: () => void;
@@ -83,15 +87,19 @@ export const useUIStore = create<UIState>((set, get) => ({
   highlightedEdgeKeys: [],
   exploreStatus: "",
   searchQuery: "",
-  colorBy: "cluster",
+  colorBy: "age",
   sizeBy: "degree",
   selectedTrait: "",
   showLabels: true,
+  showAgeEncoding: true,
+  showGenderEncoding: true,
   filters: defaultFilters(),
   toasts: [],
   societyViewOpen: false,
 
   setSocietyViewOpen: (open) => set({ societyViewOpen: open }),
+  setShowAgeEncoding: (v) => set({ showAgeEncoding: v }),
+  setShowGenderEncoding: (v) => set({ showGenderEncoding: v }),
   setSelectedNode: (id) => set({ selectedNodeId: id }),
   setHoveredNode: (id) => set({ hoveredNodeId: id }),
   setVisibleNodeIds: (ids) => set({ visibleNodeIds: ids }),

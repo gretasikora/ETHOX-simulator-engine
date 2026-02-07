@@ -1,6 +1,6 @@
 import Graph from "graphology";
 import type { NodeData, EdgeData } from "../api/client";
-import { getClusterColor, getGradientColor } from "./color";
+import { getAgeColor, getGenderShape, getGradientColor } from "./color";
 import { scaleLinear } from "./math";
 
 export interface GraphFilters {
@@ -10,11 +10,13 @@ export interface GraphFilters {
 }
 
 export interface GraphUIState {
-  colorBy: "cluster" | "trait" | "centrality";
+  colorBy: "age" | "trait" | "centrality";
   sizeBy: "degree" | "centrality";
   selectedTrait: string;
   traitKeys: string[];
   filters: GraphFilters;
+  showAgeEncoding: boolean;
+  showGenderEncoding: boolean;
 }
 
 function getMaxDegree(nodes: NodeData[]): number {
@@ -35,7 +37,7 @@ export function buildGraphology(
   const graph = new Graph({ type: "undirected", multi: false });
   const maxDegree = getMaxDegree(nodes);
   const maxCentrality = getMaxCentrality(nodes);
-  const { colorBy, sizeBy, selectedTrait } = uiState;
+  const { colorBy, sizeBy, selectedTrait, showAgeEncoding, showGenderEncoding } = uiState;
 
   for (const node of nodes) {
     const id = String(node.agent_id);
@@ -45,25 +47,27 @@ export function buildGraphology(
     } else {
       size = scaleLinear(node.degree_centrality, 0, maxCentrality, 3, 15);
     }
-    let color = "#6366f1";
-    if (colorBy === "cluster") {
-      color = getClusterColor(node.cluster);
-    } else if (colorBy === "trait" && selectedTrait && node.traits[selectedTrait] !== undefined) {
+    let color = getAgeColor(showAgeEncoding && colorBy === "age" ? node.age : undefined);
+    if (colorBy === "trait" && selectedTrait && node.traits[selectedTrait] !== undefined) {
       color = getGradientColor(node.traits[selectedTrait], 0, 1);
     } else if (colorBy === "centrality") {
       color = getGradientColor(node.degree_centrality, 0, maxCentrality);
     }
+    const shape = showGenderEncoding ? getGenderShape(node.gender) : "circle";
     graph.addNode(id, {
       label: "Agent " + id,
       x: 0,
       y: 0,
       size,
       color,
+      type: shape,
       cluster: node.cluster,
       degree: node.degree,
       degree_centrality: node.degree_centrality,
       betweenness_centrality: node.betweenness_centrality,
       traits: { ...node.traits },
+      age: node.age,
+      gender: node.gender,
       hidden: false,
     });
   }
@@ -118,11 +122,13 @@ export function applyFilters(
 
 export function applyVisualAttributes(
   graph: Graph,
-  colorBy: "cluster" | "trait" | "centrality",
+  colorBy: "age" | "trait" | "centrality",
   sizeBy: "degree" | "centrality",
   selectedTrait: string,
   _traitKeys: string[],
-  clusterColors: string[]
+  _clusterColors: string[],
+  showAgeEncoding: boolean,
+  showGenderEncoding: boolean
 ): void {
   let maxCentrality = 0;
   let maxDegree = 0;
@@ -137,11 +143,8 @@ export function applyVisualAttributes(
 
   graph.forEachNode((node) => {
     const attrs = graph.getNodeAttributes(node);
-    let color = "#6366f1";
-    if (colorBy === "cluster") {
-      const c = (attrs.cluster as number) ?? 0;
-      color = clusterColors[c % clusterColors.length];
-    } else if (colorBy === "trait" && selectedTrait) {
+    let color = getAgeColor(showAgeEncoding && colorBy === "age" ? (attrs.age as number | undefined) : undefined);
+    if (colorBy === "trait" && selectedTrait) {
       const traits = (attrs.traits as Record<string, number>) || {};
       const v = traits[selectedTrait];
       color = getGradientColor(v ?? 0.5, 0, 1);
@@ -155,8 +158,10 @@ export function applyVisualAttributes(
     } else {
       size = scaleLinear((attrs.degree_centrality as number) ?? 0, 0, maxCentrality, 3, 15);
     }
+    const shape = showGenderEncoding ? getGenderShape(attrs.gender as string | undefined) : "circle";
     graph.setNodeAttribute(node, "color", color);
     graph.setNodeAttribute(node, "size", size);
+    graph.setNodeAttribute(node, "type", shape);
   });
 
   graph.forEachEdge((edge) => {
@@ -184,6 +189,8 @@ export function exportFilteredSubgraph(graph: Graph): {
       traits: ((attrs.traits as Record<string, number>) || {}),
       degree_centrality: (attrs.degree_centrality as number) ?? 0,
       betweenness_centrality: (attrs.betweenness_centrality as number) ?? 0,
+      age: attrs.age as number | undefined,
+      gender: attrs.gender as string | undefined,
     });
   });
 

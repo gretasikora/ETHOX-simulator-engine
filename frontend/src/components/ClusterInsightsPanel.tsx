@@ -40,7 +40,7 @@ export function ClusterInsightsPanel({ onSelectAgent }: ClusterInsightsPanelProp
   return (
     <div className="flex h-full flex-col">
       <div className="flex flex-1 min-h-0">
-        <div className="w-56 shrink-0 border-r border-dark-700">
+        <div className="w-56 shrink-0 border-r border-aurora-border">
           <ClusterCardList
             stats={statsList}
             selectedClusterId={selectedClusterId}

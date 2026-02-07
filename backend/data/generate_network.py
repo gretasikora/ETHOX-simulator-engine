@@ -9,6 +9,8 @@ from pathlib import Path
 random.seed(42)
 N = 40
 CLUSTER_RANGES = [(0, 8), (8, 16), (16, 24), (24, 32), (32, 40)]
+GENDERS = ["male", "female", "non_binary", "unknown"]
+AGE_MIN, AGE_MAX = 18, 80
 TRAIT_KEYS = [
     "spending", "loyalty", "social_influence", "risk_tolerance",
     "price_sensitivity", "tech_adoption", "impulsiveness", "environmental_consciousness",
@@ -43,6 +45,8 @@ for i in range(N):
         "traits": traits,
         "degree_centrality": round(random.uniform(0.01, 0.5), 4),
         "betweenness_centrality": round(random.uniform(0.0, 0.3), 4),
+        "age": random.randint(AGE_MIN, AGE_MAX),
+        "gender": random.choice(GENDERS),
     })
 
 edges = []

@@ -87,16 +87,16 @@ export function RangeSlider({
           else setDragging("high");
         }}
       >
-        <div className="absolute inset-y-0 left-0 right-0 rounded bg-dark-700" />
+        <div className="absolute inset-y-0 left-0 right-0 rounded bg-aurora-surface2" />
         <div
-          className="absolute inset-y-0 rounded bg-accent"
+          className="absolute inset-y-0 rounded bg-aurora-accent1"
           style={{
             left: `${toPercent(low)}%`,
             width: `${toPercent(high) - toPercent(low)}%`,
           }}
         />
         <div
-          className="absolute top-1/2 h-4 w-4 -translate-y-1/2 rounded-full border-2 border-white bg-accent shadow"
+          className="absolute top-1/2 h-4 w-4 -translate-y-1/2 rounded-full border-2 border-aurora-bg0 bg-aurora-accent1 shadow-aurora-glow-sm"
           style={{ left: `calc(${toPercent(low)}% - 8px)` }}
           onMouseDown={(e) => {
             e.stopPropagation();
@@ -104,7 +104,7 @@ export function RangeSlider({
           }}
         />
         <div
-          className="absolute top-1/2 h-4 w-4 -translate-y-1/2 rounded-full border-2 border-white bg-accent shadow"
+          className="absolute top-1/2 h-4 w-4 -translate-y-1/2 rounded-full border-2 border-aurora-bg0 bg-aurora-accent1 shadow-aurora-glow-sm"
           style={{ left: `calc(${toPercent(high)}% - 8px)` }}
           onMouseDown={(e) => {
             e.stopPropagation();
@@ -112,7 +112,7 @@ export function RangeSlider({
           }}
         />
       </div>
-      <div className="flex justify-between text-xs text-gray-400">
+      <div className="flex justify-between text-xs text-aurora-text2">
         <span>{typeof low === "number" && low % 1 !== 0 ? low.toFixed(2) : low}</span>
         <span>{typeof high === "number" && high % 1 !== 0 ? high.toFixed(2) : high}</span>
       </div>

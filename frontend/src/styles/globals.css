@@ -2,35 +2,82 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ========== Aurora Graph Lab Theme ========== */
+:root {
+  --bg-0: #050B10;
+  --bg-1: #07131A;
+  --surface-0: #0A1D24;
+  --surface-1: #0D2630;
+  --surface-2: #103543;
+  --border: rgba(120, 255, 245, 0.12);
+  --border-strong: rgba(120, 255, 245, 0.22);
+  --text-0: #EAF2F2;
+  --text-1: rgba(234, 242, 242, 0.72);
+  --text-2: rgba(234, 242, 242, 0.52);
+  --accent-0: #2AFADF;
+  --accent-1: #26C6FF;
+  --accent-2: #7C3AED;
+  --danger: #FB7185;
+  --success: #34D399;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
 body {
-  @apply bg-dark-900 text-gray-200 antialiased;
+  background: var(--bg-0);
+  color: var(--text-0);
   margin: 0;
   min-height: 100vh;
+  letter-spacing: -0.01em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 * {
   box-sizing: border-box;
 }
 
+/* Aurora utility classes */
+.aurora-gradient {
+  background: linear-gradient(90deg, var(--accent-0), var(--accent-1), var(--accent-2));
+}
+.aurora-glow {
+  box-shadow: 0 0 0 1px rgba(38, 198, 255, 0.25), 0 0 22px rgba(38, 198, 255, 0.18);
+}
+.surface-card {
+  background: var(--surface-0);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  border-radius: 16px;
+}
+.surface-elevated {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+
+/* Focus ring - cyan glow */
+.focus-ring-aurora:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--bg-0), 0 0 0 4px var(--accent-1), 0 0 12px rgba(38, 198, 255, 0.35);
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
-
 ::-webkit-scrollbar-track {
-  @apply bg-dark-800;
+  background: var(--bg-1);
 }
-
 ::-webkit-scrollbar-thumb {
-  @apply bg-dark-700 rounded-full;
+  background: var(--surface-2);
+  border-radius: 9999px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-gray-600;
+  background: var(--border-strong);
 }
 
-/* Smooth transitions on interactive elements */
+/* Smooth transitions */
 button, a, [role="button"], input, select, [data-headlessui-listbox-button] {
-  @apply transition-all duration-150 ease-in-out;
+  transition: all 0.15s ease-out;
 }

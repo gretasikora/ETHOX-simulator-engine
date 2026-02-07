@@ -71,13 +71,13 @@ export function GraphExploreControls() {
   if (exploreMode === "none") return null;
 
   return (
-    <div className="absolute right-4 top-4 z-10 w-72 rounded-lg border border-dark-700 bg-dark-800 p-4 shadow-lg">
+    <div className="surface-elevated absolute right-4 top-4 z-10 w-72 rounded-xl p-4 shadow-card backdrop-blur-sm">
       <div className="mb-3 flex items-center justify-between">
-        <span className="text-sm font-medium text-white">Explore</span>
+        <span className="text-sm font-medium text-aurora-text0">Explore</span>
         <button
           type="button"
           onClick={clearHighlight}
-          className="text-xs text-gray-400 hover:text-white"
+          className="text-xs text-aurora-text1 hover:text-aurora-text0 transition-colors"
         >
           Clear highlight
         </button>
@@ -86,29 +86,29 @@ export function GraphExploreControls() {
       {exploreMode === "path" && (
         <div className="space-y-3">
           <div>
-            <label className="mb-1 block text-xs text-gray-500">From</label>
+            <label className="mb-1 block text-xs text-aurora-text2">From</label>
             <input
               type="text"
               value={pathFrom ?? ""}
               onChange={(e) => setPathFrom(e.target.value.trim() || null)}
               placeholder="Agent id"
-              className="w-full rounded border border-dark-700 bg-dark-700 px-2 py-1.5 text-sm text-gray-200 placeholder-gray-500 focus:border-accent focus:outline-none"
+              className="w-full rounded-lg border border-aurora-border bg-aurora-surface0 px-2.5 py-1.5 text-sm text-aurora-text0 placeholder-aurora-text2 focus:outline-none focus:ring-1 focus:ring-aurora-accent1"
             />
             {pathFrom && !fromVisible && (
-              <p className="mt-1 text-xs text-amber-400">Agent not visible under current filters</p>
+              <p className="mt-1 text-xs text-aurora-danger">Agent not visible under current filters</p>
             )}
           </div>
           <div>
-            <label className="mb-1 block text-xs text-gray-500">To</label>
+            <label className="mb-1 block text-xs text-aurora-text2">To</label>
             <input
               type="text"
               value={pathTo ?? ""}
               onChange={(e) => setPathTo(e.target.value.trim() || null)}
               placeholder="Agent id"
-              className="w-full rounded border border-dark-700 bg-dark-700 px-2 py-1.5 text-sm text-gray-200 placeholder-gray-500 focus:border-accent focus:outline-none"
+              className="w-full rounded-lg border border-aurora-border bg-aurora-surface0 px-2.5 py-1.5 text-sm text-aurora-text0 placeholder-aurora-text2 focus:outline-none focus:ring-1 focus:ring-aurora-accent1"
             />
             {pathTo && !toVisible && (
-              <p className="mt-1 text-xs text-amber-400">Agent not visible under current filters</p>
+              <p className="mt-1 text-xs text-aurora-danger">Agent not visible under current filters</p>
             )}
           </div>
           <label className="flex cursor-pointer items-center gap-2">
@@ -116,20 +116,20 @@ export function GraphExploreControls() {
               type="checkbox"
               checked={preferInfluence}
               onChange={(e) => setPreferInfluence(e.target.checked)}
-              className="rounded border-dark-600 bg-dark-700 text-accent focus:ring-accent"
+              className="rounded border-aurora-border bg-aurora-surface2 text-aurora-accent1 focus:ring-aurora-accent1"
             />
-            <span className="text-xs text-gray-400">Prefer influence</span>
+            <span className="text-xs text-aurora-text1">Prefer influence</span>
           </label>
           <button
             type="button"
             onClick={handleFindPath}
             disabled={pathDisabled}
-            className="w-full rounded bg-accent py-2 text-sm font-medium text-white hover:bg-accent-light disabled:opacity-50"
+            className="aurora-gradient w-full rounded-xl py-2 text-sm font-medium text-aurora-bg0 shadow-aurora-glow-sm disabled:opacity-50 transition-all"
           >
             Find Path
           </button>
           {exploreStatus && (
-            <p className="text-xs text-gray-500">{exploreStatus}</p>
+            <p className="text-xs text-aurora-text2">{exploreStatus}</p>
           )}
         </div>
       )}
@@ -137,39 +137,39 @@ export function GraphExploreControls() {
       {exploreMode === "neighborhood" && (
         <div className="space-y-3">
           <div>
-            <label className="mb-1 block text-xs text-gray-500">Center agent</label>
+            <label className="mb-1 block text-xs text-aurora-text2">Center agent</label>
             <input
               type="text"
               value={neighborhoodCenter ?? ""}
               onChange={(e) => setNeighborhoodCenter(e.target.value.trim() || null)}
               placeholder="Agent id or click node"
-              className="w-full rounded border border-dark-700 bg-dark-700 px-2 py-1.5 text-sm text-gray-200 placeholder-gray-500 focus:border-accent focus:outline-none"
+              className="w-full rounded-lg border border-aurora-border bg-aurora-surface0 px-2.5 py-1.5 text-sm text-aurora-text0 placeholder-aurora-text2 focus:outline-none focus:ring-1 focus:ring-aurora-accent1"
             />
             {neighborhoodCenter && !centerVisible && (
-              <p className="mt-1 text-xs text-amber-400">Agent not visible under current filters</p>
+              <p className="mt-1 text-xs text-aurora-danger">Agent not visible under current filters</p>
             )}
           </div>
           <div>
-            <label className="mb-1 block text-xs text-gray-500">Hops: {exploreHops}</label>
+            <label className="mb-1 block text-xs text-aurora-text2">Hops: {exploreHops}</label>
             <input
               type="range"
               min={1}
               max={3}
               value={exploreHops}
               onChange={(e) => setExploreHops(Number(e.target.value))}
-              className="w-full accent-accent"
+              className="w-full [accent-color:var(--accent-1)]"
             />
           </div>
           <button
             type="button"
             onClick={handleHighlightNeighborhood}
             disabled={!neighborhoodCenter || !centerVisible}
-            className="w-full rounded bg-accent py-2 text-sm font-medium text-white hover:bg-accent-light disabled:opacity-50"
+            className="aurora-gradient w-full rounded-xl py-2 text-sm font-medium text-aurora-bg0 shadow-aurora-glow-sm disabled:opacity-50 transition-all"
           >
             Highlight
           </button>
           {exploreStatus && (
-            <p className="text-xs text-gray-500">{exploreStatus}</p>
+            <p className="text-xs text-aurora-text2">{exploreStatus}</p>
           )}
         </div>
       )}

@@ -45,19 +45,19 @@ export function ClusterBreakdownTable({ rows, hasLive }: ClusterBreakdownTablePr
   const visibleColumns = COLUMNS.filter((c) => !c.liveOnly || hasLive);
 
   return (
-    <div className="rounded-lg border border-dark-600 bg-dark-800">
-      <div className="border-b border-dark-600 px-4 py-3">
-        <h3 className="text-sm font-semibold text-white">Cluster breakdown</h3>
-        <p className="text-xs text-gray-500">Sort by column header</p>
+    <div className="rounded-lg border border-aurora-border bg-aurora-surface1">
+      <div className="border-b border-aurora-border px-4 py-3">
+        <h3 className="text-sm font-semibold text-aurora-text0">Cluster breakdown</h3>
+        <p className="text-xs text-aurora-text2">Sort by column header</p>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full text-left text-sm">
           <thead>
-            <tr className="border-b border-dark-600 text-gray-400">
+            <tr className="border-b border-aurora-border text-aurora-text1">
               {visibleColumns.map((col) => (
                 <th
                   key={col.key}
-                  className="cursor-pointer select-none px-4 py-2 hover:bg-dark-700 hover:text-gray-200"
+                  className="cursor-pointer select-none px-4 py-2 hover:bg-aurora-surface2 hover:text-aurora-text0"
                   onClick={() => toggleSort(col.key)}
                 >
                   {col.label}
@@ -68,21 +68,21 @@ export function ClusterBreakdownTable({ rows, hasLive }: ClusterBreakdownTablePr
           </thead>
           <tbody>
             {sorted.map((row) => (
-              <tr key={row.clusterId} className="border-b border-dark-700/50 hover:bg-dark-700/30">
-                <td className="px-4 py-2 font-medium text-white">{row.clusterId}</td>
-                <td className="px-4 py-2 tabular-nums text-gray-300">{row.size}</td>
-                <td className="px-4 py-2 tabular-nums text-gray-300">
+              <tr key={row.clusterId} className="border-b border-aurora-border/50 hover:bg-aurora-surface2/50">
+                <td className="px-4 py-2 font-medium text-aurora-text0">{row.clusterId}</td>
+                <td className="px-4 py-2 tabular-nums text-aurora-text1">{row.size}</td>
+                <td className="px-4 py-2 tabular-nums text-aurora-text1">
                   {row.cohesionWithin.toFixed(2)}
                 </td>
-                <td className="px-4 py-2 tabular-nums text-gray-300">
+                <td className="px-4 py-2 tabular-nums text-aurora-text1">
                   {row.avgInfluence.toFixed(3)}
                 </td>
                 {hasLive && (
                   <>
-                    <td className="px-4 py-2 tabular-nums text-gray-300">
+                    <td className="px-4 py-2 tabular-nums text-aurora-text1">
                       {row.meanOpinion != null ? row.meanOpinion.toFixed(2) : "—"}
                     </td>
-                    <td className="px-4 py-2 tabular-nums text-gray-300">
+                    <td className="px-4 py-2 tabular-nums text-aurora-text1">
                       {row.adoptionShare != null ? `${(row.adoptionShare * 100).toFixed(0)}%` : "—"}
                     </td>
                   </>

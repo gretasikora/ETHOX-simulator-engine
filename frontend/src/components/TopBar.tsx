@@ -18,8 +18,6 @@ export function TopBar({ onSearchSelect }: TopBarProps) {
   const setSelectedTrait = useUIStore((s) => s.setSelectedTrait);
   const traitKeys = useGraphStore((s) => s.traitKeys);
   const nodes = useGraphStore((s) => s.nodes);
-  const insightsPanelOpen = useUIStore((s) => s.insightsPanelOpen);
-  const setInsightsPanelOpen = useUIStore((s) => s.setInsightsPanelOpen);
   const exploreMode = useUIStore((s) => s.exploreMode);
   const setExploreMode = useUIStore((s) => s.setExploreMode);
   const experiments = useExperimentStore((s) => s.experiments);
@@ -74,7 +72,7 @@ export function TopBar({ onSearchSelect }: TopBarProps) {
       <div className="flex items-center gap-2">
         <span className="text-xs text-gray-500">Color by</span>
         <div className="flex rounded-lg border border-dark-700 p-0.5">
-          {(["cluster", "trait", "centrality"] as const).map((opt) => (
+          {(["age", "trait", "centrality"] as const).map((opt) => (
             <button
               key={opt}
               type="button"
@@ -153,18 +151,6 @@ export function TopBar({ onSearchSelect }: TopBarProps) {
         }`}
       >
         Society
-      </button>
-
-      <button
-        type="button"
-        onClick={() => setInsightsPanelOpen(!insightsPanelOpen)}
-        className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
-          insightsPanelOpen
-            ? "border-accent bg-accent text-white"
-            : "border-dark-700 bg-dark-800 text-gray-300 hover:bg-dark-700 hover:text-white"
-        }`}
-      >
-        Insights
       </button>
 
       <button

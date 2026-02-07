@@ -1,731 +1,1246 @@
 {
   "nodes": [
     {
-      "agent_id": "0",
-      "degree": 9,
-      "cluster": 1,
-      "traits": {
-        "Sociability": 0.625,
-        "Assertiveness": 0.65,
-        "Energy Level": 0.45,
-        "Compassion": 0.7,
-        "Respectfulness": 0.7,
-        "Trust": 0.425,
-        "Organization": 0.625,
-        "Productiveness": 0.55,
-        "Responsibility": 0.525,
-        "Anxiety": 0.8,
-        "Depression": 0.675,
-        "Emotional Volatility": 0.8,
-        "Intellectual Curiosity": 0.925,
-        "Aesthetic Sensitivity": 0.675,
-        "Creative Imagination": 0.625
-      },
-      "degree_centrality": 0.4737,
-      "betweenness_centrality": 0.2883
-    },
-    {
-      "agent_id": "1",
-      "degree": 8,
-      "cluster": 2,
-      "traits": {
-        "Sociability": 0.45,
-        "Assertiveness": 0.425,
-        "Energy Level": 0.525,
-        "Compassion": 0.625,
-        "Respectfulness": 0.775,
-        "Trust": 0.875,
-        "Organization": 0.675,
-        "Productiveness": 0.525,
-        "Responsibility": 0.625,
-        "Anxiety": 0.35,
-        "Depression": 0.2,
-        "Emotional Volatility": 0.175,
-        "Intellectual Curiosity": 0.9,
-        "Aesthetic Sensitivity": 1.0,
-        "Creative Imagination": 0.8
-      },
-      "degree_centrality": 0.4211,
-      "betweenness_centrality": 0.1498
-    },
-    {
-      "agent_id": "2",
-      "degree": 8,
+      "agent_id": "agent_0",
+      "degree": 3,
       "cluster": 0,
       "traits": {
-        "Sociability": 0.575,
-        "Assertiveness": 0.7,
-        "Energy Level": 0.675,
-        "Compassion": 0.725,
-        "Respectfulness": 0.925,
-        "Trust": 0.675,
-        "Organization": 1.0,
-        "Productiveness": 1.0,
-        "Responsibility": 0.925,
-        "Anxiety": 0.5,
-        "Depression": 0.225,
-        "Emotional Volatility": 0.4,
-        "Intellectual Curiosity": 0.7,
-        "Aesthetic Sensitivity": 0.475,
-        "Creative Imagination": 0.8
+        "spending": 0.6887,
+        "loyalty": 0.3097,
+        "social_influence": 0.6772,
+        "risk_tolerance": 0.6527,
+        "price_sensitivity": 0.1591,
+        "tech_adoption": 0.3323,
+        "impulsiveness": 0.1557,
+        "environmental_consciousness": 0.5989
       },
-      "degree_centrality": 0.4211,
-      "betweenness_centrality": 0.0553
+      "degree_centrality": 0.118,
+      "betweenness_centrality": 0.1768,
+      "age": 69,
+      "gender": "male"
     },
     {
-      "agent_id": "3",
-      "degree": 9,
-      "cluster": 3,
-      "traits": {
-        "Sociability": 0.425,
-        "Assertiveness": 0.425,
-        "Energy Level": 0.575,
-        "Compassion": 0.6,
-        "Respectfulness": 0.7,
-        "Trust": 0.425,
-        "Organization": 0.6,
-        "Productiveness": 0.75,
-        "Responsibility": 0.525,
-        "Anxiety": 0.525,
-        "Depression": 0.775,
-        "Emotional Volatility": 0.5,
-        "Intellectual Curiosity": 0.725,
-        "Aesthetic Sensitivity": 0.525,
-        "Creative Imagination": 0.7
-      },
-      "degree_centrality": 0.4737,
-      "betweenness_centrality": 0.1698
-    },
-    {
-      "agent_id": "4",
+      "agent_id": "agent_1",
       "degree": 5,
-      "cluster": 1,
+      "cluster": 0,
       "traits": {
-        "Sociability": 0.975,
-        "Assertiveness": 0.6,
-        "Energy Level": 0.775,
-        "Compassion": 0.725,
-        "Respectfulness": 0.775,
-        "Trust": 0.475,
-        "Organization": 0.55,
-        "Productiveness": 0.575,
-        "Responsibility": 0.4,
-        "Anxiety": 0.675,
-        "Depression": 0.325,
-        "Emotional Volatility": 0.55,
-        "Intellectual Curiosity": 0.775,
-        "Aesthetic Sensitivity": 0.525,
-        "Creative Imagination": 0.9
+        "spending": 0.7872,
+        "loyalty": 0.4091,
+        "social_influence": 0.3819,
+        "risk_tolerance": 0.2373,
+        "price_sensitivity": 0.1842,
+        "tech_adoption": 0.2674,
+        "impulsiveness": 0.4006,
+        "environmental_consciousness": 0.6691
       },
-      "degree_centrality": 0.2632,
-      "betweenness_centrality": 0.0326
+      "degree_centrality": 0.1537,
+      "betweenness_centrality": 0.1886,
+      "age": 74,
+      "gender": "non_binary"
     },
     {
-      "agent_id": "5",
-      "degree": 7,
-      "cluster": 1,
+      "agent_id": "agent_2",
+      "degree": 6,
+      "cluster": 0,
       "traits": {
-        "Sociability": 0.875,
-        "Assertiveness": 0.75,
-        "Energy Level": 0.65,
-        "Compassion": 0.575,
-        "Respectfulness": 0.8,
-        "Trust": 0.625,
-        "Organization": 0.8,
-        "Productiveness": 0.525,
-        "Responsibility": 0.55,
-        "Anxiety": 0.6,
-        "Depression": 0.2,
-        "Emotional Volatility": 0.475,
-        "Intellectual Curiosity": 0.8,
-        "Aesthetic Sensitivity": 0.475,
-        "Creative Imagination": 0.45
+        "spending": 0.7873,
+        "loyalty": 0.1731,
+        "social_influence": 0.2896,
+        "risk_tolerance": 0.2599,
+        "price_sensitivity": 0.1939,
+        "tech_adoption": 0.3929,
+        "impulsiveness": 0.2791,
+        "environmental_consciousness": 0.7916
       },
-      "degree_centrality": 0.3684,
-      "betweenness_centrality": 0.028
+      "degree_centrality": 0.3085,
+      "betweenness_centrality": 0.0513,
+      "age": 64,
+      "gender": "female"
     },
     {
-      "agent_id": "6",
+      "agent_id": "agent_3",
       "degree": 7,
       "cluster": 0,
       "traits": {
-        "Sociability": 0.45,
-        "Assertiveness": 0.475,
-        "Energy Level": 0.375,
-        "Compassion": 0.825,
-        "Respectfulness": 0.95,
-        "Trust": 1.0,
-        "Organization": 0.775,
-        "Productiveness": 0.7,
-        "Responsibility": 0.65,
-        "Anxiety": 0.525,
-        "Depression": 0.35,
-        "Emotional Volatility": 0.475,
-        "Intellectual Curiosity": 0.8,
-        "Aesthetic Sensitivity": 0.55,
-        "Creative Imagination": 0.375
+        "spending": 0.4739,
+        "loyalty": 0.8217,
+        "social_influence": 0.5711,
+        "risk_tolerance": 0.7609,
+        "price_sensitivity": 0.0438,
+        "tech_adoption": 0.3428,
+        "impulsiveness": 0.4152,
+        "environmental_consciousness": 0.6888
       },
-      "degree_centrality": 0.3684,
-      "betweenness_centrality": 0.0391
+      "degree_centrality": 0.3312,
+      "betweenness_centrality": 0.1187,
+      "age": 76,
+      "gender": "unknown"
     },
     {
-      "agent_id": "7",
-      "degree": 11,
+      "agent_id": "agent_4",
+      "degree": 6,
       "cluster": 0,
       "traits": {
-        "Sociability": 0.65,
-        "Assertiveness": 0.475,
-        "Energy Level": 0.675,
-        "Compassion": 0.475,
-        "Respectfulness": 0.875,
-        "Trust": 0.475,
-        "Organization": 0.675,
-        "Productiveness": 0.725,
-        "Responsibility": 0.925,
-        "Anxiety": 0.7,
-        "Depression": 0.2,
-        "Emotional Volatility": 0.4,
-        "Intellectual Curiosity": 0.55,
-        "Aesthetic Sensitivity": 0.55,
-        "Creative Imagination": 0.65
+        "spending": 0.4136,
+        "loyalty": 0.6548,
+        "social_influence": 0.6339,
+        "risk_tolerance": 0.5225,
+        "price_sensitivity": 0.5261,
+        "tech_adoption": 0.5473,
+        "impulsiveness": 0.6472,
+        "environmental_consciousness": 0.3321
       },
-      "degree_centrality": 0.5789,
-      "betweenness_centrality": 0.2416
+      "degree_centrality": 0.3022,
+      "betweenness_centrality": 0.1154,
+      "age": 56,
+      "gender": "unknown"
     },
     {
-      "agent_id": "8",
-      "degree": 2,
-      "cluster": 2,
+      "agent_id": "agent_5",
+      "degree": 6,
+      "cluster": 0,
       "traits": {
-        "Sociability": 0.3,
-        "Assertiveness": 0.525,
-        "Energy Level": 0.475,
-        "Compassion": 0.725,
-        "Respectfulness": 1.0,
-        "Trust": 0.675,
-        "Organization": 0.575,
-        "Productiveness": 0.525,
-        "Responsibility": 0.5,
-        "Anxiety": 0.05,
-        "Depression": 0.15,
-        "Emotional Volatility": 0.0,
-        "Intellectual Curiosity": 0.9,
-        "Aesthetic Sensitivity": 0.925,
-        "Creative Imagination": 0.7
+        "spending": 0.8117,
+        "loyalty": 0.6188,
+        "social_influence": 0.6688,
+        "risk_tolerance": 0.4755,
+        "price_sensitivity": 0.3069,
+        "tech_adoption": 0.4516,
+        "impulsiveness": 0.8475,
+        "environmental_consciousness": 0.3582
       },
-      "degree_centrality": 0.1053,
-      "betweenness_centrality": 0.0
+      "degree_centrality": 0.0975,
+      "betweenness_centrality": 0.2738,
+      "age": 73,
+      "gender": "non_binary"
     },
     {
-      "agent_id": "9",
+      "agent_id": "agent_6",
+      "degree": 9,
+      "cluster": 0,
+      "traits": {
+        "spending": 0.9065,
+        "loyalty": 0.2941,
+        "social_influence": 0.3876,
+        "risk_tolerance": 0.8372,
+        "price_sensitivity": 0.3571,
+        "tech_adoption": 0.2397,
+        "impulsiveness": 0.8525,
+        "environmental_consciousness": 0.2918
+      },
+      "degree_centrality": 0.288,
+      "betweenness_centrality": 0.0236,
+      "age": 64,
+      "gender": "unknown"
+    },
+    {
+      "agent_id": "agent_7",
+      "degree": 4,
+      "cluster": 0,
+      "traits": {
+        "spending": 0.9852,
+        "loyalty": 0.4448,
+        "social_influence": 0.6852,
+        "risk_tolerance": 0.3046,
+        "price_sensitivity": 0.4568,
+        "tech_adoption": 0.8084,
+        "impulsiveness": 0.6565,
+        "environmental_consciousness": 0.4737
+      },
+      "degree_centrality": 0.193,
+      "betweenness_centrality": 0.2699,
+      "age": 46,
+      "gender": "male"
+    },
+    {
+      "agent_id": "agent_8",
+      "degree": 2,
+      "cluster": 1,
+      "traits": {
+        "spending": 0.2615,
+        "loyalty": 0.4234,
+        "social_influence": 0.5545,
+        "risk_tolerance": 0.5365,
+        "price_sensitivity": 0.1467,
+        "tech_adoption": 0.4011,
+        "impulsiveness": 0.3642,
+        "environmental_consciousness": 0.5682
+      },
+      "degree_centrality": 0.4424,
+      "betweenness_centrality": 0.1729,
+      "age": 33,
+      "gender": "unknown"
+    },
+    {
+      "agent_id": "agent_9",
+      "degree": 6,
+      "cluster": 1,
+      "traits": {
+        "spending": 0.6226,
+        "loyalty": 0.4444,
+        "social_influence": 0.5476,
+        "risk_tolerance": 0.6721,
+        "price_sensitivity": 0.7102,
+        "tech_adoption": 0.4094,
+        "impulsiveness": 0.6667,
+        "environmental_consciousness": 0.3038
+      },
+      "degree_centrality": 0.2167,
+      "betweenness_centrality": 0.0836,
+      "age": 33,
+      "gender": "male"
+    },
+    {
+      "agent_id": "agent_10",
+      "degree": 5,
+      "cluster": 1,
+      "traits": {
+        "spending": 0.5381,
+        "loyalty": 0.6403,
+        "social_influence": 0.9668,
+        "risk_tolerance": 0.8667,
+        "price_sensitivity": 0.6425,
+        "tech_adoption": 0.4341,
+        "impulsiveness": 0.3524,
+        "environmental_consciousness": 0.5244
+      },
+      "degree_centrality": 0.1399,
+      "betweenness_centrality": 0.2352,
+      "age": 47,
+      "gender": "non_binary"
+    },
+    {
+      "agent_id": "agent_11",
       "degree": 4,
       "cluster": 1,
       "traits": {
-        "Sociability": 0.775,
-        "Assertiveness": 0.8,
-        "Energy Level": 0.475,
-        "Compassion": 0.825,
-        "Respectfulness": 0.65,
-        "Trust": 0.525,
-        "Organization": 0.3,
-        "Productiveness": 0.525,
-        "Responsibility": 0.5,
-        "Anxiety": 0.85,
-        "Depression": 0.375,
-        "Emotional Volatility": 0.6,
-        "Intellectual Curiosity": 1.0,
-        "Aesthetic Sensitivity": 0.75,
-        "Creative Imagination": 0.925
+        "spending": 0.5453,
+        "loyalty": 1.0,
+        "social_influence": 0.662,
+        "risk_tolerance": 0.4718,
+        "price_sensitivity": 0.5559,
+        "tech_adoption": 0.5602,
+        "impulsiveness": 0.5511,
+        "environmental_consciousness": 0.6431
       },
-      "degree_centrality": 0.2105,
-      "betweenness_centrality": 0.0275
+      "degree_centrality": 0.4808,
+      "betweenness_centrality": 0.024,
+      "age": 29,
+      "gender": "male"
     },
     {
-      "agent_id": "10",
-      "degree": 1,
+      "agent_id": "agent_12",
+      "degree": 3,
       "cluster": 1,
       "traits": {
-        "Sociability": 0.575,
-        "Assertiveness": 0.325,
-        "Energy Level": 0.475,
-        "Compassion": 0.5,
-        "Respectfulness": 0.775,
-        "Trust": 0.375,
-        "Organization": 0.575,
-        "Productiveness": 0.225,
-        "Responsibility": 0.575,
-        "Anxiety": 0.875,
-        "Depression": 0.85,
-        "Emotional Volatility": 0.95,
-        "Intellectual Curiosity": 0.6,
-        "Aesthetic Sensitivity": 0.425,
-        "Creative Imagination": 0.25
+        "spending": 0.5921,
+        "loyalty": 0.4651,
+        "social_influence": 0.7834,
+        "risk_tolerance": 0.5806,
+        "price_sensitivity": 0.4683,
+        "tech_adoption": 0.6006,
+        "impulsiveness": 0.3658,
+        "environmental_consciousness": 0.3224
       },
-      "degree_centrality": 0.0526,
-      "betweenness_centrality": 0.0
+      "degree_centrality": 0.3391,
+      "betweenness_centrality": 0.09,
+      "age": 38,
+      "gender": "male"
     },
     {
-      "agent_id": "11",
-      "degree": 3,
-      "cluster": 0,
+      "agent_id": "agent_13",
+      "degree": 5,
+      "cluster": 1,
       "traits": {
-        "Sociability": 0.275,
-        "Assertiveness": 0.45,
-        "Energy Level": 0.725,
-        "Compassion": 0.8,
-        "Respectfulness": 0.975,
-        "Trust": 0.55,
-        "Organization": 0.825,
-        "Productiveness": 0.75,
-        "Responsibility": 0.95,
-        "Anxiety": 0.875,
-        "Depression": 0.45,
-        "Emotional Volatility": 0.725,
-        "Intellectual Curiosity": 0.725,
-        "Aesthetic Sensitivity": 0.7,
-        "Creative Imagination": 0.875
+        "spending": 0.2298,
+        "loyalty": 0.6578,
+        "social_influence": 0.6238,
+        "risk_tolerance": 0.2493,
+        "price_sensitivity": 0.1901,
+        "tech_adoption": 0.3586,
+        "impulsiveness": 0.4864,
+        "environmental_consciousness": 0.8517
       },
-      "degree_centrality": 0.1579,
-      "betweenness_centrality": 0.0019
+      "degree_centrality": 0.2692,
+      "betweenness_centrality": 0.2004,
+      "age": 53,
+      "gender": "non_binary"
     },
     {
-      "agent_id": "12",
+      "agent_id": "agent_14",
+      "degree": 5,
+      "cluster": 1,
+      "traits": {
+        "spending": 0.6798,
+        "loyalty": 0.8798,
+        "social_influence": 0.8823,
+        "risk_tolerance": 0.2496,
+        "price_sensitivity": 0.295,
+        "tech_adoption": 0.6831,
+        "impulsiveness": 0.4535,
+        "environmental_consciousness": 0.6551
+      },
+      "degree_centrality": 0.3208,
+      "betweenness_centrality": 0.2488,
+      "age": 20,
+      "gender": "male"
+    },
+    {
+      "agent_id": "agent_15",
+      "degree": 5,
+      "cluster": 1,
+      "traits": {
+        "spending": 0.3263,
+        "loyalty": 0.9202,
+        "social_influence": 0.6062,
+        "risk_tolerance": 0.4589,
+        "price_sensitivity": 0.8052,
+        "tech_adoption": 0.1966,
+        "impulsiveness": 0.432,
+        "environmental_consciousness": 0.3662
+      },
+      "degree_centrality": 0.1887,
+      "betweenness_centrality": 0.2799,
+      "age": 80,
+      "gender": "male"
+    },
+    {
+      "agent_id": "agent_16",
+      "degree": 3,
+      "cluster": 2,
+      "traits": {
+        "spending": 0.6814,
+        "loyalty": 0.2703,
+        "social_influence": 0.7449,
+        "risk_tolerance": 0.668,
+        "price_sensitivity": 0.3787,
+        "tech_adoption": 0.964,
+        "impulsiveness": 0.7627,
+        "environmental_consciousness": 0.2622
+      },
+      "degree_centrality": 0.1728,
+      "betweenness_centrality": 0.2792,
+      "age": 69,
+      "gender": "female"
+    },
+    {
+      "agent_id": "agent_17",
+      "degree": 3,
+      "cluster": 2,
+      "traits": {
+        "spending": 0.4176,
+        "loyalty": 0.3393,
+        "social_influence": 0.6596,
+        "risk_tolerance": 0.882,
+        "price_sensitivity": 0.4422,
+        "tech_adoption": 0.3913,
+        "impulsiveness": 0.2815,
+        "environmental_consciousness": 0.812
+      },
+      "degree_centrality": 0.1468,
+      "betweenness_centrality": 0.1924,
+      "age": 43,
+      "gender": "non_binary"
+    },
+    {
+      "agent_id": "agent_18",
+      "degree": 6,
+      "cluster": 2,
+      "traits": {
+        "spending": 0.6866,
+        "loyalty": 0.718,
+        "social_influence": 0.7306,
+        "risk_tolerance": 0.452,
+        "price_sensitivity": 0.5999,
+        "tech_adoption": 0.716,
+        "impulsiveness": 0.4464,
+        "environmental_consciousness": 0.3946
+      },
+      "degree_centrality": 0.0108,
+      "betweenness_centrality": 0.2777,
+      "age": 52,
+      "gender": "female"
+    },
+    {
+      "agent_id": "agent_19",
+      "degree": 3,
+      "cluster": 2,
+      "traits": {
+        "spending": 0.3325,
+        "loyalty": 0.5646,
+        "social_influence": 0.458,
+        "risk_tolerance": 0.7919,
+        "price_sensitivity": 0.3672,
+        "tech_adoption": 0.5506,
+        "impulsiveness": 0.2605,
+        "environmental_consciousness": 0.7997
+      },
+      "degree_centrality": 0.4524,
+      "betweenness_centrality": 0.1847,
+      "age": 37,
+      "gender": "unknown"
+    },
+    {
+      "agent_id": "agent_20",
       "degree": 5,
       "cluster": 2,
       "traits": {
-        "Sociability": 0.4,
-        "Assertiveness": 0.775,
-        "Energy Level": 0.675,
-        "Compassion": 1.0,
-        "Respectfulness": 0.8,
-        "Trust": 0.625,
-        "Organization": 0.65,
-        "Productiveness": 0.575,
-        "Responsibility": 0.65,
-        "Anxiety": 0.25,
-        "Depression": 0.7,
-        "Emotional Volatility": 0.575,
-        "Intellectual Curiosity": 0.825,
-        "Aesthetic Sensitivity": 1.0,
-        "Creative Imagination": 0.75
+        "spending": 0.4288,
+        "loyalty": 0.3581,
+        "social_influence": 0.5789,
+        "risk_tolerance": 0.6674,
+        "price_sensitivity": 0.3229,
+        "tech_adoption": 0.9499,
+        "impulsiveness": 0.2188,
+        "environmental_consciousness": 0.5359
       },
-      "degree_centrality": 0.2632,
-      "betweenness_centrality": 0.0497
+      "degree_centrality": 0.1742,
+      "betweenness_centrality": 0.2455,
+      "age": 66,
+      "gender": "female"
     },
     {
-      "agent_id": "13",
-      "degree": 3,
-      "cluster": 0,
-      "traits": {
-        "Sociability": 0.125,
-        "Assertiveness": 0.375,
-        "Energy Level": 0.875,
-        "Compassion": 0.7,
-        "Respectfulness": 0.95,
-        "Trust": 1.0,
-        "Organization": 0.85,
-        "Productiveness": 0.875,
-        "Responsibility": 1.0,
-        "Anxiety": 0.55,
-        "Depression": 0.6,
-        "Emotional Volatility": 0.2,
-        "Intellectual Curiosity": 0.575,
-        "Aesthetic Sensitivity": 0.9,
-        "Creative Imagination": 0.425
-      },
-      "degree_centrality": 0.1579,
-      "betweenness_centrality": 0.0
-    },
-    {
-      "agent_id": "14",
-      "degree": 4,
+      "agent_id": "agent_21",
+      "degree": 6,
       "cluster": 2,
       "traits": {
-        "Sociability": 0.55,
-        "Assertiveness": 0.475,
-        "Energy Level": 0.625,
-        "Compassion": 0.975,
-        "Respectfulness": 0.925,
-        "Trust": 0.65,
-        "Organization": 0.3,
-        "Productiveness": 0.5,
-        "Responsibility": 0.55,
-        "Anxiety": 0.4,
-        "Depression": 0.425,
-        "Emotional Volatility": 0.225,
-        "Intellectual Curiosity": 0.825,
-        "Aesthetic Sensitivity": 0.85,
-        "Creative Imagination": 0.925
+        "spending": 0.5486,
+        "loyalty": 0.2244,
+        "social_influence": 0.3419,
+        "risk_tolerance": 0.8244,
+        "price_sensitivity": 0.4746,
+        "tech_adoption": 0.5059,
+        "impulsiveness": 0.4454,
+        "environmental_consciousness": 0.4947
       },
-      "degree_centrality": 0.2105,
-      "betweenness_centrality": 0.0283
+      "degree_centrality": 0.378,
+      "betweenness_centrality": 0.231,
+      "age": 24,
+      "gender": "unknown"
     },
     {
-      "agent_id": "15",
-      "degree": 2,
+      "agent_id": "agent_22",
+      "degree": 3,
+      "cluster": 2,
+      "traits": {
+        "spending": 0.3921,
+        "loyalty": 0.6105,
+        "social_influence": 0.6179,
+        "risk_tolerance": 0.3995,
+        "price_sensitivity": 0.485,
+        "tech_adoption": 0.6488,
+        "impulsiveness": 0.6417,
+        "environmental_consciousness": 0.7674
+      },
+      "degree_centrality": 0.2191,
+      "betweenness_centrality": 0.2721,
+      "age": 46,
+      "gender": "female"
+    },
+    {
+      "agent_id": "agent_23",
+      "degree": 3,
+      "cluster": 2,
+      "traits": {
+        "spending": 0.6411,
+        "loyalty": 0.305,
+        "social_influence": 0.6358,
+        "risk_tolerance": 0.7381,
+        "price_sensitivity": 0.2803,
+        "tech_adoption": 0.4758,
+        "impulsiveness": 0.3999,
+        "environmental_consciousness": 0.2293
+      },
+      "degree_centrality": 0.35,
+      "betweenness_centrality": 0.2119,
+      "age": 22,
+      "gender": "unknown"
+    },
+    {
+      "agent_id": "agent_24",
+      "degree": 5,
       "cluster": 3,
       "traits": {
-        "Sociability": 0.425,
-        "Assertiveness": 0.5,
-        "Energy Level": 0.275,
-        "Compassion": 0.5,
-        "Respectfulness": 0.525,
-        "Trust": 0.775,
-        "Organization": 0.5,
-        "Productiveness": 0.35,
-        "Responsibility": 0.45,
-        "Anxiety": 0.725,
-        "Depression": 0.7,
-        "Emotional Volatility": 0.55,
-        "Intellectual Curiosity": 0.9,
-        "Aesthetic Sensitivity": 0.65,
-        "Creative Imagination": 0.625
+        "spending": 0.4531,
+        "loyalty": 0.3908,
+        "social_influence": 0.5331,
+        "risk_tolerance": 0.5896,
+        "price_sensitivity": 0.7672,
+        "tech_adoption": 0.3294,
+        "impulsiveness": 0.6118,
+        "environmental_consciousness": 0.7028
       },
-      "degree_centrality": 0.1053,
-      "betweenness_centrality": 0.0119
+      "degree_centrality": 0.2153,
+      "betweenness_centrality": 0.2243,
+      "age": 52,
+      "gender": "female"
     },
     {
-      "agent_id": "16",
-      "degree": 2,
-      "cluster": 0,
-      "traits": {
-        "Sociability": 0.25,
-        "Assertiveness": 0.275,
-        "Energy Level": 0.425,
-        "Compassion": 0.825,
-        "Respectfulness": 1.0,
-        "Trust": 0.6,
-        "Organization": 0.65,
-        "Productiveness": 0.5,
-        "Responsibility": 0.55,
-        "Anxiety": 0.65,
-        "Depression": 0.45,
-        "Emotional Volatility": 0.375,
-        "Intellectual Curiosity": 0.325,
-        "Aesthetic Sensitivity": 0.5,
-        "Creative Imagination": 0.4
-      },
-      "degree_centrality": 0.1053,
-      "betweenness_centrality": 0.0
-    },
-    {
-      "agent_id": "17",
-      "degree": 3,
-      "cluster": 1,
-      "traits": {
-        "Sociability": 0.05,
-        "Assertiveness": 0.6,
-        "Energy Level": 0.8,
-        "Compassion": 0.9,
-        "Respectfulness": 0.65,
-        "Trust": 0.575,
-        "Organization": 0.5,
-        "Productiveness": 0.625,
-        "Responsibility": 0.6,
-        "Anxiety": 0.75,
-        "Depression": 0.575,
-        "Emotional Volatility": 0.525,
-        "Intellectual Curiosity": 0.925,
-        "Aesthetic Sensitivity": 0.825,
-        "Creative Imagination": 1.0
-      },
-      "degree_centrality": 0.1579,
-      "betweenness_centrality": 0.0019
-    },
-    {
-      "agent_id": "18",
-      "degree": 2,
+      "agent_id": "agent_25",
+      "degree": 5,
       "cluster": 3,
       "traits": {
-        "Sociability": 0.475,
-        "Assertiveness": 0.325,
-        "Energy Level": 0.35,
-        "Compassion": 0.575,
-        "Respectfulness": 0.475,
-        "Trust": 0.425,
-        "Organization": 0.3,
-        "Productiveness": 0.1,
-        "Responsibility": 0.425,
-        "Anxiety": 0.675,
-        "Depression": 0.625,
-        "Emotional Volatility": 0.325,
-        "Intellectual Curiosity": 0.65,
-        "Aesthetic Sensitivity": 0.7,
-        "Creative Imagination": 0.825
+        "spending": 0.4475,
+        "loyalty": 0.4692,
+        "social_influence": 0.661,
+        "risk_tolerance": 0.7026,
+        "price_sensitivity": 0.8479,
+        "tech_adoption": 0.6019,
+        "impulsiveness": 0.7377,
+        "environmental_consciousness": 0.1361
       },
-      "degree_centrality": 0.1053,
-      "betweenness_centrality": 0.0095
+      "degree_centrality": 0.4348,
+      "betweenness_centrality": 0.0545,
+      "age": 34,
+      "gender": "unknown"
     },
     {
-      "agent_id": "19",
-      "degree": 3,
-      "cluster": 0,
+      "agent_id": "agent_26",
+      "degree": 6,
+      "cluster": 3,
       "traits": {
-        "Sociability": 0.025,
-        "Assertiveness": 0.3,
-        "Energy Level": 0.525,
-        "Compassion": 0.975,
-        "Respectfulness": 0.875,
-        "Trust": 0.6,
-        "Organization": 0.55,
-        "Productiveness": 0.75,
-        "Responsibility": 0.875,
-        "Anxiety": 0.725,
-        "Depression": 0.9,
-        "Emotional Volatility": 0.475,
-        "Intellectual Curiosity": 0.725,
-        "Aesthetic Sensitivity": 0.675,
-        "Creative Imagination": 0.6
+        "spending": 0.3874,
+        "loyalty": 0.4784,
+        "social_influence": 0.4572,
+        "risk_tolerance": 0.5199,
+        "price_sensitivity": 0.532,
+        "tech_adoption": 0.3216,
+        "impulsiveness": 0.3983,
+        "environmental_consciousness": 0.5824
       },
-      "degree_centrality": 0.1579,
-      "betweenness_centrality": 0.0049
+      "degree_centrality": 0.0252,
+      "betweenness_centrality": 0.0742,
+      "age": 71,
+      "gender": "male"
+    },
+    {
+      "agent_id": "agent_27",
+      "degree": 4,
+      "cluster": 3,
+      "traits": {
+        "spending": 0.5205,
+        "loyalty": 0.407,
+        "social_influence": 0.7617,
+        "risk_tolerance": 0.3275,
+        "price_sensitivity": 0.6563,
+        "tech_adoption": 0.6866,
+        "impulsiveness": 0.4105,
+        "environmental_consciousness": 0.533
+      },
+      "degree_centrality": 0.2921,
+      "betweenness_centrality": 0.2724,
+      "age": 42,
+      "gender": "unknown"
+    },
+    {
+      "agent_id": "agent_28",
+      "degree": 6,
+      "cluster": 3,
+      "traits": {
+        "spending": 0.7045,
+        "loyalty": 0.6214,
+        "social_influence": 0.3851,
+        "risk_tolerance": 0.4178,
+        "price_sensitivity": 0.7426,
+        "tech_adoption": 0.4478,
+        "impulsiveness": 0.702,
+        "environmental_consciousness": 0.1709
+      },
+      "degree_centrality": 0.0162,
+      "betweenness_centrality": 0.126,
+      "age": 49,
+      "gender": "male"
+    },
+    {
+      "agent_id": "agent_29",
+      "degree": 6,
+      "cluster": 3,
+      "traits": {
+        "spending": 0.4326,
+        "loyalty": 0.7269,
+        "social_influence": 0.227,
+        "risk_tolerance": 0.5431,
+        "price_sensitivity": 0.6535,
+        "tech_adoption": 0.6578,
+        "impulsiveness": 0.8639,
+        "environmental_consciousness": 0.2425
+      },
+      "degree_centrality": 0.468,
+      "betweenness_centrality": 0.0837,
+      "age": 46,
+      "gender": "female"
+    },
+    {
+      "agent_id": "agent_30",
+      "degree": 3,
+      "cluster": 3,
+      "traits": {
+        "spending": 0.6643,
+        "loyalty": 0.5682,
+        "social_influence": 0.4616,
+        "risk_tolerance": 0.4635,
+        "price_sensitivity": 0.3109,
+        "tech_adoption": 0.6337,
+        "impulsiveness": 0.6868,
+        "environmental_consciousness": 0.1629
+      },
+      "degree_centrality": 0.2091,
+      "betweenness_centrality": 0.1666,
+      "age": 33,
+      "gender": "unknown"
+    },
+    {
+      "agent_id": "agent_31",
+      "degree": 4,
+      "cluster": 3,
+      "traits": {
+        "spending": 0.5857,
+        "loyalty": 0.5944,
+        "social_influence": 0.3713,
+        "risk_tolerance": 0.4,
+        "price_sensitivity": 0.4901,
+        "tech_adoption": 0.5045,
+        "impulsiveness": 0.589,
+        "environmental_consciousness": 0.2128
+      },
+      "degree_centrality": 0.0691,
+      "betweenness_centrality": 0.0578,
+      "age": 25,
+      "gender": "female"
+    },
+    {
+      "agent_id": "agent_32",
+      "degree": 5,
+      "cluster": 4,
+      "traits": {
+        "spending": 0.2626,
+        "loyalty": 0.3838,
+        "social_influence": 0.6755,
+        "risk_tolerance": 0.8548,
+        "price_sensitivity": 0.3499,
+        "tech_adoption": 0.423,
+        "impulsiveness": 0.1851,
+        "environmental_consciousness": 0.3911
+      },
+      "degree_centrality": 0.4726,
+      "betweenness_centrality": 0.1914,
+      "age": 66,
+      "gender": "unknown"
+    },
+    {
+      "agent_id": "agent_33",
+      "degree": 2,
+      "cluster": 4,
+      "traits": {
+        "spending": 0.064,
+        "loyalty": 0.3663,
+        "social_influence": 0.4975,
+        "risk_tolerance": 0.4238,
+        "price_sensitivity": 0.1815,
+        "tech_adoption": 0.5105,
+        "impulsiveness": 0.5422,
+        "environmental_consciousness": 0.9765
+      },
+      "degree_centrality": 0.0517,
+      "betweenness_centrality": 0.0745,
+      "age": 53,
+      "gender": "unknown"
+    },
+    {
+      "agent_id": "agent_34",
+      "degree": 3,
+      "cluster": 4,
+      "traits": {
+        "spending": 0.5219,
+        "loyalty": 0.3399,
+        "social_influence": 0.4589,
+        "risk_tolerance": 0.8141,
+        "price_sensitivity": 0.4074,
+        "tech_adoption": 0.6138,
+        "impulsiveness": 0.7101,
+        "environmental_consciousness": 0.5587
+      },
+      "degree_centrality": 0.087,
+      "betweenness_centrality": 0.0521,
+      "age": 22,
+      "gender": "female"
+    },
+    {
+      "agent_id": "agent_35",
+      "degree": 4,
+      "cluster": 4,
+      "traits": {
+        "spending": 0.0917,
+        "loyalty": 0.5145,
+        "social_influence": 0.3803,
+        "risk_tolerance": 0.6126,
+        "price_sensitivity": 0.6972,
+        "tech_adoption": 0.6977,
+        "impulsiveness": 0.6834,
+        "environmental_consciousness": 0.664
+      },
+      "degree_centrality": 0.3273,
+      "betweenness_centrality": 0.2725,
+      "age": 70,
+      "gender": "female"
+    },
+    {
+      "agent_id": "agent_36",
+      "degree": 7,
+      "cluster": 4,
+      "traits": {
+        "spending": 0.076,
+        "loyalty": 0.4344,
+        "social_influence": 0.4992,
+        "risk_tolerance": 0.3123,
+        "price_sensitivity": 0.7084,
+        "tech_adoption": 0.499,
+        "impulsiveness": 0.1562,
+        "environmental_consciousness": 0.6237
+      },
+      "degree_centrality": 0.1327,
+      "betweenness_centrality": 0.0274,
+      "age": 79,
+      "gender": "male"
+    },
+    {
+      "agent_id": "agent_37",
+      "degree": 9,
+      "cluster": 4,
+      "traits": {
+        "spending": 0.7342,
+        "loyalty": 0.2698,
+        "social_influence": 0.6479,
+        "risk_tolerance": 0.6741,
+        "price_sensitivity": 0.326,
+        "tech_adoption": 0.5792,
+        "impulsiveness": 0.2243,
+        "environmental_consciousness": 0.634
+      },
+      "degree_centrality": 0.4303,
+      "betweenness_centrality": 0.0989,
+      "age": 62,
+      "gender": "unknown"
+    },
+    {
+      "agent_id": "agent_38",
+      "degree": 7,
+      "cluster": 4,
+      "traits": {
+        "spending": 0.362,
+        "loyalty": 0.6982,
+        "social_influence": 0.4358,
+        "risk_tolerance": 0.488,
+        "price_sensitivity": 0.4454,
+        "tech_adoption": 0.8244,
+        "impulsiveness": 0.5082,
+        "environmental_consciousness": 0.4849
+      },
+      "degree_centrality": 0.3807,
+      "betweenness_centrality": 0.1876,
+      "age": 66,
+      "gender": "male"
+    },
+    {
+      "agent_id": "agent_39",
+      "degree": 3,
+      "cluster": 4,
+      "traits": {
+        "spending": 0.232,
+        "loyalty": 0.7442,
+        "social_influence": 0.5432,
+        "risk_tolerance": 0.8057,
+        "price_sensitivity": 0.2753,
+        "tech_adoption": 0.541,
+        "impulsiveness": 0.3544,
+        "environmental_consciousness": 0.94
+      },
+      "degree_centrality": 0.0676,
+      "betweenness_centrality": 0.2496,
+      "age": 49,
+      "gender": "non_binary"
     }
   ],
   "edges": [
     {
-      "source": "0",
-      "target": "3",
-      "weight": 0.8683
+      "source": "agent_36",
+      "target": "agent_38",
+      "weight": 0.8843
     },
     {
-      "source": "0",
-      "target": "4",
-      "weight": 0.84
+      "source": "agent_27",
+      "target": "agent_31",
+      "weight": 0.6859
     },
     {
-      "source": "0",
-      "target": "5",
-      "weight": 0.82
+      "source": "agent_26",
+      "target": "agent_27",
+      "weight": 0.9048
     },
     {
-      "source": "0",
-      "target": "7",
-      "weight": 0.8
+      "source": "agent_21",
+      "target": "agent_22",
+      "weight": 0.954
     },
     {
-      "source": "0",
-      "target": "9",
-      "weight": 0.8683
+      "source": "agent_32",
+      "target": "agent_36",
+      "weight": 0.498
     },
     {
-      "source": "0",
-      "target": "10",
-      "weight": 0.8333
+      "source": "agent_18",
+      "target": "agent_23",
+      "weight": 0.6126
     },
     {
-      "source": "0",
-      "target": "12",
-      "weight": 0.82
+      "source": "agent_38",
+      "target": "agent_39",
+      "weight": 0.953
     },
     {
-      "source": "0",
-      "target": "15",
-      "weight": 0.8633
+      "source": "agent_11",
+      "target": "agent_14",
+      "weight": 0.4635
     },
     {
-      "source": "0",
-      "target": "17",
-      "weight": 0.8267
+      "source": "agent_24",
+      "target": "agent_29",
+      "weight": 0.8213
     },
     {
-      "source": "1",
-      "target": "2",
-      "weight": 0.785
+      "source": "agent_26",
+      "target": "agent_30",
+      "weight": 0.6467
     },
     {
-      "source": "1",
-      "target": "3",
-      "weight": 0.81
+      "source": "agent_2",
+      "target": "agent_5",
+      "weight": 0.9088
     },
     {
-      "source": "1",
-      "target": "5",
-      "weight": 0.805
+      "source": "agent_25",
+      "target": "agent_31",
+      "weight": 0.3107
     },
     {
-      "source": "1",
-      "target": "6",
-      "weight": 0.8267
+      "source": "agent_10",
+      "target": "agent_14",
+      "weight": 0.3524
     },
     {
-      "source": "1",
-      "target": "7",
-      "weight": 0.795
+      "source": "agent_5",
+      "target": "agent_6",
+      "weight": 0.9679
     },
     {
-      "source": "1",
-      "target": "8",
-      "weight": 0.8833
+      "source": "agent_24",
+      "target": "agent_25",
+      "weight": 0.4643
     },
     {
-      "source": "1",
-      "target": "12",
-      "weight": 0.8383
+      "source": "agent_17",
+      "target": "agent_19",
+      "weight": 0.6038
     },
     {
-      "source": "1",
-      "target": "14",
-      "weight": 0.8583
+      "source": "agent_1",
+      "target": "agent_7",
+      "weight": 0.4165
     },
     {
-      "source": "2",
-      "target": "3",
-      "weight": 0.7983
+      "source": "agent_16",
+      "target": "agent_20",
+      "weight": 0.5509
     },
     {
-      "source": "2",
-      "target": "4",
-      "weight": 0.8
+      "source": "agent_34",
+      "target": "agent_38",
+      "weight": 0.419
     },
     {
-      "source": "2",
-      "target": "5",
-      "weight": 0.84
+      "source": "agent_3",
+      "target": "agent_6",
+      "weight": 0.6484
     },
     {
-      "source": "2",
-      "target": "6",
-      "weight": 0.8183
+      "source": "agent_34",
+      "target": "agent_35",
+      "weight": 0.6228
     },
     {
-      "source": "2",
-      "target": "7",
-      "weight": 0.8667
+      "source": "agent_20",
+      "target": "agent_23",
+      "weight": 0.7668
     },
     {
-      "source": "2",
-      "target": "11",
-      "weight": 0.83
+      "source": "agent_26",
+      "target": "agent_28",
+      "weight": 0.3517
     },
     {
-      "source": "2",
-      "target": "13",
-      "weight": 0.7833
+      "source": "agent_20",
+      "target": "agent_22",
+      "weight": 0.7832
     },
     {
-      "source": "3",
-      "target": "5",
-      "weight": 0.8217
+      "source": "agent_27",
+      "target": "agent_28",
+      "weight": 0.9996
     },
     {
-      "source": "3",
-      "target": "6",
-      "weight": 0.83
+      "source": "agent_25",
+      "target": "agent_27",
+      "weight": 0.567
     },
     {
-      "source": "3",
-      "target": "7",
-      "weight": 0.845
+      "source": "agent_4",
+      "target": "agent_6",
+      "weight": 0.3057
     },
     {
-      "source": "3",
-      "target": "12",
-      "weight": 0.8283
+      "source": "agent_4",
+      "target": "agent_7",
+      "weight": 0.843
     },
     {
-      "source": "3",
-      "target": "18",
-      "weight": 0.8317
+      "source": "agent_11",
+      "target": "agent_13",
+      "weight": 0.7456
     },
     {
-      "source": "3",
-      "target": "19",
-      "weight": 0.8467
+      "source": "agent_34",
+      "target": "agent_36",
+      "weight": 0.7398
     },
     {
-      "source": "4",
-      "target": "5",
-      "weight": 0.87
+      "source": "agent_4",
+      "target": "agent_5",
+      "weight": 0.8232
     },
     {
-      "source": "4",
-      "target": "7",
-      "weight": 0.8333
+      "source": "agent_10",
+      "target": "agent_11",
+      "weight": 0.8506
     },
     {
-      "source": "4",
-      "target": "9",
-      "weight": 0.8583
+      "source": "agent_18",
+      "target": "agent_20",
+      "weight": 0.4799
     },
     {
-      "source": "5",
-      "target": "6",
-      "weight": 0.8383
+      "source": "agent_28",
+      "target": "agent_29",
+      "weight": 0.863
     },
     {
-      "source": "5",
-      "target": "7",
-      "weight": 0.85
+      "source": "agent_25",
+      "target": "agent_26",
+      "weight": 0.8279
     },
     {
-      "source": "6",
-      "target": "7",
-      "weight": 0.815
+      "source": "agent_13",
+      "target": "agent_14",
+      "weight": 0.3632
     },
     {
-      "source": "6",
-      "target": "13",
-      "weight": 0.8117
+      "source": "agent_24",
+      "target": "agent_28",
+      "weight": 0.6756
     },
     {
-      "source": "6",
-      "target": "16",
-      "weight": 0.8533
+      "source": "agent_37",
+      "target": "agent_38",
+      "weight": 0.3758
     },
     {
-      "source": "7",
-      "target": "11",
-      "weight": 0.8367
+      "source": "agent_8",
+      "target": "agent_15",
+      "weight": 0.7337
     },
     {
-      "source": "7",
-      "target": "13",
-      "weight": 0.7733
+      "source": "agent_35",
+      "target": "agent_37",
+      "weight": 0.7534
     },
     {
-      "source": "7",
-      "target": "16",
-      "weight": 0.805
+      "source": "agent_28",
+      "target": "agent_30",
+      "weight": 0.3817
     },
     {
-      "source": "7",
-      "target": "19",
-      "weight": 0.805
+      "source": "agent_0",
+      "target": "agent_4",
+      "weight": 0.9971
     },
     {
-      "source": "8",
-      "target": "14",
-      "weight": 0.8417
+      "source": "agent_1",
+      "target": "agent_3",
+      "weight": 0.9211
     },
     {
-      "source": "9",
-      "target": "14",
-      "weight": 0.835
+      "source": "agent_14",
+      "target": "agent_15",
+      "weight": 0.5597
     },
     {
-      "source": "9",
-      "target": "17",
-      "weight": 0.8417
+      "source": "agent_3",
+      "target": "agent_5",
+      "weight": 0.6104
     },
     {
-      "source": "11",
-      "target": "19",
-      "weight": 0.8383
+      "source": "agent_9",
+      "target": "agent_13",
+      "weight": 0.9866
     },
     {
-      "source": "12",
-      "target": "14",
-      "weight": 0.8467
+      "source": "agent_16",
+      "target": "agent_21",
+      "weight": 0.5787
     },
     {
-      "source": "12",
-      "target": "17",
-      "weight": 0.84
+      "source": "agent_9",
+      "target": "agent_15",
+      "weight": 0.3642
     },
     {
-      "source": "15",
-      "target": "18",
-      "weight": 0.86
+      "source": "agent_18",
+      "target": "agent_19",
+      "weight": 0.8509
+    },
+    {
+      "source": "agent_9",
+      "target": "agent_11",
+      "weight": 0.7105
+    },
+    {
+      "source": "agent_10",
+      "target": "agent_13",
+      "weight": 0.8521
+    },
+    {
+      "source": "agent_10",
+      "target": "agent_12",
+      "weight": 0.859
+    },
+    {
+      "source": "agent_0",
+      "target": "agent_2",
+      "weight": 0.3104
+    },
+    {
+      "source": "agent_8",
+      "target": "agent_13",
+      "weight": 0.422
+    },
+    {
+      "source": "agent_2",
+      "target": "agent_6",
+      "weight": 0.6683
+    },
+    {
+      "source": "agent_17",
+      "target": "agent_23",
+      "weight": 0.6527
+    },
+    {
+      "source": "agent_1",
+      "target": "agent_5",
+      "weight": 0.7258
+    },
+    {
+      "source": "agent_2",
+      "target": "agent_4",
+      "weight": 0.737
+    },
+    {
+      "source": "agent_36",
+      "target": "agent_39",
+      "weight": 0.6539
+    },
+    {
+      "source": "agent_35",
+      "target": "agent_38",
+      "weight": 0.6161
+    },
+    {
+      "source": "agent_20",
+      "target": "agent_21",
+      "weight": 0.9675
+    },
+    {
+      "source": "agent_1",
+      "target": "agent_6",
+      "weight": 0.3676
+    },
+    {
+      "source": "agent_16",
+      "target": "agent_18",
+      "weight": 0.7105
+    },
+    {
+      "source": "agent_33",
+      "target": "agent_37",
+      "weight": 0.5876
+    },
+    {
+      "source": "agent_36",
+      "target": "agent_37",
+      "weight": 0.3725
+    },
+    {
+      "source": "agent_17",
+      "target": "agent_21",
+      "weight": 0.8338
+    },
+    {
+      "source": "agent_21",
+      "target": "agent_32",
+      "weight": 0.427
+    },
+    {
+      "source": "agent_9",
+      "target": "agent_26",
+      "weight": 0.8187
+    },
+    {
+      "source": "agent_3",
+      "target": "agent_38",
+      "weight": 0.5939
+    },
+    {
+      "source": "agent_12",
+      "target": "agent_21",
+      "weight": 0.8051
+    },
+    {
+      "source": "agent_2",
+      "target": "agent_32",
+      "weight": 0.4102
+    },
+    {
+      "source": "agent_4",
+      "target": "agent_33",
+      "weight": 0.6102
+    },
+    {
+      "source": "agent_31",
+      "target": "agent_38",
+      "weight": 0.4912
+    },
+    {
+      "source": "agent_6",
+      "target": "agent_37",
+      "weight": 0.3776
+    },
+    {
+      "source": "agent_24",
+      "target": "agent_36",
+      "weight": 0.4544
+    },
+    {
+      "source": "agent_3",
+      "target": "agent_32",
+      "weight": 0.511
+    },
+    {
+      "source": "agent_12",
+      "target": "agent_36",
+      "weight": 0.5297
+    },
+    {
+      "source": "agent_6",
+      "target": "agent_26",
+      "weight": 0.3904
+    },
+    {
+      "source": "agent_9",
+      "target": "agent_37",
+      "weight": 0.5779
+    },
+    {
+      "source": "agent_0",
+      "target": "agent_31",
+      "weight": 0.9448
+    },
+    {
+      "source": "agent_22",
+      "target": "agent_30",
+      "weight": 0.5027
+    },
+    {
+      "source": "agent_2",
+      "target": "agent_29",
+      "weight": 0.8609
+    },
+    {
+      "source": "agent_25",
+      "target": "agent_37",
+      "weight": 0.6057
+    },
+    {
+      "source": "agent_6",
+      "target": "agent_14",
+      "weight": 0.6668
+    },
+    {
+      "source": "agent_19",
+      "target": "agent_29",
+      "weight": 0.5331
+    },
+    {
+      "source": "agent_3",
+      "target": "agent_9",
+      "weight": 0.9341
+    },
+    {
+      "source": "agent_18",
+      "target": "agent_35",
+      "weight": 0.372
+    },
+    {
+      "source": "agent_10",
+      "target": "agent_18",
+      "weight": 0.8322
+    },
+    {
+      "source": "agent_7",
+      "target": "agent_15",
+      "weight": 0.8281
+    },
+    {
+      "source": "agent_29",
+      "target": "agent_37",
+      "weight": 0.4057
+    },
+    {
+      "source": "agent_7",
+      "target": "agent_28",
+      "weight": 0.8574
+    },
+    {
+      "source": "agent_1",
+      "target": "agent_37",
+      "weight": 0.5173
+    },
+    {
+      "source": "agent_5",
+      "target": "agent_24",
+      "weight": 0.8822
+    },
+    {
+      "source": "agent_6",
+      "target": "agent_39",
+      "weight": 0.7062
+    },
+    {
+      "source": "agent_3",
+      "target": "agent_29",
+      "weight": 0.7235
+    },
+    {
+      "source": "agent_15",
+      "target": "agent_32",
+      "weight": 0.3725
     }
   ]
 }
