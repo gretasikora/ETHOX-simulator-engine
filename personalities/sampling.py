@@ -21,8 +21,11 @@ import numpy as np
 import pandas as pd
 
 import statsmodels.api as sm
+import sys
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from calculate_demographics import calculate_gender_ratio, calculate_age_group_ratios
+from config import NUM_AGENTS
 
 
 # -----------------------------
@@ -313,6 +316,17 @@ def load_bfi2_data(local_paths: list = None, verbose: bool = True) -> pd.DataFra
 def _generate_synthetic_bfi2_data(n_samples: int = 2000, seed: int = 42) -> pd.DataFrame:
     """
     Creates a realistic synthetic BFI-2 dataset when real data is unavailable.
+    
+    Implements research-backed demographic effects:
+    - Gender: Women higher on Agreeableness & Negative Emotionality; 
+              Men slightly higher on Extraversion
+    - Age: Maturity principle (older → higher Conscientiousness/Agreeableness, 
+           lower Negative Emotionality)
+    
+    Sources:
+    - Soto & John (2017): Gender means/SDs from BFI-2 internet sample
+    - General Big Five literature on gender and age patterns
+    - Russian BFI-2 measurement invariance study (age/sex effects)
     """
     np.random.seed(seed)
     age = np.concatenate([
@@ -352,8 +366,6 @@ def _generate_synthetic_bfi2_data(n_samples: int = 2000, seed: int = 42) -> pd.D
     df['age'] = age
     df['gender'] = gender
     return df
-
-
 
 # -----------------------------
 # 5) Score BFI-2 facets
@@ -635,9 +647,9 @@ def main():
     p_gender = calculate_gender_ratio()
     p_age = calculate_age_group_ratios()
 
-    # F) Sample 200 people
+    # F) Sample NUM_AGENTS people
     df_people = sample_society(
-        n=3,
+        n=NUM_AGENTS,
         p_gender=p_gender,
         p_age=p_age,
         cell_mu=cell_mu,
@@ -652,8 +664,8 @@ def main():
     print(df_people[FACETS].mean().round(2))
 
     # Save
-    df_people.to_csv("synthetic_society_200.csv", index=False)
-    print("\nWrote synthetic_society_200.csv")
+    df_people.to_csv(f"synthetic_society_{NUM_AGENTS}.csv", index=False)
+    print(f"\nWrote synthetic_society_{NUM_AGENTS}.csv")
 
 if __name__ == "__main__":
     main()
