@@ -87,19 +87,80 @@ def sample_num_interactions(
     # clamp to sensible bounds
     return int(np.clip(k, min_deg, max_deg))
 
+def precompute_personality_context(all_agents, eps=1e-8):
+    """
+    Analyzes the population to create a whitening transform.
+    Returns a 'context' dictionary used for the similarity_score function.
+    """
+    if not all_agents:
+        return None
+        
+    # 1. Identify traits and vectorize the whole population
+    keys = sorted(list(all_agents[0].traits.keys()))
+    X = np.array([[float(a.traits.get(k, 3.0)) for k in keys] for a in all_agents])
+    N, D = X.shape
 
-def similarity_score(agent_a, agent_b):
-    traits_a = agent_a.traits or {}
-    traits_b = agent_b.traits or {}
-    keys = set(traits_a.keys()) & set(traits_b.keys())
-    if not keys:
+    # 2. Z-Score / Standardization
+    means = X.mean(axis=0, keepdims=True)
+    sds = X.std(axis=0, ddof=0, keepdims=True)
+    sds = np.where(sds < eps, 1.0, sds)
+    Xz = (X - means) / sds
+
+    # 3. Whitening Transform (Mahalanobis)
+    Sigma = np.cov(Xz, rowvar=False, ddof=0)
+    vals, vecs = np.linalg.eigh(Sigma)
+    vals_clipped = np.clip(vals, eps, None)
+    W = vecs @ np.diag(1.0 / np.sqrt(vals_clipped)) @ vecs.T
+
+    # 4. Determine Lambda (Density scaling)
+    # We transform everyone to find the median distance for a smart RBF scale
+    Xw = Xz @ W.T
+    # Calculate a sample of distances to find a good lambda
+    # For large N, we use a subset to save time
+    sample_size = min(N, 500)
+    Xw_sample = Xw[:sample_size]
+    dists = np.sum((Xw_sample[:, None] - Xw_sample[None, :])**2, axis=2)
+    
+    iu = np.triu_indices(sample_size, k=1)
+    med = np.median(dists[iu]) if len(iu[0]) > 0 else 1.0
+    rbf_lambda = 1.0 / (2.0 * med) if med > 0 else 0.5
+
+    return {
+        "W": W,
+        "means": means,
+        "sds": sds,
+        "keys": keys,
+        "rbf_lambda": float(rbf_lambda)
+    }
+
+def similarity_score(agent_a, agent_b, context):
+    """
+    Calculates the whitened RBF similarity between two agents.
+    Returns a float between 0.0 and 1.0.
+    """
+    if context is None:
         return 0.0
-    diffs = [abs(float(traits_a[k]) - float(traits_b[k])) for k in keys]
-    mean_diff = sum(diffs) / len(diffs)
-    return float(max(0.0, 1.0 - (mean_diff / 4.0)))
+        
+    # 1. Extract and align traits
+    keys = context["keys"]
+    v_a = np.array([float(agent_a.traits.get(k, 3.0)) for k in keys])
+    v_b = np.array([float(agent_b.traits.get(k, 3.0)) for k in keys])
+
+    # 2. Project into Whitened Space
+    # (Value - Mean) / SD, then multiply by Whitening Matrix
+    means = context["means"].reshape(-1)
+    sds = context["sds"].reshape(-1)
+    w_a = ((v_a - means) / sds) @ context["W"].T
+    w_b = ((v_b - means) / sds) @ context["W"].T
+
+    # 3. RBF Kernel
+    d2 = np.sum((w_a - w_b)**2)
+    similarity = np.exp(-context["rbf_lambda"] * d2)
+
+    return float(np.clip(similarity, 0.0, 1.0))
 
 
-def build_adjacency_matrix(agents):
+def build_adjacency_matrix(agents, context):
     n = len(agents)
     matrix = np.zeros((n, n), dtype=np.float64)
     rng = np.random.default_rng(SEED)
@@ -108,7 +169,7 @@ def build_adjacency_matrix(agents):
         for j in range(n):
             if i == j:
                 continue
-            score = similarity_score(agents[i], agents[j])
+            score = similarity_score(agents[i], agents[j], context)
             scores.append((j, score))
         scores.sort(key=lambda x: x[1], reverse=True)
         k = sample_num_interactions(agents[i].traits, rng, min_deg=0, max_deg=max(0, n - 1))

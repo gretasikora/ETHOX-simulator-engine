@@ -24,7 +24,7 @@ import statsmodels.api as sm
 import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from calculate_demographics import calculate_gender_ratio, calculate_age_group_ratios
+from personalities.calculate_demographics import calculate_gender_ratio, calculate_age_group_ratios
 from config import NUM_AGENTS
 
 
