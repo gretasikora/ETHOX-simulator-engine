@@ -5,6 +5,7 @@ class Agent:
         self.traits = traits
         self.customer_behavior = customer_behavior or {}
         self.memory = {}
+        self.opinion = ""
 
     def remember(self, other_id, summary):
         self.memory[int(other_id)] = summary

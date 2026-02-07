@@ -580,6 +580,7 @@ def sample_society(
         x = rng.multivariate_normal(mean=mu, cov=Sigma)
         if clamp_1_5:
             x = np.clip(x, 1.0, 5.0)
+        x = np.round(x, 1)
         X[i, :] = x
 
     df = pd.DataFrame(X, columns=FACETS)

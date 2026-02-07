@@ -59,7 +59,7 @@ Write a brief summary (1-2 sentences) of what you think about Agent {other.id}. 
 
 
 def run_conversation(a, b, context):
-    turns = random.randint(10, 20)
+    turns = random.randint(2, 4)
     transcript = []
     speaker, listener = a, b
     for _ in range(turns):
@@ -78,3 +78,39 @@ def interact(a, b, context):
     a.remember(b.id, summary_a)
     b.remember(a.id, summary_b)
     return transcript
+
+
+def build_trigger_prompt(agent, event_message):
+    return f"""
+You are Agent {agent.id}.
+
+You have been assigned a personality profile based on the BFI-2, a validated psychological instrument measuring 15 personality facets across 5 major domains.
+Each trait is scored from 1 (very low) to 5 (very high)
+Your personality shapes HOW you interact, make decisions, and react to situations. Higher scores indicate stronger tendencies, and lower scores indicate weakness on the trait.
+
+Your personality:
+{agent.traits}
+
+You have been assigned a shopping behavior profile. Act accordingly.
+Your profile:
+{agent.customer_behavior}
+
+Event:
+{event_message}
+
+Give ONE honest sentence reacting to the event.
+"""
+
+
+def trigger_reaction(agent, event_message):
+    reaction = llm_generate(build_trigger_prompt(agent, event_message)).strip()
+    agent.opinion = reaction
+    print(agent.id, reaction)
+    return reaction
+
+
+def broadcast_trigger(agents, event_message):
+    reactions = {}
+    for agent in agents:
+        reactions[agent.id] = trigger_reaction(agent, event_message)
+    return reactions
