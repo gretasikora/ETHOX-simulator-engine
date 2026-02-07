@@ -79,16 +79,15 @@ Each agent has:
 
 * an `id`
 * a small trait dictionary
-* a rolling memory buffer (last *k* messages)
+* a per-agent memory map (agent_id -> summary)
 
 No decision logic lives in the agent class.
 
 ### Interactions
 
 * Two agents are randomly sampled each round.
-* One speaks, one listens.
-* The speaker generates a single short message via the LLM client.
-* Both agents store the message in memory.
+* They have a 10â€“20 turn back-and-forth conversation.
+* Each agent summarizes their impression of the other and stores it in memory.
 
 ### LLM client
 

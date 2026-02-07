@@ -3,7 +3,7 @@ import random
 
 SEED = 42
 NUM_AGENTS = 3
-WARMUP_ROUNDS = 20
+WARMUP_ROUNDS = 6
 
 MODEL = "gpt-4.1-mini"
 MAX_TOKENS = 100

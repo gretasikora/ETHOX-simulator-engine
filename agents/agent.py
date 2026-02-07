@@ -3,8 +3,7 @@ class Agent:
     def __init__(self, id, traits):
         self.id = id
         self.traits = traits
-        self.memory = []
+        self.memory = {}
 
-    def remember(self, text, k=3):
-        self.memory.append(text)
-        self.memory = self.memory[-k:]
+    def remember(self, other_id, summary):
+        self.memory[int(other_id)] = summary
