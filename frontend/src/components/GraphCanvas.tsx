@@ -156,6 +156,7 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
       labelColor: { color: string };
       labelFont: string;
       labelSize: number;
+      labelWeight: string;
       labelRenderedSizeThreshold: number;
       nodeProgramClasses: Record<string, unknown>;
       nodeReducer: (node: string, data: Record<string, unknown>) => Record<string, unknown>;
@@ -168,8 +169,9 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
       minCameraRatio: 0.08,
       maxCameraRatio: 3,
       labelColor: { color: "rgba(234,242,242,0.65)" },
-      labelFont: "Inter, system-ui, sans-serif",
-      labelSize: 10,
+      labelFont: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif",
+      labelSize: 13,
+      labelWeight: "600",
       labelRenderedSizeThreshold: showLabels ? 0 : 999,
       nodeProgramClasses: {
         square: NodeSquareProgram,

@@ -1,5 +1,5 @@
 import { Listbox } from "@headlessui/react";
-import { Search, LayoutGrid, FlaskConical } from "lucide-react";
+import { Search, LayoutGrid, FlaskConical, ChevronUp } from "lucide-react";
 import { useUIStore } from "../store/useUIStore";
 import { useGraphStore } from "../store/useGraphStore";
 import { useExperimentStore } from "../store/useExperimentStore";
@@ -28,6 +28,7 @@ export function AppHeader({ onSearchSelect }: AppHeaderProps) {
   const setSocietyViewOpen = useUIStore((s) => s.setSocietyViewOpen);
   const graphViewMode = useUIStore((s) => s.graphViewMode);
   const setGraphViewMode = useUIStore((s) => s.setGraphViewMode);
+  const setHeaderCollapsed = useUIStore((s) => s.setHeaderCollapsed);
 
   const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -64,10 +65,18 @@ export function AppHeader({ onSearchSelect }: AppHeaderProps) {
 
   return (
     <header className="top-bar group sticky top-0 z-20 flex min-h-12 shrink-0 flex-wrap items-center gap-2 border-b border-aurora-border/60 bg-aurora-bg1/90 px-4 py-2 backdrop-blur-sm sm:gap-3 md:gap-5 md:px-5">
-      <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+      <div className="flex shrink-0 items-center gap-1 sm:gap-2">
         <h1 className="text-sm font-semibold tracking-tight text-aurora-text0 sm:text-base">
           Society Explorer
         </h1>
+        <button
+          type="button"
+          onClick={() => setHeaderCollapsed(true)}
+          className="rounded p-1.5 text-aurora-text2 hover:bg-aurora-surface2/80 hover:text-aurora-text0"
+          aria-label="Collapse menu"
+        >
+          <ChevronUp className="h-4 w-4" />
+        </button>
       </div>
 
       <div className="relative min-w-[120px] flex-1 max-w-sm basis-28 sm:basis-40">

@@ -39,6 +39,9 @@ interface UIState {
   /** Sidebar: when true, show thin icon rail only */
   sidebarCollapsed: boolean;
   setSidebarCollapsed: (v: boolean) => void;
+  /** Top menu/header: when true, show slim bar only; expand to show full controls */
+  headerCollapsed: boolean;
+  setHeaderCollapsed: (v: boolean) => void;
   /** Which filter sections are expanded (persisted when sidebar collapses) */
   filtersSectionOpen: { nodeEncoding: boolean; degreeRange: boolean; traitFilter: boolean };
   setFiltersSectionOpen: (key: keyof UIState["filtersSectionOpen"], value: boolean) => void;
@@ -109,10 +112,12 @@ export const useUIStore = create<UIState>((set, get) => ({
   toasts: [],
   societyViewOpen: false,
   sidebarCollapsed: false,
+  headerCollapsed: false,
   filtersSectionOpen: { nodeEncoding: true, degreeRange: false, traitFilter: false },
   minimalMode: true,
 
   setSidebarCollapsed: (v) => set({ sidebarCollapsed: v }),
+  setHeaderCollapsed: (v) => set({ headerCollapsed: v }),
   setFiltersSectionOpen: (key, value) =>
     set((s) => ({
       filtersSectionOpen: { ...s.filtersSectionOpen, [key]: value },

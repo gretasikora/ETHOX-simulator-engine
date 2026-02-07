@@ -1,4 +1,5 @@
 import { useRef, useState, useCallback, useEffect, useMemo } from "react";
+import { ChevronDown } from "lucide-react";
 import { AppHeader } from "./AppHeader";
 import { SidebarFilters } from "./SidebarFilters";
 import { GraphCanvas } from "./GraphCanvas";
@@ -26,6 +27,8 @@ export function AppShell() {
   const graphViewMode = useUIStore((s) => s.graphViewMode);
   const filters = useUIStore((s) => s.filters);
   const sidebarCollapsed = useUIStore((s) => s.sidebarCollapsed);
+  const headerCollapsed = useUIStore((s) => s.headerCollapsed);
+  const setHeaderCollapsed = useUIStore((s) => s.setHeaderCollapsed);
   const selectedTrait = useUIStore((s) => s.selectedTrait);
   const showAgeEncoding = useUIStore((s) => s.showAgeEncoding);
   const showGenderEncoding = useUIStore((s) => s.showGenderEncoding);
@@ -90,7 +93,21 @@ export function AppShell() {
         />
       </div>
       <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
-        <AppHeader onSearchSelect={handleSearchSelect} />
+        {headerCollapsed ? (
+          <div className="sticky top-0 z-20 flex h-9 shrink-0 items-center justify-between border-b border-aurora-border/50 bg-aurora-bg1/90 px-3 backdrop-blur-sm">
+            <span className="text-xs font-medium text-aurora-text1/90">Society Explorer</span>
+            <button
+              type="button"
+              onClick={() => setHeaderCollapsed(false)}
+              className="rounded p-1.5 text-aurora-text2 hover:bg-aurora-surface2/80 hover:text-aurora-text0"
+              aria-label="Expand menu"
+            >
+              <ChevronDown className="h-4 w-4 rotate-180" />
+            </button>
+          </div>
+        ) : (
+          <AppHeader onSearchSelect={handleSearchSelect} />
+        )}
         {societyViewOpen ? (
           <div className="relative flex-1 overflow-auto bg-aurora-bg0">
             <SocietyPage />
