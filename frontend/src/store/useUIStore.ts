@@ -28,6 +28,7 @@ interface UIState {
   showLabels: boolean;
   showAgeEncoding: boolean;
   showGenderEncoding: boolean;
+  graphViewMode: "2d" | "3d";
   filters: {
     clusters: number[];
     degreeRange: [number, number];
@@ -38,6 +39,7 @@ interface UIState {
   setSocietyViewOpen: (open: boolean) => void;
   setShowAgeEncoding: (v: boolean) => void;
   setShowGenderEncoding: (v: boolean) => void;
+  setGraphViewMode: (mode: "2d" | "3d") => void;
   setSelectedNode: (id: string | null) => void;
   setHoveredNode: (id: string | null) => void;
   setVisibleNodeIds: (ids: string[]) => void;
@@ -93,6 +95,7 @@ export const useUIStore = create<UIState>((set, get) => ({
   showLabels: true,
   showAgeEncoding: true,
   showGenderEncoding: true,
+  graphViewMode: "2d",
   filters: defaultFilters(),
   toasts: [],
   societyViewOpen: false,
@@ -100,6 +103,7 @@ export const useUIStore = create<UIState>((set, get) => ({
   setSocietyViewOpen: (open) => set({ societyViewOpen: open }),
   setShowAgeEncoding: (v) => set({ showAgeEncoding: v }),
   setShowGenderEncoding: (v) => set({ showGenderEncoding: v }),
+  setGraphViewMode: (mode) => set({ graphViewMode: mode }),
   setSelectedNode: (id) => set({ selectedNodeId: id }),
   setHoveredNode: (id) => set({ hoveredNodeId: id }),
   setVisibleNodeIds: (ids) => set({ visibleNodeIds: ids }),

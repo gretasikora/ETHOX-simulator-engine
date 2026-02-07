@@ -26,6 +26,8 @@ export function AppHeader({ onSearchSelect }: AppHeaderProps) {
   const setExperimentPanelOpen = useExperimentStore((s) => s.setExperimentPanelOpen);
   const societyViewOpen = useUIStore((s) => s.societyViewOpen);
   const setSocietyViewOpen = useUIStore((s) => s.setSocietyViewOpen);
+  const graphViewMode = useUIStore((s) => s.graphViewMode);
+  const setGraphViewMode = useUIStore((s) => s.setGraphViewMode);
 
   const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -116,6 +118,24 @@ export function AppHeader({ onSearchSelect }: AppHeaderProps) {
               </Listbox.Options>
             </Listbox>
           )}
+        </div>
+
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          <span className="hidden text-xs text-aurora-text2 sm:inline">View</span>
+          <div className="flex rounded-md border border-aurora-border bg-aurora-surface0 p-0.5 sm:rounded-lg">
+            {(["2d", "3d"] as const).map((mode) => (
+              <button
+                key={mode}
+                type="button"
+                onClick={() => setGraphViewMode(mode)}
+                className={`${toggleGroupBase} uppercase ${
+                  graphViewMode === mode ? toggleActive : toggleInactive
+                }`}
+              >
+                {mode}
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="flex items-center gap-1.5 sm:gap-2">

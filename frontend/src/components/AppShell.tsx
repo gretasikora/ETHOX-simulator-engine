@@ -1,7 +1,8 @@
-import { useRef, useState, useCallback, useEffect } from "react";
+import { useRef, useState, useCallback, useEffect, useMemo } from "react";
 import { AppHeader } from "./AppHeader";
 import { SidebarFilters } from "./SidebarFilters";
 import { GraphCanvas } from "./GraphCanvas";
+import { Graph3D } from "./graph/Graph3D";
 import { AgentProfileDrawer } from "./AgentProfileDrawer";
 import { GraphExploreControls } from "./GraphExploreControls";
 import { Legend } from "./Legend";
@@ -9,6 +10,8 @@ import { ToastContainer } from "./Toast";
 import { ExperimentPanel } from "./experiments/ExperimentPanel";
 import { SocietyPage } from "./society/SocietyPage";
 import { useUIStore } from "../store/useUIStore";
+import { useGraphStore } from "../store/useGraphStore";
+import { exportVisibleGraphToForceGraphData } from "../utils/graphExport";
 import { ErrorBoundary } from "./ErrorBoundary";
 import type Graph from "graphology";
 
@@ -19,7 +22,33 @@ export function AppShell() {
   const selectedNodeId = useUIStore((s) => s.selectedNodeId);
   const visibleNodeIds = useUIStore((s) => s.visibleNodeIds);
   const setSelectedNode = useUIStore((s) => s.setSelectedNode);
+  const setHoveredNode = useUIStore((s) => s.setHoveredNode);
   const societyViewOpen = useUIStore((s) => s.societyViewOpen);
+  const graphViewMode = useUIStore((s) => s.graphViewMode);
+  const filters = useUIStore((s) => s.filters);
+  const selectedTrait = useUIStore((s) => s.selectedTrait);
+  const showAgeEncoding = useUIStore((s) => s.showAgeEncoding);
+  const showGenderEncoding = useUIStore((s) => s.showGenderEncoding);
+  const colorBy = useUIStore((s) => s.colorBy);
+
+  const nodes = useGraphStore((s) => s.nodes);
+  const edges = useGraphStore((s) => s.edges);
+  const traitKeys = useGraphStore((s) => s.traitKeys);
+  const fgData = useMemo(() => {
+    const { nodes: fgNodes, links: fgLinks, capped } = exportVisibleGraphToForceGraphData(
+      nodes,
+      edges,
+      filters,
+      selectedTrait || traitKeys[0] || ""
+    );
+    return { nodes: fgNodes, links: fgLinks, capped };
+  }, [nodes, edges, filters, selectedTrait, traitKeys]);
+
+  const maxCentrality = useMemo(
+    () => Math.max(0.01, ...fgData.nodes.map((n) => n.degree_centrality ?? 0), 0),
+    [fgData.nodes]
+  );
+  const hoveredNodeId = useUIStore((s) => s.hoveredNodeId);
 
   const open = selectedNodeId != null;
 
@@ -62,12 +91,37 @@ export function AppShell() {
         ) : (
           <div className="relative flex-1 min-h-0 p-4">
             <div className="h-full w-full min-h-0 relative">
-              <GraphCanvas
-                graphRef={graphRef}
-                onSigmaReady={setResetCameraFn}
-              />
-              <GraphExploreControls />
-              <Legend />
+              {graphViewMode === "2d" ? (
+                <>
+                  <GraphCanvas
+                    graphRef={graphRef}
+                    onSigmaReady={setResetCameraFn}
+                  />
+                  <GraphExploreControls />
+                  <Legend />
+                </>
+              ) : (
+                <>
+                  {fgData.capped && (
+                    <div className="absolute left-4 top-4 z-10 rounded-lg border border-aurora-accent1/50 bg-aurora-surface1/95 px-3 py-2 text-xs text-aurora-text0 backdrop-blur-sm">
+                      3D view limited to 3000 nodes for performance.
+                    </div>
+                  )}
+                  <Graph3D
+                    nodes={fgData.nodes}
+                    links={fgData.links}
+                    selectedNodeId={selectedNodeId}
+                    hoveredNodeId={hoveredNodeId}
+                    onNodeClick={setSelectedNode}
+                    onNodeHover={setHoveredNode}
+                    showAgeEncoding={showAgeEncoding}
+                    showGenderEncoding={showGenderEncoding}
+                    colorBy={colorBy}
+                    selectedTrait={selectedTrait || traitKeys[0] || ""}
+                    maxCentrality={maxCentrality}
+                  />
+                </>
+              )}
             </div>
           </div>
         )}
