@@ -18,14 +18,14 @@ This is intentionally **barebones**. No graphs, no analytics, no visualizations 
 We simulate a small society of agents (default: 20) where:
 
 1. Agents are initialized with slightly different personalities.
-2. They talk to each other in random pairwise conversations over multiple rounds.
+2. A network graph is created based on their personalities.
 3. Each agent forms opinions (initially implicit, later explicit via ratings).
 4. A trigger event occurs (e.g. “price doubled”).
 5. Agents react individually.
 6. Agents continue interacting, potentially influencing each other.
 7. Post-event opinions are compared to pre-event opinions.
 
-Right now, this repo covers **steps 1–2** (warm-up interactions). Rating, triggers, and network construction come later.
+Right now, this repo covers **steps 1–5** (network construction + trigger reactions). Rating and post-event interaction come later.
 
 ---
 
@@ -83,11 +83,10 @@ Each agent has:
 
 No decision logic lives in the agent class.
 
-### Interactions
+### Network construction
 
-* Two agents are randomly sampled each round.
-* They have a 10â€“20 turn back-and-forth conversation.
-* Each agent summarizes their impression of the other and stores it in memory.
+* Build a similarity-based adjacency matrix from agent personalities.
+* Stubs exist for per-agent connection count and influencibility.
 
 ### LLM client
 
@@ -218,8 +217,6 @@ If:
 
 * Agent-to-agent ratings
 * Explicit opinion objects
-* Trigger events
-* Network / graph construction
 * Analytics or plotting
 * Optimization or performance work
 

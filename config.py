@@ -2,7 +2,7 @@
 import random
 
 SEED = 42
-NUM_AGENTS = 3
+NUM_AGENTS = 20
 WARMUP_ROUNDS = 3
 
 MODEL = "gpt-4.1-mini"

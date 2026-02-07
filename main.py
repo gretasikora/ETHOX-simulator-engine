@@ -1,14 +1,17 @@
 # main.py
-import random
 from simulation.init_network import init_agents
-from simulation.interaction import interact, broadcast_trigger
-from config import TRIGGER_EVENT_MESSAGE, WARMUP_ROUNDS
+from simulation.interaction import broadcast_trigger
+from simulation.network import build_adjacency_matrix, visualize_adjacency_matrix
+from config import TRIGGER_EVENT_MESSAGE
+from pathlib import Path
 
 agents = init_agents()
 
-for _ in range(WARMUP_ROUNDS):
-    a, b = random.sample(agents, 2)
-    interact(a, b, context="Casual chat on the platform")
+adjacency = build_adjacency_matrix(agents)
+out_dir = Path("simulation") / "outputs"
+out_dir.mkdir(parents=True, exist_ok=True)
+labels = {i: str(a.id) for i, a in enumerate(agents)}
+visualize_adjacency_matrix(adjacency, out_dir / "network.png", labels=labels)
 
 broadcast_trigger(agents, TRIGGER_EVENT_MESSAGE)
 
