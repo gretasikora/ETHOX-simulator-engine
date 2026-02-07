@@ -36,6 +36,15 @@ interface UIState {
   };
   toasts: ToastItem[];
   societyViewOpen: boolean;
+  /** Sidebar: when true, show thin icon rail only */
+  sidebarCollapsed: boolean;
+  setSidebarCollapsed: (v: boolean) => void;
+  /** Which filter sections are expanded (persisted when sidebar collapses) */
+  filtersSectionOpen: { nodeEncoding: boolean; degreeRange: boolean; traitFilter: boolean };
+  setFiltersSectionOpen: (key: keyof UIState["filtersSectionOpen"], value: boolean) => void;
+  /** Minimal UI density (default ON) – lighter controls, progressive disclosure */
+  minimalMode: boolean;
+  setMinimalMode: (v: boolean) => void;
   setSocietyViewOpen: (open: boolean) => void;
   setShowAgeEncoding: (v: boolean) => void;
   setShowGenderEncoding: (v: boolean) => void;
@@ -99,7 +108,16 @@ export const useUIStore = create<UIState>((set, get) => ({
   filters: defaultFilters(),
   toasts: [],
   societyViewOpen: false,
+  sidebarCollapsed: false,
+  filtersSectionOpen: { nodeEncoding: true, degreeRange: false, traitFilter: false },
+  minimalMode: true,
 
+  setSidebarCollapsed: (v) => set({ sidebarCollapsed: v }),
+  setFiltersSectionOpen: (key, value) =>
+    set((s) => ({
+      filtersSectionOpen: { ...s.filtersSectionOpen, [key]: value },
+    })),
+  setMinimalMode: (v) => set({ minimalMode: v }),
   setSocietyViewOpen: (open) => set({ societyViewOpen: open }),
   setShowAgeEncoding: (v) => set({ showAgeEncoding: v }),
   setShowGenderEncoding: (v) => set({ showGenderEncoding: v }),

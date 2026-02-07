@@ -164,12 +164,12 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
       renderEdgeLabels: false,
       defaultEdgeType: "line",
       defaultNodeColor: "#2AFADF",
-      defaultEdgeColor: "rgba(234,242,242,0.18)",
+      defaultEdgeColor: "rgba(234,242,242,0.12)",
       minCameraRatio: 0.08,
       maxCameraRatio: 3,
-      labelColor: { color: "#EAF2F2" },
+      labelColor: { color: "rgba(234,242,242,0.65)" },
       labelFont: "Inter, system-ui, sans-serif",
-      labelSize: 12,
+      labelSize: 10,
       labelRenderedSizeThreshold: showLabels ? 0 : 999,
       nodeProgramClasses: {
         square: NodeSquareProgram,
@@ -275,7 +275,7 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
           const key = edgeKey(source, target);
           const inHighlight = edgeKeysSet.includes(key);
           if (inHighlight) return { ...data, color: "rgba(38,198,255,0.55)" };
-          return { ...data, color: "rgba(234,242,242,0.06)" };
+          return { ...data, color: "rgba(234,242,242,0.04)" };
         }
         const [source, target] = graph.extremities(edge);
         const focus = selectedRef.current || hoveredRef.current;
@@ -284,7 +284,7 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
         if (connected)
           return { ...data, color: "rgba(38,198,255,0.55)" };
         if (focus)
-          return { ...data, color: "rgba(234,242,242,0.06)" };
+          return { ...data, color: "rgba(234,242,242,0.04)" };
         return data;
       },
     };
@@ -375,7 +375,7 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
   const showEmptyState = nodes.length > 0 && visibleNodeIds.length === 0;
 
   return (
-    <div className="surface-card absolute inset-0 flex flex-col overflow-hidden rounded-2xl">
+    <div className="absolute inset-0 flex flex-col overflow-hidden rounded-2xl border border-aurora-border/40 bg-aurora-surface0/30 shadow-sm">
       <div className="relative min-h-0 flex-1">
         <div
           ref={containerRef}
@@ -383,7 +383,7 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
           style={{
             width: "100%",
             height: "100%",
-            background: "radial-gradient(ellipse 80% 80% at 50% 50%, rgba(10, 29, 36, 0.4) 0%, #050B10 70%)",
+            background: "radial-gradient(ellipse 85% 85% at 50% 50%, rgba(10, 29, 36, 0.25) 0%, rgba(5, 11, 16, 0.5) 60%, rgba(5, 11, 16, 0.92) 100%)",
           }}
         />
       </div>

@@ -25,6 +25,7 @@ export function AppShell() {
   const societyViewOpen = useUIStore((s) => s.societyViewOpen);
   const graphViewMode = useUIStore((s) => s.graphViewMode);
   const filters = useUIStore((s) => s.filters);
+  const sidebarCollapsed = useUIStore((s) => s.sidebarCollapsed);
   const selectedTrait = useUIStore((s) => s.selectedTrait);
   const showAgeEncoding = useUIStore((s) => s.showAgeEncoding);
   const showGenderEncoding = useUIStore((s) => s.showGenderEncoding);
@@ -78,7 +79,9 @@ export function AppShell() {
   }, []);
 
   return (
-    <div className="grid h-screen w-screen grid-cols-1 bg-aurora-bg0 lg:grid-cols-[320px_1fr]">
+    <div
+      className={`grid h-screen w-screen grid-cols-1 bg-aurora-bg0 ${sidebarCollapsed ? "lg:grid-cols-[52px_1fr]" : "lg:grid-cols-[260px_1fr]"}`}
+    >
       <div className="h-0 w-0 overflow-visible lg:h-auto lg:w-auto lg:min-w-0">
         <SidebarFilters
           graphRef={graphRef}
@@ -93,7 +96,7 @@ export function AppShell() {
             <SocietyPage />
           </div>
         ) : (
-          <div className="relative flex-1 min-h-0 p-4">
+          <div className="relative flex-1 min-h-0 p-5">
             <div className="h-full w-full min-h-0 relative">
               {graphViewMode === "2d" ? (
                 <>
