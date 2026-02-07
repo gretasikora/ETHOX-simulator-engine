@@ -574,7 +574,7 @@ def generate_personality_traits(
     if p_age is None:
         p_age = {"Under 18": 0.05, "18-40": 0.65, "40+": 0.30}
 
-    df_bfi2 = download_bfi2_from_cran()
+    df_bfi2 = load_bfi2_data(local_paths=['./BFI2.csv'])
 
     age_col = "age" if "age" in df_bfi2.columns else "Age"
     gender_col = "gender" if "gender" in df_bfi2.columns else "Gender"
