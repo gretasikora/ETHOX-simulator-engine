@@ -10,6 +10,17 @@ interface UIState {
   selectedNodeId: string | null;
   hoveredNodeId: string | null;
   visibleNodeIds: string[];
+  insightsPanelOpen: boolean;
+  selectedClusterId: number | null;
+  exploreMode: "none" | "path" | "neighborhood";
+  pathFrom: string | null;
+  pathTo: string | null;
+  neighborhoodCenter: string | null;
+  exploreHops: number;
+  preferInfluence: boolean;
+  highlightedNodeIds: string[];
+  highlightedEdgeKeys: string[];
+  exploreStatus: string;
   searchQuery: string;
   colorBy: "cluster" | "trait" | "centrality";
   sizeBy: "degree" | "centrality";
@@ -21,9 +32,22 @@ interface UIState {
     traitRange: [number, number];
   };
   toasts: ToastItem[];
+  societyViewOpen: boolean;
+  setSocietyViewOpen: (open: boolean) => void;
   setSelectedNode: (id: string | null) => void;
   setHoveredNode: (id: string | null) => void;
   setVisibleNodeIds: (ids: string[]) => void;
+  setInsightsPanelOpen: (open: boolean) => void;
+  setSelectedClusterId: (id: number | null) => void;
+  setExploreMode: (mode: "none" | "path" | "neighborhood") => void;
+  setPathFrom: (id: string | null) => void;
+  setPathTo: (id: string | null) => void;
+  setNeighborhoodCenter: (id: string | null) => void;
+  setExploreHops: (n: number) => void;
+  setPreferInfluence: (v: boolean) => void;
+  setHighlighted: (nodeIds: string[], edgeKeys: string[]) => void;
+  clearHighlight: () => void;
+  setExploreStatus: (msg: string) => void;
   setSearchQuery: (q: string) => void;
   setColorBy: (v: "cluster" | "trait" | "centrality") => void;
   setSizeBy: (v: "degree" | "centrality") => void;
@@ -47,6 +71,17 @@ export const useUIStore = create<UIState>((set, get) => ({
   selectedNodeId: null,
   hoveredNodeId: null,
   visibleNodeIds: [],
+  insightsPanelOpen: false,
+  selectedClusterId: null,
+  exploreMode: "none",
+  pathFrom: null,
+  pathTo: null,
+  neighborhoodCenter: null,
+  exploreHops: 2,
+  preferInfluence: false,
+  highlightedNodeIds: [],
+  highlightedEdgeKeys: [],
+  exploreStatus: "",
   searchQuery: "",
   colorBy: "cluster",
   sizeBy: "degree",
@@ -54,10 +89,25 @@ export const useUIStore = create<UIState>((set, get) => ({
   showLabels: true,
   filters: defaultFilters(),
   toasts: [],
+  societyViewOpen: false,
 
+  setSocietyViewOpen: (open) => set({ societyViewOpen: open }),
   setSelectedNode: (id) => set({ selectedNodeId: id }),
   setHoveredNode: (id) => set({ hoveredNodeId: id }),
   setVisibleNodeIds: (ids) => set({ visibleNodeIds: ids }),
+  setInsightsPanelOpen: (open) => set({ insightsPanelOpen: open }),
+  setSelectedClusterId: (id) => set({ selectedClusterId: id }),
+  setExploreMode: (mode) => set({ exploreMode: mode }),
+  setPathFrom: (id) => set({ pathFrom: id }),
+  setPathTo: (id) => set({ pathTo: id }),
+  setNeighborhoodCenter: (id) => set({ neighborhoodCenter: id }),
+  setExploreHops: (n) => set({ exploreHops: Math.max(1, Math.min(3, n)) }),
+  setPreferInfluence: (v) => set({ preferInfluence: v }),
+  setHighlighted: (nodeIds, edgeKeys) =>
+    set({ highlightedNodeIds: nodeIds, highlightedEdgeKeys: edgeKeys }),
+  clearHighlight: () =>
+    set({ highlightedNodeIds: [], highlightedEdgeKeys: [], exploreStatus: "" }),
+  setExploreStatus: (msg) => set({ exploreStatus: msg }),
   setSearchQuery: (q) => set({ searchQuery: q }),
   setColorBy: (v) => set({ colorBy: v }),
   setSizeBy: (v) => set({ sizeBy: v }),

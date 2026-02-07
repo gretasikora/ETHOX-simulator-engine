@@ -52,3 +52,17 @@ export function hexToRgba(hex: string, alpha: number): string {
   const b = parseInt(match[2], 16);
   return `rgba(${r},${g},${b},${alpha})`;
 }
+
+/** Diverging scale for opinion -1..+1: blue (negative) -> neutral -> orange/amber (positive) */
+export function getOpinionColor(opinion: number): string {
+  const t = Math.max(-1, Math.min(1, opinion));
+  const normalized = (t + 1) / 2; // 0..1
+  if (normalized <= 0.5) {
+    const s = normalized * 2; // 0..1 from neg to neutral
+    const hue = 220 - s * 40; // 220 -> 180 (blue to cyan)
+    return hslToHex(hue, 75, 50);
+  }
+  const s = (normalized - 0.5) * 2; // 0..1 from neutral to pos
+  const hue = 25 + s * 25; // 25 -> 50 (orange to amber)
+  return hslToHex(hue, 80, 52);
+}

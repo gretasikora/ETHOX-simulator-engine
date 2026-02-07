@@ -1,6 +1,7 @@
 import { Listbox } from "@headlessui/react";
 import { useUIStore } from "../store/useUIStore";
 import { useGraphStore } from "../store/useGraphStore";
+import { useExperimentStore } from "../store/useExperimentStore";
 
 interface TopBarProps {
   onSearchSelect: (agentId: string) => void;
@@ -17,6 +18,15 @@ export function TopBar({ onSearchSelect }: TopBarProps) {
   const setSelectedTrait = useUIStore((s) => s.setSelectedTrait);
   const traitKeys = useGraphStore((s) => s.traitKeys);
   const nodes = useGraphStore((s) => s.nodes);
+  const insightsPanelOpen = useUIStore((s) => s.insightsPanelOpen);
+  const setInsightsPanelOpen = useUIStore((s) => s.setInsightsPanelOpen);
+  const exploreMode = useUIStore((s) => s.exploreMode);
+  const setExploreMode = useUIStore((s) => s.setExploreMode);
+  const experiments = useExperimentStore((s) => s.experiments);
+  const addExperiment = useExperimentStore((s) => s.addExperiment);
+  const setExperimentPanelOpen = useExperimentStore((s) => s.setExperimentPanelOpen);
+  const societyViewOpen = useUIStore((s) => s.societyViewOpen);
+  const setSocietyViewOpen = useUIStore((s) => s.setSocietyViewOpen);
 
   const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -114,6 +124,66 @@ export function TopBar({ onSearchSelect }: TopBarProps) {
           ))}
         </div>
       </div>
+
+      <div className="flex items-center gap-1 rounded-lg border border-dark-700 p-0.5">
+        <span className="px-2 text-xs text-gray-500">Explore</span>
+        {(["none", "path", "neighborhood"] as const).map((mode) => (
+          <button
+            key={mode}
+            type="button"
+            onClick={() => setExploreMode(mode)}
+            className={`rounded px-2 py-1.5 text-xs font-medium capitalize ${
+              exploreMode === mode
+                ? "bg-accent text-white"
+                : "text-gray-400 hover:bg-dark-700 hover:text-gray-200"
+            }`}
+          >
+            {mode === "none" ? "None" : mode === "path" ? "Path" : "Neighborhood"}
+          </button>
+        ))}
+      </div>
+
+      <button
+        type="button"
+        onClick={() => setSocietyViewOpen(!societyViewOpen)}
+        className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
+          societyViewOpen
+            ? "border-accent bg-accent text-white"
+            : "border-dark-700 bg-dark-800 text-gray-300 hover:bg-dark-700 hover:text-white"
+        }`}
+      >
+        Society
+      </button>
+
+      <button
+        type="button"
+        onClick={() => setInsightsPanelOpen(!insightsPanelOpen)}
+        className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
+          insightsPanelOpen
+            ? "border-accent bg-accent text-white"
+            : "border-dark-700 bg-dark-800 text-gray-300 hover:bg-dark-700 hover:text-white"
+        }`}
+      >
+        Insights
+      </button>
+
+      <button
+        type="button"
+        onClick={() => {
+          addExperiment({
+            name: `Experiment ${experiments.length + 1}`,
+            interventionType: "message",
+            content: {},
+            targetMode: "all",
+            targetParams: {},
+            intensity: 0.5,
+          });
+          setExperimentPanelOpen(true);
+        }}
+        className="rounded-lg border border-amber-500/50 bg-amber-500/10 px-3 py-2 text-sm font-medium text-amber-400 hover:bg-amber-500/20"
+      >
+        New Experiment
+      </button>
     </header>
   );
 }

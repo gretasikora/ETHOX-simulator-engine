@@ -1,7 +1,7 @@
 import { useEffect, useCallback, useMemo } from "react";
-import type { NodeData } from "../api/client";
 import { formatTraitLabel, sortTraits } from "../utils/traits";
 import { useGraphStore } from "../store/useGraphStore";
+import { usePlaybackStore } from "../store/usePlaybackStore";
 
 interface AgentProfileDrawerProps {
   open: boolean;
@@ -39,6 +39,20 @@ export function AgentProfileDrawer({
     if (!selectedNodeId) return null;
     return nodes.find((n) => String(n.agent_id) === String(selectedNodeId)) ?? null;
   }, [selectedNodeId, nodes]);
+
+  const playbackRunId = usePlaybackStore((s) => s.activeRunId);
+  const playbackT = usePlaybackStore((s) => s.t);
+  const playbackRuns = usePlaybackStore((s) => s.runs);
+
+  const currentFrameState = useMemo(() => {
+    if (!selectedNodeId) return null;
+    const run = playbackRunId ? playbackRuns.find((r) => r.id === playbackRunId) : null;
+    if (!run?.frames?.length) return null;
+    const frame = run.frames[Math.min(playbackT, run.frames.length - 1)];
+    const agents = frame?.agents;
+    return agents?.[selectedNodeId] ?? null;
+  }, [selectedNodeId, playbackRunId, playbackT, playbackRuns]);
+
   const handleClose = useCallback(() => onOpenChange(false), [onOpenChange]);
 
   useEffect(() => {
@@ -91,6 +105,34 @@ export function AgentProfileDrawer({
           </div>
         ) : (
           <div className="flex-1 overflow-y-auto p-4">
+            {currentFrameState != null && (
+              <section className="mb-6 rounded-lg border border-dark-600 bg-dark-700/50 p-3">
+                <h3 className="mb-2 text-xs font-medium uppercase tracking-wider text-gray-400">
+                  Current state (Day {playbackT})
+                </h3>
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+                  <div className="rounded bg-dark-800 p-2">
+                    <div className="text-xs text-gray-500">Opinion</div>
+                    <div className="text-sm font-medium tabular-nums text-white">
+                      {currentFrameState.opinion.toFixed(2)}
+                    </div>
+                  </div>
+                  <div className="rounded bg-dark-800 p-2">
+                    <div className="text-xs text-gray-500">Adoption</div>
+                    <div className="text-sm font-medium tabular-nums text-white">
+                      {currentFrameState.adoption.toFixed(2)}
+                    </div>
+                  </div>
+                  <div className="rounded bg-dark-800 p-2">
+                    <div className="text-xs text-gray-500">Sentiment</div>
+                    <div className="text-sm font-medium tabular-nums text-white">
+                      {currentFrameState.sentiment.toFixed(2)}
+                    </div>
+                  </div>
+                </div>
+              </section>
+            )}
+
             {/* Persona */}
             <section className="mb-6">
               <h3 className="mb-2 text-xs font-medium uppercase tracking-wider text-gray-400">
