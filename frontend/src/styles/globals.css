@@ -81,3 +81,13 @@ body {
 button, a, [role="button"], input, select, [data-headlessui-listbox-button] {
   transition: all 0.15s ease-out;
 }
+
+/* 3D graph container: vignette behind transparent WebGL canvas */
+.graph3d-container {
+  background: radial-gradient(
+    ellipse 80% 80% at 50% 50%,
+    rgba(5, 11, 16, 0.2) 0%,
+    rgba(5, 11, 16, 0.6) 55%,
+    rgba(5, 11, 16, 0.92) 100%
+  );
+}

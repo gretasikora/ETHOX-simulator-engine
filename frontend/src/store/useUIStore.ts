@@ -89,7 +89,7 @@ export const useUIStore = create<UIState>((set, get) => ({
   highlightedEdgeKeys: [],
   exploreStatus: "",
   searchQuery: "",
-  colorBy: "age",
+  colorBy: "centrality",
   sizeBy: "degree",
   selectedTrait: "",
   showLabels: true,

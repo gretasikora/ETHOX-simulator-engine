@@ -77,6 +77,19 @@ export function AgentProfileDrawer({
                 <span className="capitalize">{agent.gender.replace(/_/g, " ")}</span>
               )}
             </div>
+            {(agent?.level_of_care != null || agent?.effect_on_usage != null || (agent?.text_opinion != null && agent.text_opinion !== "")) && (
+              <div className="mt-2 space-y-1 border-t border-aurora-border pt-2 text-sm text-aurora-text1">
+                {agent?.level_of_care != null && (
+                  <div><span className="text-aurora-text2">Level of care:</span> {agent.level_of_care}/10</div>
+                )}
+                {agent?.effect_on_usage != null && (
+                  <div><span className="text-aurora-text2">Effect on usage:</span> {agent.effect_on_usage}</div>
+                )}
+                {agent?.text_opinion != null && agent.text_opinion !== "" && (
+                  <div><span className="text-aurora-text2">Opinion:</span> {agent.text_opinion}</div>
+                )}
+              </div>
+            )}
           </div>
           <button
             type="button"

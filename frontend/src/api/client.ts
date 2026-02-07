@@ -1,6 +1,6 @@
 const BASE = "";
 
-export type GenderLabel = "male" | "female" | "non_binary" | "unknown";
+export type GenderLabel = "male" | "female";
 
 export interface NodeData {
   agent_id: string;
@@ -13,6 +13,12 @@ export interface NodeData {
   age?: number;
   /** Gender for shape encoding. Optional; missing uses "unknown" (diamond). */
   gender?: string;
+  /** Level of care (0–10). Passed in with personality. */
+  level_of_care?: number;
+  /** Effect on usage (-5 to 5). Passed in with personality. */
+  effect_on_usage?: number;
+  /** Text opinion string. Passed in with personality. */
+  text_opinion?: string;
 }
 
 export interface EdgeData {

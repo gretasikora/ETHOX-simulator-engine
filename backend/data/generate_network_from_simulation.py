@@ -16,6 +16,7 @@ if str(ROOT) not in sys.path:
 import numpy as np
 import networkx as nx
 
+
 from simulation.init_network import init_agents
 from simulation.network import build_adjacency_matrix
 
@@ -88,6 +89,31 @@ def export_network_json(agents, adjacency, out_path: Path | None = None) -> Path
     deg_centrality = nx.degree_centrality(G)
     betweenness = nx.betweenness_centrality(G) if G.number_of_edges() > 0 else {i: 0.0 for i in range(n)}
 
+    # Map age_group to approximate age (years) for frontend color scale
+    def _age_from_group(age_group):
+        if not age_group:
+            return None
+        g = str(age_group).strip().lower()
+        if "under" in g or "25" in g and "40" not in g:
+            return 22
+        if "25" in g and "40" in g:
+            return 32
+        if "40" in g or "40+" in g:
+            return 55
+        return 32
+
+    def _normalize_gender(g):
+        if not g:
+            return None
+        s = str(g).strip().lower()
+        if s in ("male", "female"):
+            return s
+        if s.startswith("m"):
+            return "male"
+        if s.startswith("f"):
+            return "female"
+        return "female"  # default so shape/color encoding works
+
     nodes = []
     for i in range(n):
         a = agents[i]
@@ -99,14 +125,30 @@ def export_network_json(agents, adjacency, out_path: Path | None = None) -> Path
                     traits[k] = _normalize_trait_1_5_to_0_1(float(v))
                 except (TypeError, ValueError):
                     traits[str(k)] = 0.5
-        nodes.append({
+        cb = getattr(a, "customer_behavior", None) or {}
+        age = _age_from_group(cb.get("age_group"))
+        gender = _normalize_gender(cb.get("gender"))
+        level_of_care = getattr(a, "level_of_care", None)
+        effect_on_usage = getattr(a, "effect_on_usage", None)
+        text_opinion = getattr(a, "text_opinion", None) or ""
+        node = {
             "agent_id": str(i),
             "degree": degree[i],
             "cluster": clusters[i],
             "traits": traits,
             "degree_centrality": round(deg_centrality.get(i, 0.0), 4),
             "betweenness_centrality": round(betweenness.get(i, 0.0), 4),
-        })
+        }
+        if age is not None:
+            node["age"] = age
+        if gender is not None:
+            node["gender"] = gender
+        if level_of_care is not None:
+            node["level_of_care"] = int(level_of_care)
+        if effect_on_usage is not None:
+            node["effect_on_usage"] = int(effect_on_usage)
+        node["text_opinion"] = str(text_opinion)
+        nodes.append(node)
 
     data = {"nodes": nodes, "edges": edges}
     if out_path is None:

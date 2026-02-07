@@ -26,7 +26,13 @@ function getMaxDegree(nodes: NodeData[]): number {
 
 function getMaxCentrality(nodes: NodeData[]): number {
   if (nodes.length === 0) return 1;
-  return Math.max(0.01, ...nodes.map((n) => n.degree_centrality));
+  return Math.max(0.01, ...nodes.map((n) => n.degree_centrality ?? 0));
+}
+
+/** Min centrality so gradient uses full data range (better color variation). */
+function getMinCentrality(nodes: NodeData[]): number {
+  if (nodes.length === 0) return 0;
+  return Math.min(...nodes.map((n) => n.degree_centrality ?? 0));
 }
 
 export function buildGraphology(
@@ -37,21 +43,29 @@ export function buildGraphology(
   const graph = new Graph({ type: "undirected", multi: false });
   const maxDegree = getMaxDegree(nodes);
   const maxCentrality = getMaxCentrality(nodes);
+  const minCentrality = getMinCentrality(nodes);
+  const centralityRange = Math.max(0.001, maxCentrality - minCentrality);
   const { colorBy, sizeBy, selectedTrait, showAgeEncoding, showGenderEncoding } = uiState;
 
   for (const node of nodes) {
     const id = String(node.agent_id);
+    const traits = node.traits && typeof node.traits === "object" ? node.traits : {};
     let size = 8;
     if (sizeBy === "degree") {
-      size = scaleLinear(node.degree, 0, maxDegree, 3, 15);
+      size = scaleLinear(node.degree ?? 0, 0, maxDegree, 3, 15);
     } else {
-      size = scaleLinear(node.degree_centrality, 0, maxCentrality, 3, 15);
+      size = scaleLinear(node.degree_centrality ?? 0, 0, maxCentrality, 3, 15);
     }
-    let color = getAgeColor(showAgeEncoding && colorBy === "age" ? node.age : undefined);
-    if (colorBy === "trait" && selectedTrait && node.traits[selectedTrait] !== undefined) {
-      color = getGradientColor(node.traits[selectedTrait], 0, 1);
+    let color: string;
+    if (colorBy === "trait" && selectedTrait) {
+      const v = traits[selectedTrait];
+      color = getGradientColor(v !== undefined ? v : 0.5, 0, 1);
     } else if (colorBy === "centrality") {
-      color = getGradientColor(node.degree_centrality, 0, maxCentrality);
+      color = getGradientColor(node.degree_centrality ?? 0, minCentrality, minCentrality + centralityRange);
+    } else if (colorBy === "age" && showAgeEncoding && node.age != null && Number.isFinite(node.age)) {
+      color = getAgeColor(node.age);
+    } else {
+      color = getGradientColor(node.degree_centrality ?? 0, minCentrality, minCentrality + centralityRange);
     }
     const shape = showGenderEncoding ? getGenderShape(node.gender) : "circle";
     graph.addNode(id, {
@@ -61,11 +75,11 @@ export function buildGraphology(
       size,
       color,
       type: shape,
-      cluster: node.cluster,
-      degree: node.degree,
-      degree_centrality: node.degree_centrality,
-      betweenness_centrality: node.betweenness_centrality,
-      traits: { ...node.traits },
+      cluster: node.cluster ?? 0,
+      degree: node.degree ?? 0,
+      degree_centrality: node.degree_centrality ?? 0,
+      betweenness_centrality: node.betweenness_centrality ?? 0,
+      traits: { ...traits },
       age: node.age,
       gender: node.gender,
       hidden: false,
@@ -130,27 +144,36 @@ export function applyVisualAttributes(
   showAgeEncoding: boolean,
   showGenderEncoding: boolean
 ): void {
+  let minCentrality = Infinity;
   let maxCentrality = 0;
   let maxDegree = 0;
   graph.forEachNode((_n, attrs) => {
     const dc = (attrs.degree_centrality as number) ?? 0;
     const d = (attrs.degree as number) ?? 0;
+    if (dc < minCentrality) minCentrality = dc;
     if (dc > maxCentrality) maxCentrality = dc;
     if (d > maxDegree) maxDegree = d;
   });
-  if (maxCentrality === 0) maxCentrality = 1;
+  if (minCentrality === Infinity) minCentrality = 0;
+  const centralityRange = Math.max(0.001, maxCentrality - minCentrality);
   if (maxDegree === 0) maxDegree = 1;
 
   graph.forEachNode((node) => {
     const attrs = graph.getNodeAttributes(node);
-    let color = getAgeColor(showAgeEncoding && colorBy === "age" ? (attrs.age as number | undefined) : undefined);
+    const age = attrs.age as number | undefined;
+    let color: string;
     if (colorBy === "trait" && selectedTrait) {
       const traits = (attrs.traits as Record<string, number>) || {};
       const v = traits[selectedTrait];
       color = getGradientColor(v ?? 0.5, 0, 1);
     } else if (colorBy === "centrality") {
       const dc = (attrs.degree_centrality as number) ?? 0;
-      color = getGradientColor(dc, 0, maxCentrality);
+      color = getGradientColor(dc, minCentrality, minCentrality + centralityRange);
+    } else if (colorBy === "age" && showAgeEncoding && age != null && Number.isFinite(age)) {
+      color = getAgeColor(age);
+    } else {
+      const dc = (attrs.degree_centrality as number) ?? 0;
+      color = getGradientColor(dc, minCentrality, minCentrality + centralityRange);
     }
     let size = 8;
     if (sizeBy === "degree") {

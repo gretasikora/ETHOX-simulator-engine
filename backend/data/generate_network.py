@@ -9,8 +9,16 @@ from pathlib import Path
 random.seed(42)
 N = 40
 CLUSTER_RANGES = [(0, 8), (8, 16), (16, 24), (24, 32), (32, 40)]
-GENDERS = ["male", "female", "non_binary", "unknown"]
+GENDERS = ["male", "female"]
 AGE_MIN, AGE_MAX = 18, 80
+# Fake opinions for testing level_of_care / effect_on_usage / text_opinion
+FAKE_OPINIONS = [
+    "I think this product is useful for daily tasks.",
+    "Not sure yet—need to try it longer.",
+    "Helps me stay organized; would recommend.",
+    "A bit expensive but the quality is good.",
+    "Wish it had better support for my use case.",
+]
 TRAIT_KEYS = [
     "spending", "loyalty", "social_influence", "risk_tolerance",
     "price_sensitivity", "tech_adoption", "impulsiveness", "environmental_consciousness",
@@ -47,6 +55,9 @@ for i in range(N):
         "betweenness_centrality": round(random.uniform(0.0, 0.3), 4),
         "age": random.randint(AGE_MIN, AGE_MAX),
         "gender": random.choice(GENDERS),
+        "level_of_care": random.randint(0, 10),
+        "effect_on_usage": random.randint(-5, 5),
+        "text_opinion": random.choice(FAKE_OPINIONS),
     })
 
 edges = []

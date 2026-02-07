@@ -44,10 +44,14 @@ export function AppShell() {
     return { nodes: fgNodes, links: fgLinks, capped };
   }, [nodes, edges, filters, selectedTrait, traitKeys]);
 
-  const maxCentrality = useMemo(
-    () => Math.max(0.01, ...fgData.nodes.map((n) => n.degree_centrality ?? 0), 0),
-    [fgData.nodes]
-  );
+  // Use full graph min/max (same as 2D) so 3D color gradient spans actual data range
+  const centralityScale = useMemo(() => {
+    if (nodes.length === 0) return { min: 0, max: 0.01 };
+    const vals = nodes.map((n) => n.degree_centrality ?? 0);
+    const min = Math.min(...vals);
+    const max = Math.max(...vals);
+    return { min, max: Math.max(min + 0.001, max) };
+  }, [nodes]);
   const hoveredNodeId = useUIStore((s) => s.hoveredNodeId);
 
   const open = selectedNodeId != null;
@@ -118,7 +122,7 @@ export function AppShell() {
                     showGenderEncoding={showGenderEncoding}
                     colorBy={colorBy}
                     selectedTrait={selectedTrait || traitKeys[0] || ""}
-                    maxCentrality={maxCentrality}
+                    centralityScale={centralityScale}
                   />
                 </>
               )}

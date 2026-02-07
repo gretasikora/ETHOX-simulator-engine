@@ -4,11 +4,36 @@ import * as THREE from "three";
 import { RotateCcw } from "lucide-react";
 import { getAgeColor, getGenderShape, getGradientColor } from "../../utils/color";
 import type { FGNode, FGLink } from "../../utils/graphExport";
+import {
+  createNodeMesh,
+  createHaloRing,
+  createLabelSprite,
+  configureSceneAtmosphere,
+  addSceneLights,
+  animateCameraToNode,
+} from "./graph3dUtils";
 
-const BASE_NODE_SCALE = 3;
-const SELECTED_NODE_SCALE = 4.5;
-const EDGE_COLOR_DIM = "rgba(234,242,242,0.15)";
-const EDGE_COLOR_HIGHLIGHT = "rgba(38,198,255,0.55)";
+const EDGE_COLOR_DIM = "rgba(234,242,242,0.12)";
+const EDGE_COLOR_HIGHLIGHT = "rgba(38,198,255,0.6)";
+const LINK_WIDTH_DIM = 0.4;
+const LINK_WIDTH_HIGHLIGHT = 1.2;
+const MAX_LINK_WIDTH = 1.8;
+
+type ShapeKey = "sphere" | "box" | "cone" | "octahedron";
+
+function shapeForKey(gender: string | undefined, showGender: boolean): ShapeKey {
+  if (!showGender) return "sphere";
+  const s = getGenderShape(gender);
+  if (s === "circle") return "sphere";
+  if (s === "square") return "box";
+  if (s === "triangle") return "cone";
+  return "octahedron";
+}
+
+interface CentralityScale {
+  min: number;
+  max: number;
+}
 
 interface Graph3DProps {
   nodes: FGNode[];
@@ -21,7 +46,7 @@ interface Graph3DProps {
   showGenderEncoding: boolean;
   colorBy: "age" | "trait" | "centrality";
   selectedTrait: string;
-  maxCentrality: number;
+  centralityScale: CentralityScale;
 }
 
 function getNodeColor(
@@ -29,40 +54,23 @@ function getNodeColor(
   showAge: boolean,
   colorBy: string,
   selectedTrait: string,
-  maxCentrality: number
+  centralityScale: CentralityScale
 ): string {
+  const { min, max } = centralityScale;
+  const range = Math.max(0.001, max - min);
   if (colorBy === "centrality") {
     const v = node.degree_centrality ?? 0;
-    return getGradientColor(v, 0, Math.max(1, maxCentrality));
+    return getGradientColor(v, min, min + range);
   }
   if (colorBy === "trait" && selectedTrait) {
     const v = node.traits?.[selectedTrait] ?? 0.5;
     return getGradientColor(v, 0, 1);
   }
-  if (!showAge || colorBy !== "age") {
-    return getAgeColor(undefined);
+  if (colorBy === "age" && showAge && node.age != null && Number.isFinite(node.age)) {
+    return getAgeColor(node.age);
   }
-  return getAgeColor(node.age);
-}
-
-function createNodeGeometry(
-  gender: string | undefined,
-  showGender: boolean
-): THREE.BufferGeometry {
-  const shape = showGender ? getGenderShape(gender) : "circle";
-  const size = 0.5;
-  switch (shape) {
-    case "circle":
-      return new THREE.SphereGeometry(size, 16, 16);
-    case "square":
-      return new THREE.BoxGeometry(size * 2, size * 2, size * 2);
-    case "triangle":
-      return new THREE.ConeGeometry(size, size * 2, 3);
-    case "diamond":
-      return new THREE.OctahedronGeometry(size, 0);
-    default:
-      return new THREE.SphereGeometry(size, 16, 16);
-  }
+  const v = node.degree_centrality ?? 0;
+  return getGradientColor(v, min, min + range);
 }
 
 export function Graph3D({
@@ -76,58 +84,45 @@ export function Graph3D({
   showGenderEncoding,
   colorBy,
   selectedTrait,
-  maxCentrality,
+  centralityScale,
 }: Graph3DProps) {
-  const fgRef = useRef<{ cameraPosition: (pos: { x: number; y: number; z: number }, lookAt?: { x: number; y: number; z: number }, ms?: number) => void } | null>(null);
+  const fgRef = useRef<{
+    cameraPosition: (pos: { x: number; y: number; z: number }, lookAt?: { x: number; y: number; z: number }, ms?: number) => void;
+    scene?: () => THREE.Scene;
+    camera?: () => THREE.Camera;
+    renderer?: () => THREE.WebGLRenderer;
+    lights?: (lights: THREE.Light[]) => unknown;
+  } | null>(null);
 
-  const graphData = useMemo(
-    () => ({ nodes, links }),
-    [nodes, links]
-  );
+  const graphData = useMemo(() => ({ nodes, links }), [nodes, links]);
 
   const nodeThreeObject = useCallback(
     (node: FGNode) => {
       const isSelected = selectedNodeId === node.id;
-      const color = getNodeColor(
-        node,
-        showAgeEncoding,
-        colorBy,
-        selectedTrait,
-        maxCentrality
-      );
-      const geometry = createNodeGeometry(node.gender, showGenderEncoding);
-      const material = new THREE.MeshStandardMaterial({
-        color,
-        metalness: 0.2,
-        roughness: 0.6,
-        emissive: isSelected ? color : "#000000",
-        emissiveIntensity: isSelected ? 0.4 : 0,
-      });
-      const mesh = new THREE.Mesh(geometry, material);
-      const scale = isSelected ? SELECTED_NODE_SCALE : BASE_NODE_SCALE;
-      mesh.scale.setScalar(scale);
-      return mesh;
+      const isHovered = hoveredNodeId === node.id;
+      const color = getNodeColor(node, showAgeEncoding, colorBy, selectedTrait, centralityScale);
+      const shape = shapeForKey(node.gender, showGenderEncoding);
+      const mesh = createNodeMesh(shape, color, { hovered: isHovered, selected: isSelected });
+      const group = new THREE.Group();
+      group.add(mesh);
+      if (isSelected) {
+        const halo = createHaloRing();
+        group.add(halo);
+      }
+      if (isHovered || isSelected) {
+        const label = createLabelSprite(`Agent ${node.id}`, 1.2);
+        label.position.y = 1.8;
+        group.add(label);
+      }
+      return group;
     },
-    [
-      selectedNodeId,
-      showAgeEncoding,
-      showGenderEncoding,
-      colorBy,
-      selectedTrait,
-      maxCentrality,
-    ]
+    [selectedNodeId, hoveredNodeId, showAgeEncoding, showGenderEncoding, colorBy, selectedTrait, centralityScale]
   );
 
   const nodeColor = useCallback(
     (node: FGNode) =>
-      getNodeColor(
-        node,
-        showAgeEncoding,
-        colorBy,
-        selectedTrait,
-        maxCentrality
-      ),
-    [showAgeEncoding, colorBy, selectedTrait, maxCentrality]
+      getNodeColor(node, showAgeEncoding, colorBy, selectedTrait, centralityScale),
+    [showAgeEncoding, colorBy, selectedTrait, centralityScale]
   );
 
   const linkColor = useCallback(
@@ -135,49 +130,102 @@ export function Graph3D({
       const s = typeof link.source === "object" ? (link.source as FGNode).id : link.source;
       const t = typeof link.target === "object" ? (link.target as FGNode).id : link.target;
       const highlight =
-        s === hoveredNodeId ||
-        t === hoveredNodeId ||
-        s === selectedNodeId ||
-        t === selectedNodeId;
+        s === hoveredNodeId || t === hoveredNodeId || s === selectedNodeId || t === selectedNodeId;
       return highlight ? EDGE_COLOR_HIGHLIGHT : EDGE_COLOR_DIM;
     },
     [hoveredNodeId, selectedNodeId]
   );
 
+  const linkWidth = useCallback(
+    (link: FGLink) => {
+      const s = typeof link.source === "object" ? (link.source as FGNode).id : link.source;
+      const t = typeof link.target === "object" ? (link.target as FGNode).id : link.target;
+      const highlight =
+        s === hoveredNodeId || t === hoveredNodeId || s === selectedNodeId || t === selectedNodeId;
+      if (highlight) return LINK_WIDTH_HIGHLIGHT;
+      const w = link.value ?? 1;
+      return Math.min(MAX_LINK_WIDTH, LINK_WIDTH_DIM + w * 0.4);
+    },
+    [hoveredNodeId, selectedNodeId]
+  );
+
+  const linkDirectionalParticles = useCallback(
+    (link: FGLink) => {
+      if (!selectedNodeId) return 0;
+      const s = typeof link.source === "object" ? (link.source as FGNode).id : link.source;
+      const t = typeof link.target === "object" ? (link.target as FGNode).id : link.target;
+      return s === selectedNodeId || t === selectedNodeId ? 3 : 0;
+    },
+    [selectedNodeId]
+  );
+
   const handleResetCamera = useCallback(() => {
     if (fgRef.current?.cameraPosition) {
       const dist = Math.max(200, Math.cbrt(nodes.length) * 30);
-      fgRef.current.cameraPosition({ x: dist, y: dist, z: dist }, { x: 0, y: 0, z: 0 }, 800);
+      fgRef.current.cameraPosition(
+        { x: dist, y: dist, z: dist },
+        { x: 0, y: 0, z: 0 },
+        800
+      );
+    }
+  }, [nodes.length]);
+
+  const handleNodeClick = useCallback(
+    (node: FGNode & { x?: number; y?: number; z?: number }) => {
+      onNodeClick(node.id);
+      const inst = fgRef.current;
+      if (inst?.cameraPosition && typeof node.x === "number" && typeof node.y === "number" && typeof node.z === "number") {
+        animateCameraToNode(inst.cameraPosition.bind(inst), node, 550);
+      }
+    },
+    [onNodeClick]
+  );
+
+  const onEngineStop = useCallback(() => {
+    const inst = fgRef.current;
+    if (inst?.cameraPosition && nodes.length > 0) {
+      const dist = Math.max(200, Math.cbrt(nodes.length) * 30);
+      inst.cameraPosition(
+        { x: dist, y: dist, z: dist },
+        { x: 0, y: 0, z: 0 },
+        0
+      );
+    }
+    if (inst?.scene && inst?.renderer) {
+      try {
+        const scene = inst.scene();
+        const renderer = inst.renderer();
+        configureSceneAtmosphere(scene, renderer);
+        const existingLights = scene.children.filter((c) => c instanceof THREE.Light);
+        existingLights.forEach((l) => scene.remove(l));
+        addSceneLights(scene);
+      } catch {
+        // ignore
+      }
     }
   }, [nodes.length]);
 
   return (
-    <div className="relative h-full w-full bg-aurora-bg0">
+    <div className="graph3d-container relative h-full w-full overflow-hidden rounded-2xl">
       <ForceGraph3D
         ref={fgRef as never}
         graphData={graphData}
         nodeThreeObject={nodeThreeObject}
         nodeColor={nodeColor}
         linkColor={linkColor}
-        linkWidth={0.5}
-        linkOpacity={0.6}
-        onNodeClick={(n) => onNodeClick((n as FGNode).id)}
+        linkWidth={linkWidth}
+        linkOpacity={0.5}
+        linkDirectionalParticles={linkDirectionalParticles}
+        linkDirectionalParticleWidth={0.8}
+        linkDirectionalParticleColor={() => "rgba(38,198,255,0.5)"}
+        onNodeClick={handleNodeClick}
         onNodeHover={(n) => onNodeHover(n ? (n as FGNode).id : null)}
-        nodeLabel={(node) => {
-          const id = (node as FGNode).id;
-          if (id === selectedNodeId || id === hoveredNodeId) {
-            return `Agent ${id}`;
-          }
-          return "";
-        }}
+        nodeLabel={() => ""}
         enableNodeDrag={false}
         showNavInfo={false}
-        onEngineStop={() => {
-          if (fgRef.current?.cameraPosition && nodes.length > 0) {
-            const dist = Math.max(200, Math.cbrt(nodes.length) * 30);
-            fgRef.current.cameraPosition({ x: dist, y: dist, z: dist }, { x: 0, y: 0, z: 0 }, 0);
-          }
-        }}
+        backgroundColor="rgba(5,11,16,0)"
+        d3VelocityDecay={0.3}
+        onEngineStop={onEngineStop}
       />
       <button
         type="button"
