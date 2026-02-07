@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useGraphStore } from "./store/useGraphStore";
 import { useUIStore } from "./store/useUIStore";
 import { AppShell } from "./components/AppShell";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 
 export default function App() {
   const loadGraph = useGraphStore((s) => s.loadGraph);
@@ -48,5 +49,9 @@ export default function App() {
     );
   }
 
-  return <AppShell />;
+  return (
+    <ErrorBoundary>
+      <AppShell />
+    </ErrorBoundary>
+  );
 }

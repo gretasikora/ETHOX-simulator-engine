@@ -31,6 +31,7 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
   const hoveredNodeId = useUIStore((s) => s.hoveredNodeId);
   const setSelectedNode = useUIStore((s) => s.setSelectedNode);
   const setHoveredNode = useUIStore((s) => s.setHoveredNode);
+  const setVisibleNodeIds = useUIStore((s) => s.setVisibleNodeIds);
   const colorBy = useUIStore((s) => s.colorBy);
   const sizeBy = useUIStore((s) => s.sizeBy);
   const selectedTrait = useUIStore((s) => s.selectedTrait);
@@ -46,13 +47,10 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
     const sigma = sigmaRef.current;
     if (!sigma) return;
     const camera = sigma.getCamera();
-    if (camera.animatedReset) {
+    if (typeof camera.animatedReset === "function") {
       camera.animatedReset({ duration: 600 });
-    } else if ((camera as { animate?: (state: unknown, opts: { duration: number }) => void }).animate) {
-      (camera as { animate: (state: unknown, opts: { duration: number }) => void }).animate(
-        { x: 0.5, y: 0.5, ratio: 1 },
-        { duration: 600 }
-      );
+    } else if (typeof camera.animate === "function") {
+      camera.animate({ x: 0.5, y: 0.5, ratio: 1 }, { duration: 600 });
     }
   }, []);
 
@@ -156,7 +154,7 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
 
     sigma.on("enterNode", ({ node }) => setHoveredNode(node));
     sigma.on("leaveNode", () => setHoveredNode(null));
-    sigma.on("clickNode", ({ node }) => setSelectedNode(node));
+    sigma.on("clickNode", ({ node }) => setSelectedNode(node != null ? String(node) : null));
     sigma.on("clickStage", () => setSelectedNode(null));
 
     onSigmaReady(resetCamera);
@@ -183,7 +181,12 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
       traitKeys,
       CLUSTER_COLORS
     );
-  }, [colorBy, sizeBy, selectedTrait, traitKeys, filters]);
+    const visibleIds: string[] = [];
+    graph.forEachNode((node) => {
+      if (!graph.getNodeAttribute(node, "hidden")) visibleIds.push(node);
+    });
+    setVisibleNodeIds(visibleIds);
+  }, [colorBy, sizeBy, selectedTrait, traitKeys, filters, setVisibleNodeIds]);
 
   useEffect(() => {
     const sigma = sigmaRef.current;
@@ -194,21 +197,9 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
     );
   }, [showLabels]);
 
-  useEffect(() => {
-    const sigma = sigmaRef.current;
-    const graph = graphInstanceRef.current;
-    if (!sigma || !graph || !selectedNodeId) return;
-    if (!graph.hasNode(selectedNodeId)) return;
-    const pos = graph.getNodeAttributes(selectedNodeId) as { x: number; y: number };
-    const camera = sigma.getCamera();
-    const animate = (camera as { animate?: (state: { x: number; y: number; ratio: number }, opts: { duration: number }) => void }).animate;
-    if (animate) {
-      animate(
-        { x: pos.x, y: pos.y, ratio: 0.3 },
-        { duration: 600 }
-      );
-    }
-  }, [selectedNodeId]);
+  // Do not animate camera on node select - it zoomed in too far (ratio 0.3) and
+  // made the rest of the network disappear. The selected node is still highlighted
+  // by the node reducer; the drawer shows details without changing the view.
 
   return (
     <div className="absolute inset-0">

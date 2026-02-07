@@ -9,6 +9,7 @@ export interface ToastItem {
 interface UIState {
   selectedNodeId: string | null;
   hoveredNodeId: string | null;
+  visibleNodeIds: string[];
   searchQuery: string;
   colorBy: "cluster" | "trait" | "centrality";
   sizeBy: "degree" | "centrality";
@@ -22,6 +23,7 @@ interface UIState {
   toasts: ToastItem[];
   setSelectedNode: (id: string | null) => void;
   setHoveredNode: (id: string | null) => void;
+  setVisibleNodeIds: (ids: string[]) => void;
   setSearchQuery: (q: string) => void;
   setColorBy: (v: "cluster" | "trait" | "centrality") => void;
   setSizeBy: (v: "degree" | "centrality") => void;
@@ -44,6 +46,7 @@ const defaultFilters = (): UIState["filters"] => ({
 export const useUIStore = create<UIState>((set, get) => ({
   selectedNodeId: null,
   hoveredNodeId: null,
+  visibleNodeIds: [],
   searchQuery: "",
   colorBy: "cluster",
   sizeBy: "degree",
@@ -54,6 +57,7 @@ export const useUIStore = create<UIState>((set, get) => ({
 
   setSelectedNode: (id) => set({ selectedNodeId: id }),
   setHoveredNode: (id) => set({ hoveredNodeId: id }),
+  setVisibleNodeIds: (ids) => set({ visibleNodeIds: ids }),
   setSearchQuery: (q) => set({ searchQuery: q }),
   setColorBy: (v) => set({ colorBy: v }),
   setSizeBy: (v) => set({ sizeBy: v }),
