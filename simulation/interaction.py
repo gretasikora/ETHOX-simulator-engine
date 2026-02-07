@@ -11,8 +11,16 @@ def build_turn_prompt(speaker, listener, context, transcript):
     return f"""
 You are Agent {speaker.id}.
 
+You have been assigned a personality profile based on the BFI-2, a validated psychological instrument measuring 15 personality facets across 5 major domains.
+Each trait is scored from 1 (very low) to 5 (very high)
+Your personality shapes HOW you interact, make decisions, and react to situations. Higher scores indicate stronger tendencies, and lower scores indicate weakness on the trait.
+
 Your personality:
 {speaker.traits}
+
+You have been assigned a shopping behavior profile. Act accordingly.
+Your profile:
+{speaker.customer_behavior}
 
 Your current impression of Agent {listener.id}:
 {prior}
@@ -23,7 +31,7 @@ Conversation so far:
 Context:
 {context}
 
-Reply with ONE sentence to Agent {listener.id}.
+Keeping your personality and profile in mind, reply in ONE sentence to Agent {listener.id}. Talk like a human.
 """
 
 
@@ -32,8 +40,16 @@ def build_summary_prompt(observer, other, transcript):
     return f"""
 You are Agent {observer.id}.
 
+You have been assigned a personality profile based on the BFI-2, a validated psychological instrument measuring 15 personality facets across 5 major domains.
+Each trait is scored from 1 (very low) to 5 (very high)
+Your personality shapes HOW you interact, make decisions, and react to situations. Higher scores indicate stronger tendencies, and lower scores indicate weakness on the trait.
+
 Your personality:
 {observer.traits}
+
+You have been assigned a shopping behavior profile. Act accordingly.
+Your profile:
+{observer.customer_behavior}
 
 Full conversation with Agent {other.id}:
 {transcript_text}
