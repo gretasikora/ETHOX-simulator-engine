@@ -5,7 +5,6 @@ import { GraphCanvas } from "./GraphCanvas";
 import { Graph3D } from "./graph/Graph3D";
 import { AgentProfileDrawer } from "./AgentProfileDrawer";
 import { GraphExploreControls } from "./GraphExploreControls";
-import { Legend } from "./Legend";
 import { ToastContainer } from "./Toast";
 import { ExperimentPanel } from "./experiments/ExperimentPanel";
 import { SocietyPage } from "./society/SocietyPage";
@@ -103,7 +102,6 @@ export function AppShell() {
                     onSigmaReady={setResetCameraFn}
                   />
                   <GraphExploreControls />
-                  <Legend />
                 </>
               ) : (
                 <>

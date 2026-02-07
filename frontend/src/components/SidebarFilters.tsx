@@ -108,8 +108,6 @@ export function SidebarFilters({
               <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-aurora-text2">
                 <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full border border-current" /> Male</span>
                 <span className="flex items-center gap-1"><span className="h-2 w-2 border border-current" style={{ borderRadius: 2 }} /> Female</span>
-                <span className="flex items-center gap-1"><span className="inline-block border-l-[4px] border-r-[4px] border-b-[7px] border-l-transparent border-r-transparent border-b-current" style={{ marginBottom: 1 }} /> Non-binary</span>
-                <span className="flex items-center gap-1"><span className="inline-block h-2 w-2 rotate-45 border border-current" /> Unknown</span>
               </div>
             )}
           </div>
