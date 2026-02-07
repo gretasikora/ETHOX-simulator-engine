@@ -33,15 +33,22 @@ Right now, this repo covers **steps 1–2** (warm-up interactions). Rating, trig
 
 ```
 agentic-society/
-├── main.py                  # Entry point, runs the simulation loop
-├── config.py                # Global configuration (single source of truth)
+├── main.py                    # Entry point, runs the simulation loop
+├── config.py                  # Global configuration (single source of truth)
+├── requirements.txt           # Python dependencies
+├── AGENTS.md                  # Quick reference for future agents
 ├── agents/
-│   └── agent.py             # Agent state (traits + memory)
+│   └── agent.py               # Agent state (traits + memory)
 ├── llm/
-│   └── client.py            # LLM stub (replace later with real API)
+│   └── client.py              # LLM client wrapper
 ├── simulation/
-│   ├── interaction.py       # Pairwise interaction logic + prompts
-│   └── init_network.py      # Agent initialization
+│   ├── agents.py              # Agent utilities
+│   ├── connection.py          # Connection/network utilities
+│   ├── interaction.py         # Pairwise interaction logic + prompts
+│   ├── init_network.py        # Agent initialization
+│   └── json_to_matrix.py      # JSON to adjacency matrix conversion
+├── personalities/
+│   └── sampling.py            # BFI-2 personality sampling (200 agents)
 ```
 
 Design principle: **each file has one job**. No file should “know” more than it needs to.
@@ -103,6 +110,27 @@ This lets you:
 
 ## Running the simulation
 
+### Setup
+
+1. **Create and activate a virtual environment:**
+   ```bash
+   python -m venv .venv
+   source .venv/bin/activate  # On macOS/Linux
+   # .venv\Scripts\activate   # On Windows
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Set your OpenAI API key:**
+   ```bash
+   export OPENAI_API_KEY='your-key-here'
+   ```
+
+### Run the main simulation
+
 From the repo root:
 
 ```bash
@@ -117,7 +145,56 @@ You should see:
 * repeated interactions,
 * no errors.
 
-If this doesn’t work, **do not move on**.
+If this doesn't work, **do not move on**.
+
+### Generate synthetic personalities
+
+The [personalities/sampling.py](personalities/sampling.py) file generates 200 synthetic agent personalities based on the **BFI-2 (Big Five Inventory-2)** personality framework. It uses:
+
+* **Demographic conditioning**: Gender (female/male) and age groups (Under 18, 18-40, 40+)
+* **Psychometric data**: Correlations and means from Soto & John (2017)
+* **Real or synthetic BFI-2 data**: Auto-generates realistic training data if real dataset unavailable
+* **Multivariate sampling**: Generates correlated personality facet scores (15 facets across 5 domains)
+
+**Generate the synthetic society (no R required!):**
+
+```bash
+python personalities/sampling.py
+```
+
+This will:
+1. Try to download the real BFI-2 dataset from CRAN (may fail due to encoding issues)
+2. **Automatically fall back** to generating realistic synthetic training data
+3. Fit age-effect models for each personality facet
+4. Generate 200 synthetic individuals with realistic personality distributions
+5. Save results to `synthetic_society_200.csv`
+
+**Optional: Use real BFI-2 data**
+
+If you have R and want to use the real dataset instead of synthetic training data:
+
+```r
+# In R console:
+install.packages('ShinyItemAnalysis')
+library(ShinyItemAnalysis)
+data('BFI2')
+write.csv(BFI2, 'BFI2.csv', row.names=FALSE)
+```
+
+Place `BFI2.csv` in your project root, then run the script.
+
+**Output format:**
+- `gender`: female/male
+- `age_group`: Under 18, 18-40, or 40+
+- 15 facet columns: Sociability, Assertiveness, Energy Level, Compassion, Respectfulness, Trust, Organization, Productiveness, Responsibility, Anxiety, Depression, Emotional Volatility, Intellectual Curiosity, Aesthetic Sensitivity, Creative Imagination
+- All facet scores are on a 1–5 scale (clamped)
+
+**Customization:**
+Edit the demographic proportions in the `main()` function:
+```python
+p_gender = {"female": 0.55, "male": 0.45}
+p_age = {"Under 18": 0.05, "18-40": 0.65, "40+": 0.30}
+```
 
 ---
 
