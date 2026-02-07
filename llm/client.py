@@ -13,5 +13,4 @@ def llm_generate(prompt: str) -> str:
         max_output_tokens=MAX_TOKENS,
         temperature=TEMPERATURE,
     )
-    print(response.output_text)
     return response.output_text
