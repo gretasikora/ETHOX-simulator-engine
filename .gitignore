@@ -1,3 +1,19 @@
+# =============================================================================
+# ETHOX-simulator-engine – PROJECT CONTEXT (for AI / new agents)
+# =============================================================================
+# We are building a modular, block-based "synthetic customer society" simulator.
+# - Input: agent data (JSON) with id, archetype, traits (e.g. price_sensitivity,
+#   loyalty, social_influence), state (sentiment, active), memory, neighbors,
+#   influence_score. Agents can have an undefined number of extra features.
+# - Pipeline: (1) Load agents from JSON  (2) Compute agent-to-agent connection
+#   scores (social_influence, influence_score, sentiment similarity, loyalty)
+#   (3) Store as N×N adjacency matrix  (4) Later: influence graph, events,
+#   interactions, experiments. Build feature-by-feature; minimal deps (Python,
+#   numpy); no YAML – use a single entry script (e.g. simulation/json_to_matrix.py)
+#   and small support modules (agents.py, connection.py). Outputs go to
+#   outputs/ or simulation/outputs/ and are gitignored below.
+# =============================================================================
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
@@ -205,3 +221,7 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# ETHOX simulator – generated outputs (adjacency matrix, run artifacts)
+outputs/
+simulation/outputs/
