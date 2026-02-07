@@ -11,7 +11,7 @@ export interface GraphFilters {
 
 export interface GraphUIState {
   colorBy: "age" | "trait" | "centrality";
-  sizeBy: "degree" | "centrality";
+  sizeBy: "degree" | "centrality" | "level_of_care";
   selectedTrait: string;
   traitKeys: string[];
   filters: GraphFilters;
@@ -53,6 +53,9 @@ export function buildGraphology(
     let size = 8;
     if (sizeBy === "degree") {
       size = scaleLinear(node.degree ?? 0, 0, maxDegree, 3, 15);
+    } else if (sizeBy === "level_of_care") {
+      const loc = node.level_of_care ?? 0;
+      size = scaleLinear(Math.max(0, Math.min(10, loc)), 0, 10, 3, 15);
     } else {
       size = scaleLinear(node.degree_centrality ?? 0, 0, maxCentrality, 3, 15);
     }
@@ -82,6 +85,7 @@ export function buildGraphology(
       traits: { ...traits },
       age: node.age,
       gender: node.gender,
+      level_of_care: node.level_of_care,
       hidden: false,
     });
   }
@@ -137,7 +141,7 @@ export function applyFilters(
 export function applyVisualAttributes(
   graph: Graph,
   colorBy: "age" | "trait" | "centrality",
-  sizeBy: "degree" | "centrality",
+  sizeBy: "degree" | "centrality" | "level_of_care",
   selectedTrait: string,
   _traitKeys: string[],
   _clusterColors: string[],
@@ -178,6 +182,9 @@ export function applyVisualAttributes(
     let size = 8;
     if (sizeBy === "degree") {
       size = scaleLinear((attrs.degree as number) ?? 0, 0, maxDegree, 3, 15);
+    } else if (sizeBy === "level_of_care") {
+      const loc = (attrs.level_of_care as number) ?? 0;
+      size = scaleLinear(Math.max(0, Math.min(10, loc)), 0, 10, 3, 15);
     } else {
       size = scaleLinear((attrs.degree_centrality as number) ?? 0, 0, maxCentrality, 3, 15);
     }

@@ -74,7 +74,7 @@ export function Legend() {
         <div>
           <div className="font-medium uppercase tracking-wider text-aurora-text2">Size</div>
           <div className="text-aurora-text1">
-            {sizeBy === "degree" ? "Degree" : "Centrality"}
+            {sizeBy === "degree" ? "Degree" : sizeBy === "level_of_care" ? "Level of care" : "Centrality"}
           </div>
         </div>
       </div>

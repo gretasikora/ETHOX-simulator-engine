@@ -106,7 +106,7 @@ export function TopBar({ onSearchSelect }: TopBarProps) {
       <div className="flex items-center gap-2">
         <span className="text-xs text-gray-500">Size by</span>
         <div className="flex rounded-lg border border-dark-700 p-0.5">
-          {(["degree", "centrality"] as const).map((opt) => (
+          {(["degree", "centrality", "level_of_care"] as const).map((opt) => (
             <button
               key={opt}
               type="button"
@@ -117,7 +117,7 @@ export function TopBar({ onSearchSelect }: TopBarProps) {
                   : "text-gray-400 hover:bg-dark-700 hover:text-gray-200"
               }`}
             >
-              {opt}
+              {opt === "level_of_care" ? "Level of care" : opt}
             </button>
           ))}
         </div>

@@ -11,6 +11,7 @@ export interface FGNode {
   betweenness_centrality?: number;
   traits?: Record<string, number>;
   cluster?: number;
+  level_of_care?: number;
 }
 
 export interface FGLink {
@@ -56,6 +57,7 @@ function toFGNode(node: NodeData): FGNode {
     betweenness_centrality: node.betweenness_centrality,
     traits: node.traits ? { ...node.traits } : undefined,
     cluster: node.cluster,
+    level_of_care: node.level_of_care,
   };
 }
 

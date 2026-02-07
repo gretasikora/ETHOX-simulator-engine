@@ -141,7 +141,7 @@ export function AppHeader({ onSearchSelect }: AppHeaderProps) {
         <div className="flex items-center gap-1.5 sm:gap-2">
           <span className="hidden text-xs text-aurora-text2 sm:inline">Size</span>
           <div className="flex rounded-md border border-aurora-border bg-aurora-surface0 p-0.5 sm:rounded-lg">
-            {(["degree", "centrality"] as const).map((opt) => (
+            {(["degree", "centrality", "level_of_care"] as const).map((opt) => (
               <button
                 key={opt}
                 type="button"
@@ -150,7 +150,7 @@ export function AppHeader({ onSearchSelect }: AppHeaderProps) {
                   sizeBy === opt ? toggleActive : toggleInactive
                 }`}
               >
-                {opt}
+                {opt === "level_of_care" ? "Level of care" : opt}
               </button>
             ))}
           </div>

@@ -37,7 +37,7 @@ export function getCachedGeometry(
 export function createNodeMesh(
   shape: "sphere" | "box" | "cone" | "octahedron",
   color: string,
-  opts: { hovered?: boolean; selected?: boolean }
+  opts: { hovered?: boolean; selected?: boolean; sizeScale?: number }
 ): THREE.Mesh {
   const size = 0.5;
   const geometry = getCachedGeometry(shape, size);
@@ -50,8 +50,9 @@ export function createNodeMesh(
     emissiveIntensity: opts.selected ? 0.5 : opts.hovered ? 0.25 : 0,
   });
   const mesh = new THREE.Mesh(geometry, material);
-  const scale = opts.selected ? 4.5 : opts.hovered ? 3.45 : 3;
-  mesh.scale.setScalar(scale);
+  const baseScale = opts.selected ? 4.5 : opts.hovered ? 3.45 : 3;
+  const sizeScale = opts.sizeScale ?? 1;
+  mesh.scale.setScalar(baseScale * sizeScale);
   return mesh;
 }
 

@@ -35,6 +35,11 @@ interface CentralityScale {
   max: number;
 }
 
+function scaleLinear(value: number, inMin: number, inMax: number, outMin: number, outMax: number): number {
+  const t = inMax === inMin ? 0.5 : (value - inMin) / (inMax - inMin);
+  return outMin + (outMax - outMin) * Math.max(0, Math.min(1, t));
+}
+
 interface Graph3DProps {
   nodes: FGNode[];
   links: FGLink[];
@@ -47,6 +52,7 @@ interface Graph3DProps {
   colorBy: "age" | "trait" | "centrality";
   selectedTrait: string;
   centralityScale: CentralityScale;
+  sizeBy: "degree" | "centrality" | "level_of_care";
 }
 
 function getNodeColor(
@@ -85,6 +91,7 @@ export function Graph3D({
   colorBy,
   selectedTrait,
   centralityScale,
+  sizeBy,
 }: Graph3DProps) {
   const fgRef = useRef<{
     cameraPosition: (pos: { x: number; y: number; z: number }, lookAt?: { x: number; y: number; z: number }, ms?: number) => void;
@@ -102,7 +109,16 @@ export function Graph3D({
       const isHovered = hoveredNodeId === node.id;
       const color = getNodeColor(node, showAgeEncoding, colorBy, selectedTrait, centralityScale);
       const shape = shapeForKey(node.gender, showGenderEncoding);
-      const mesh = createNodeMesh(shape, color, { hovered: isHovered, selected: isSelected });
+      const loc = node.level_of_care ?? 0;
+      const sizeScale =
+        sizeBy === "level_of_care"
+          ? scaleLinear(Math.max(0, Math.min(10, loc)), 0, 10, 0.6, 1.4)
+          : 1;
+      const mesh = createNodeMesh(shape, color, {
+        hovered: isHovered,
+        selected: isSelected,
+        sizeScale,
+      });
       const group = new THREE.Group();
       group.add(mesh);
       if (isSelected) {
@@ -116,7 +132,7 @@ export function Graph3D({
       }
       return group;
     },
-    [selectedNodeId, hoveredNodeId, showAgeEncoding, showGenderEncoding, colorBy, selectedTrait, centralityScale]
+    [selectedNodeId, hoveredNodeId, showAgeEncoding, showGenderEncoding, colorBy, selectedTrait, centralityScale, sizeBy]
   );
 
   const nodeColor = useCallback(

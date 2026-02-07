@@ -30,6 +30,7 @@ export function AppShell() {
   const showAgeEncoding = useUIStore((s) => s.showAgeEncoding);
   const showGenderEncoding = useUIStore((s) => s.showGenderEncoding);
   const colorBy = useUIStore((s) => s.colorBy);
+  const sizeBy = useUIStore((s) => s.sizeBy);
 
   const nodes = useGraphStore((s) => s.nodes);
   const edges = useGraphStore((s) => s.edges);
@@ -123,6 +124,7 @@ export function AppShell() {
                     colorBy={colorBy}
                     selectedTrait={selectedTrait || traitKeys[0] || ""}
                     centralityScale={centralityScale}
+                    sizeBy={sizeBy}
                   />
                 </>
               )}

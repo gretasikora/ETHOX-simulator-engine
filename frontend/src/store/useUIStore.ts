@@ -23,7 +23,7 @@ interface UIState {
   exploreStatus: string;
   searchQuery: string;
   colorBy: "age" | "trait" | "centrality";
-  sizeBy: "degree" | "centrality";
+  sizeBy: "degree" | "centrality" | "level_of_care";
   selectedTrait: string;
   showLabels: boolean;
   showAgeEncoding: boolean;
@@ -56,7 +56,7 @@ interface UIState {
   setExploreStatus: (msg: string) => void;
   setSearchQuery: (q: string) => void;
   setColorBy: (v: "age" | "trait" | "centrality") => void;
-  setSizeBy: (v: "degree" | "centrality") => void;
+  setSizeBy: (v: "degree" | "centrality" | "level_of_care") => void;
   setSelectedTrait: (trait: string) => void;
   toggleLabels: () => void;
   setClusterFilter: (clusters: number[]) => void;
