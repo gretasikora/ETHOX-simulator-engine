@@ -2,7 +2,7 @@
 import json
 import re
 
-from llm.client import llm_generate
+from llm.client import llm_generate, llm_supervisor
 
 def build_trigger_prompt(agent, event_message):
     return f"""
@@ -133,3 +133,53 @@ def update_opinion_from_neighbors(agent, event_message, neighbor_opinions, weigh
     print("\n", agent.id, "\n", updated, agent.care, agent.usage_effect)
     agent.opinion = updated
     return updated
+
+
+def build_supervisor_summary_prompt(agents, event_message, include_initial=False):
+    """Build prompt for supervisor to summarize all agent opinions."""
+    opinion_lines = []
+    for agent in agents:
+        if include_initial and hasattr(agent, 'initial_opinion'):
+            opinion_lines.append(f"Agent {agent.id}:")
+            opinion_lines.append(f"  Initial: {agent.initial_opinion} (care: {agent.initial_care}, usage_effect: {agent.initial_usage_effect})")
+            opinion_lines.append(f"  Final: {agent.opinion} (care: {agent.care}, usage_effect: {agent.usage_effect})")
+        else:
+            opinion_lines.append(f"Agent {agent.id}: {agent.opinion} (care: {agent.care}/10, usage_effect: {agent.usage_effect})")
+
+    opinions_block = "\n".join(opinion_lines)
+
+    change_instruction = ""
+    if include_initial:
+        change_instruction = "\n6. How opinions and metrics shifted from initial reactions to final positions after social influence"
+
+    return f"""
+You are analyzing a simulation of {len(agents)} agents with different personalities and shopping behaviors based on the BFI-2 psychological model.
+
+Event that triggered reactions:
+{event_message}
+
+{"Agent opinions (Initial → Final after social influence):" if include_initial else "Final agent opinions:"}
+{opinions_block}
+
+Each agent has three metrics:
+- opinion: their qualitative reaction to the event
+- care: how much they care about the event (0-10 scale, 0=indifferent, 10=heavily care)
+- usage_effect: predicted impact on their Amazon usage (-5 to +5 scale, -5=heavily reduce usage, +5=heavily increase usage)
+
+Provide a comprehensive summary that includes:
+1. Overall sentiment distribution (positive/negative/neutral/indifferent)
+2. Care distribution and average engagement level with the event
+3. Predicted net impact on platform usage (distribution and average of usage_effect scores)
+4. Key themes or patterns in the qualitative responses
+5. Notable outliers or unique perspectives
+6. Degree of consensus or polarization in the network{change_instruction}
+
+Keep the summary concise but insightful (3-5 paragraphs).
+"""
+
+
+def supervisor_summarize(agents, event_message, include_initial=False):
+    """Generate a supervisor summary of all agent opinions using the more powerful LLM."""
+    prompt = build_supervisor_summary_prompt(agents, event_message, include_initial=include_initial)
+    summary = llm_supervisor(prompt).strip()
+    return summary

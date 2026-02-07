@@ -14,3 +14,13 @@ def llm_generate(prompt: str) -> str:
         temperature=TEMPERATURE,
     )
     return response.output_text
+
+
+def llm_supervisor(prompt: str) -> str:
+    response = _client.responses.create(
+        model="gpt-4.1",
+        input=prompt,
+        max_output_tokens=10000,
+        temperature=0.3,
+    )
+    return response.output_text
