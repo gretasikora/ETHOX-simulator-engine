@@ -1,7 +1,7 @@
 """
 Society generator for BFI-2 15 facets, conditioned on:
 - Gender: female/male
-- Age: <18, 18-40, 40+
+- Age: Under 25, 25-40, 40+
 
 Sources used conceptually:
 - Correlations (Table 3) and gender means/SDs (Table 5): Soto & John (2017)
@@ -19,7 +19,10 @@ from typing import Dict, List, Tuple
 
 import numpy as np
 import pandas as pd
+
 import statsmodels.api as sm
+
+from calculate_demographics import calculate_gender_ratio, calculate_age_group_ratios
 
 
 # -----------------------------
@@ -310,89 +313,44 @@ def load_bfi2_data(local_paths: list = None, verbose: bool = True) -> pd.DataFra
 def _generate_synthetic_bfi2_data(n_samples: int = 2000, seed: int = 42) -> pd.DataFrame:
     """
     Creates a realistic synthetic BFI-2 dataset when real data is unavailable.
-    
-    Implements research-backed demographic effects:
-    - Gender: Women higher on Agreeableness & Negative Emotionality; 
-              Men slightly higher on Extraversion
-    - Age: Maturity principle (older → higher Conscientiousness/Agreeableness, 
-           lower Negative Emotionality)
-    
-    Sources:
-    - Soto & John (2017): Gender means/SDs from BFI-2 internet sample
-    - General Big Five literature on gender and age patterns
-    - Russian BFI-2 measurement invariance study (age/sex effects)
     """
     np.random.seed(seed)
-    
-    # Generate age: mix of different age groups
     age = np.concatenate([
-        np.random.randint(15, 18, size=100),     # teens
-        np.random.randint(18, 40, size=1300),    # young adults
-        np.random.randint(40, 75, size=600),     # middle age+
+        np.random.randint(15, 18, size=100),
+        np.random.randint(18, 40, size=1300),
+        np.random.randint(40, 75, size=600),
     ])
     np.random.shuffle(age)
-    
-    # Generate gender: roughly balanced (slight female majority)
+
     gender = np.random.choice(['female', 'male'], size=n_samples, p=[0.52, 0.48])
     is_female = (gender == 'female').astype(int)
-    
-    # Generate 60 BFI-2 items (i1-i60) with realistic correlations
+
     items = np.zeros((n_samples, 60))
-    
-    # Generate latent traits (5 Big Five factors) 
     traits = np.random.randn(n_samples, 5)
-    
-    # Factor indices:
-    # 0 = Extraversion, 1 = Agreeableness, 2 = Conscientiousness,
-    # 3 = Negative Emotionality, 4 = Open-Mindedness
-    
-    # Standardize age for effects (centered at 30, scaled per decade)
     age_z = (age - 30.0) / 10.0
-    
+
     for i in range(60):
-        factor_idx = (i % 5)  # Cycle through factors
-        item_loading = 0.6 + np.random.rand(n_samples) * 0.2  # Loading 0.6-0.8
-        
-        # Base response from latent trait
+        factor_idx = (i % 5)
+        item_loading = 0.6 + np.random.rand(n_samples) * 0.2
         response = 3.0 + traits[:, factor_idx] * item_loading
-        
-        # Gender effects (trait-specific, directional)
-        if factor_idx == 1:  # Agreeableness
-            # Women score higher (d ≈ 0.4-0.5 SD in literature)
+        if factor_idx == 1:
             response += is_female * 0.25
-        elif factor_idx == 3:  # Negative Emotionality
-            # Women score notably higher (d ≈ 0.5-0.7 SD)
+        elif factor_idx == 3:
             response += is_female * 0.35
-        elif factor_idx == 0:  # Extraversion (esp. Assertiveness facet)
-            # Men score slightly higher on assertiveness
+        elif factor_idx == 0:
             response -= is_female * 0.10
-        # Open-Mindedness (4): minimal or mixed gender effects
-        # Conscientiousness (2): small/mixed effects, omitted for simplicity
-        
-        # Age effects (trait-specific, "maturity principle")
-        if factor_idx == 1:  # Agreeableness
-            # Increases with age (esp. from adolescence to middle age)
+        if factor_idx == 1:
             response += age_z * 0.15
-        elif factor_idx == 2:  # Conscientiousness
-            # Increases with age (robust finding)
+        elif factor_idx == 2:
             response += age_z * 0.18
-        elif factor_idx == 3:  # Negative Emotionality
-            # Decreases with age (emotional stability increases)
+        elif factor_idx == 3:
             response -= age_z * 0.20
-        # Extraversion (0): often shows inverted-U or stability, omit strong effect
-        # Open-Mindedness (4): can decline slightly in older age, but mixed
-        
-        # Add item-specific noise (measurement error)
         response += np.random.randn(n_samples) * 0.5
-        
-        # Clip to valid Likert range and round
         items[:, i] = np.clip(np.round(response), 1, 5)
-    
-    # Create dataframe
+
     df = pd.DataFrame(items, columns=[f'i{i+1}' for i in range(60)])
     df['age'] = age
     df['gender'] = gender
-    
     return df
 
 
@@ -508,8 +466,8 @@ def build_cell_means(age_model: AgeModel) -> Dict[Tuple[str, str], np.ndarray]:
     """
     # Representative midpoints for your categories
     age_mid = {
-        "Under 18": 16.0,
-        "18-40": 29.0,     # reference
+        "Under 25": 20.0,
+        "25-40": 32.0,    
         "40+": 55.0,
     }
 
@@ -528,7 +486,7 @@ def build_cell_means(age_model: AgeModel) -> Dict[Tuple[str, str], np.ndarray]:
         # Convert age deltas in z units into raw-score deltas using pooled SDs
         sd_vec, _ = build_covariance_from_R()
 
-        for ag in ["Under 18", "18-40", "40+"]:
+        for ag in ["Under 25", "25-40", "40+"]:
             deltas = []
             for k, facet in enumerate(FACETS):
                 dz = delta_z_for_age_group(age_model, facet=facet, female=female_ind, age_mid=age_mid[ag])
@@ -603,9 +561,9 @@ def generate_personality_traits(
     Returns a list of dicts: {facet_name: score}.
     """
     if p_gender is None:
-        p_gender = {"female": 0.55, "male": 0.45}
+        p_gender = calculate_gender_ratio()
     if p_age is None:
-        p_age = {"Under 18": 0.05, "18-40": 0.65, "40+": 0.30}
+        p_age = calculate_age_group_ratios()
 
     df_bfi2 = load_bfi2_data(local_paths=['./BFI2.csv'])
 
@@ -673,9 +631,9 @@ def main():
     # D) Build demographic cell means anchored to Soto&John gender means
     cell_mu = build_cell_means(age_model)
 
-    # E) Plug in YOUR customer base proportions (examples below)
-    p_gender = {"female": 0.55, "male": 0.45}
-    p_age = {"Under 18": 0.05, "18-40": 0.65, "40+": 0.30}
+    # E) Calculate customer base proportions from Amazon survey data
+    p_gender = calculate_gender_ratio()
+    p_age = calculate_age_group_ratios()
 
     # F) Sample 200 people
     df_people = sample_society(
