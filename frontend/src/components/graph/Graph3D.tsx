@@ -219,6 +219,18 @@ export function Graph3D({
         // ignore
       }
     }
+    if (inst?.camera) {
+      try {
+        const cam = inst.camera();
+        if (cam && "near" in cam && "far" in cam) {
+          (cam as THREE.PerspectiveCamera).near = 0.1;
+          (cam as THREE.PerspectiveCamera).far = 10000;
+          (cam as THREE.PerspectiveCamera).updateProjectionMatrix();
+        }
+      } catch {
+        // ignore
+      }
+    }
   }, [nodes.length]);
 
   return (

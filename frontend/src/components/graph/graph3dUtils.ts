@@ -1,8 +1,8 @@
 import * as THREE from "three";
 
-/** Theme: dark teal/ink to match app (--bg-0) */
+/** Theme: dark teal/ink to match app (--bg-0). Use low density so zooming in doesn't fog out the graph. */
 const FOG_COLOR = 0x050b10;
-const FOG_DENSITY = 0.012;
+const FOG_DENSITY = 0.00004;
 const HALO_COLOR = 0x26c6ff; // accent-1 cyan
 const HALO_OPACITY = 0.45;
 
@@ -50,6 +50,8 @@ export function createNodeMesh(
     emissiveIntensity: opts.selected ? 0.5 : opts.hovered ? 0.25 : 0,
   });
   const mesh = new THREE.Mesh(geometry, material);
+  mesh.castShadow = false;
+  mesh.receiveShadow = false;
   const baseScale = opts.selected ? 4.5 : opts.hovered ? 3.45 : 3;
   const sizeScale = opts.sizeScale ?? 1;
   mesh.scale.setScalar(baseScale * sizeScale);
@@ -133,6 +135,7 @@ export function configureSceneAtmosphere(
   scene.fog = new THREE.FogExp2(FOG_COLOR, FOG_DENSITY);
   renderer.setClearColor(0x050b10, 0);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.shadowMap.enabled = false;
   if ("physicallyCorrectLights" in renderer) {
     (renderer as THREE.WebGLRenderer & { physicallyCorrectLights: boolean }).physicallyCorrectLights = true;
   }
@@ -151,9 +154,11 @@ export function addSceneLights(scene: THREE.Scene): void {
   scene.add(ambient);
   const key = new THREE.DirectionalLight(0xe8f4f4, 0.7);
   key.position.set(120, 180, 100);
+  key.castShadow = false;
   scene.add(key);
   const rim = new THREE.PointLight(0x26c6ff, 0.35, 400);
   rim.position.set(-150, -80, 120);
+  rim.castShadow = false;
   scene.add(rim);
 }
 
