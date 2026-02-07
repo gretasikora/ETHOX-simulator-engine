@@ -310,7 +310,17 @@ def load_bfi2_data(local_paths: list = None, verbose: bool = True) -> pd.DataFra
 def _generate_synthetic_bfi2_data(n_samples: int = 2000, seed: int = 42) -> pd.DataFrame:
     """
     Creates a realistic synthetic BFI-2 dataset when real data is unavailable.
-    Uses realistic distributions based on population norms.
+    
+    Implements research-backed demographic effects:
+    - Gender: Women higher on Agreeableness & Negative Emotionality; 
+              Men slightly higher on Extraversion
+    - Age: Maturity principle (older → higher Conscientiousness/Agreeableness, 
+           lower Negative Emotionality)
+    
+    Sources:
+    - Soto & John (2017): Gender means/SDs from BFI-2 internet sample
+    - General Big Five literature on gender and age patterns
+    - Russian BFI-2 measurement invariance study (age/sex effects)
     """
     np.random.seed(seed)
     
@@ -322,38 +332,60 @@ def _generate_synthetic_bfi2_data(n_samples: int = 2000, seed: int = 42) -> pd.D
     ])
     np.random.shuffle(age)
     
-    # Generate gender: roughly balanced
+    # Generate gender: roughly balanced (slight female majority)
     gender = np.random.choice(['female', 'male'], size=n_samples, p=[0.52, 0.48])
+    is_female = (gender == 'female').astype(int)
     
     # Generate 60 BFI-2 items (i1-i60) with realistic correlations
-    # Use correlation structure to generate correlated responses
     items = np.zeros((n_samples, 60))
     
     # Generate latent traits (5 Big Five factors) 
     traits = np.random.randn(n_samples, 5)
     
-    # Map items to their primary factor (simplified mapping)
-    # Extraversion: items 1,6,11,16,21,26,31,36,41,46,51,56
-    # Agreeableness: items 2,7,12,17,22,27,32,37,42,47,52,57
-    # Conscientiousness: items 3,8,13,18,23,28,33,38,43,48,53,58
-    # Negative Emotionality: items 4,9,14,19,24,29,34,39,44,49,54,59
-    # Open-Mindedness: items 5,10,15,20,25,30,35,40,45,50,55,60
+    # Factor indices:
+    # 0 = Extraversion, 1 = Agreeableness, 2 = Conscientiousness,
+    # 3 = Negative Emotionality, 4 = Open-Mindedness
+    
+    # Standardize age for effects (centered at 30, scaled per decade)
+    age_z = (age - 30.0) / 10.0
     
     for i in range(60):
         factor_idx = (i % 5)  # Cycle through factors
         item_loading = 0.6 + np.random.rand(n_samples) * 0.2  # Loading 0.6-0.8
         
-        # Base response from factor
+        # Base response from latent trait
         response = 3.0 + traits[:, factor_idx] * item_loading
         
-        # Add gender and age effects (small)
-        response += (gender == 'female').astype(int) * np.random.uniform(-0.2, 0.2)
-        response += (age - 30) * np.random.uniform(-0.01, 0.01)
+        # Gender effects (trait-specific, directional)
+        if factor_idx == 1:  # Agreeableness
+            # Women score higher (d ≈ 0.4-0.5 SD in literature)
+            response += is_female * 0.25
+        elif factor_idx == 3:  # Negative Emotionality
+            # Women score notably higher (d ≈ 0.5-0.7 SD)
+            response += is_female * 0.35
+        elif factor_idx == 0:  # Extraversion (esp. Assertiveness facet)
+            # Men score slightly higher on assertiveness
+            response -= is_female * 0.10
+        # Open-Mindedness (4): minimal or mixed gender effects
+        # Conscientiousness (2): small/mixed effects, omitted for simplicity
         
-        # Add item-specific noise
+        # Age effects (trait-specific, "maturity principle")
+        if factor_idx == 1:  # Agreeableness
+            # Increases with age (esp. from adolescence to middle age)
+            response += age_z * 0.15
+        elif factor_idx == 2:  # Conscientiousness
+            # Increases with age (robust finding)
+            response += age_z * 0.18
+        elif factor_idx == 3:  # Negative Emotionality
+            # Decreases with age (emotional stability increases)
+            response -= age_z * 0.20
+        # Extraversion (0): often shows inverted-U or stability, omit strong effect
+        # Open-Mindedness (4): can decline slightly in older age, but mixed
+        
+        # Add item-specific noise (measurement error)
         response += np.random.randn(n_samples) * 0.5
         
-        # Clip to 1-5 and round
+        # Clip to valid Likert range and round
         items[:, i] = np.clip(np.round(response), 1, 5)
     
     # Create dataframe

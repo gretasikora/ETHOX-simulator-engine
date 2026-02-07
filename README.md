@@ -153,10 +153,10 @@ The [personalities/sampling.py](personalities/sampling.py) file generates 200 sy
 
 * **Demographic conditioning**: Gender (female/male) and age groups (Under 18, 18-40, 40+)
 * **Psychometric data**: Correlations and means from Soto & John (2017)
-* **Real or synthetic BFI-2 data**: Auto-generates realistic training data if real dataset unavailable
+* **Real or synthetic BFI-2 data**: Auto-generates realistic training data if real dataset unavailable using gender patterns and the maturity principle
 * **Multivariate sampling**: Generates correlated personality facet scores (15 facets across 5 domains)
 
-**Generate the synthetic society (no R required!):**
+**Generate the synthetic society:**
 
 ```bash
 python personalities/sampling.py
@@ -262,3 +262,29 @@ This is not a product. It’s a **foundation**.
 * Don’t add features without a testable hypothesis.
 * Don’t touch visuals until behavior makes sense.
 * Don’t trust “interesting outputs” without control experiments.
+
+---
+
+# Synthetic BFI-2 Data Generation
+
+The script generates synthetic BFI-2 data with:
+- Realistic age and gender distributions
+- Research-backed demographic effects:
+  - Women score higher on Agreeableness and Negative Emotionality facets
+  - Men score slightly higher on Assertiveness
+  - Older adults score higher on Agreeableness/Conscientiousness, lower on Negative Emotionality (maturity principle)
+
+These effects are based on:
+- Soto & John (2017), Table 5 (gender means/SDs)
+- General Big Five literature (maturity principle)
+- Russian BFI-2 invariance study (age/sex effects)
+
+**No R or external data required.**
+
+To generate and check the data:
+```bash
+python personalities/sampling.py
+python test_demographics.py  # Shows group differences
+```
+
+See the script for details on the effect sizes and implementation.
