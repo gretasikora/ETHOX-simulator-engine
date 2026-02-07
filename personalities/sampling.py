@@ -11,6 +11,8 @@ Sources used conceptually:
 
 from __future__ import annotations
 
+import os
+import tempfile
 import io
 import math
 import tarfile
@@ -271,7 +273,14 @@ def download_bfi2_from_cran() -> pd.DataFrame:
         raise RuntimeError("BFI2.rda not found inside ShinyItemAnalysis source tarball.")
 
     rda_bytes = tf.extractfile(rda_member).read()
-    res = pyreadr.read_r(io.BytesIO(rda_bytes))
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".rda") as tmp:
+        tmp.write(rda_bytes)
+        tmp_path = tmp.name
+    try:
+        res = pyreadr.read_r(tmp_path, encoding="latin1")
+    finally:
+        if os.path.exists(tmp_path):
+            os.remove(tmp_path)
     # the object name is likely "BFI2"
     if "BFI2" not in res:
         # fall back: take first object
@@ -477,7 +486,55 @@ def sample_society(
 
 
 # -----------------------------
-# 9) Putting it all together
+# 9) Helper for simulation
+# -----------------------------
+def generate_personality_traits(
+    n: int,
+    seed: int,
+    p_gender: Dict[str, float] | None = None,
+    p_age: Dict[str, float] | None = None,
+) -> List[Dict[str, float]]:
+    """
+    Generate personality traits for n agents (in-memory, no caching).
+    Returns a list of dicts: {facet_name: score}.
+    """
+    if p_gender is None:
+        p_gender = {"female": 0.55, "male": 0.45}
+    if p_age is None:
+        p_age = {"Under 18": 0.05, "18-40": 0.65, "40+": 0.30}
+
+    df_bfi2 = download_bfi2_from_cran()
+
+    age_col = "age" if "age" in df_bfi2.columns else "Age"
+    gender_col = "gender" if "gender" in df_bfi2.columns else "Gender"
+
+    facets = score_facets_from_items(df_bfi2)
+    age = df_bfi2[age_col]
+    gender = df_bfi2[gender_col]
+
+    age_model = fit_age_models(facets, age=age, gender=gender, age_ref=29.0)
+    _, Sigma = build_covariance_from_R()
+    cell_mu = build_cell_means(age_model)
+
+    df_people = sample_society(
+        n=n,
+        p_gender=p_gender,
+        p_age=p_age,
+        cell_mu=cell_mu,
+        Sigma=Sigma,
+        seed=seed,
+        clamp_1_5=True,
+    )
+
+    traits_list: List[Dict[str, float]] = []
+    for _, row in df_people.iterrows():
+        traits_list.append({facet: float(row[facet]) for facet in FACETS})
+
+    return traits_list
+
+
+# -----------------------------
+# 10) Putting it all together
 # -----------------------------
 def main():
     # A) Load open item-level dataset with age+gender
@@ -507,7 +564,7 @@ def main():
 
     # F) Sample 200 people
     df_people = sample_society(
-        n=200,
+        n=3,
         p_gender=p_gender,
         p_age=p_age,
         cell_mu=cell_mu,

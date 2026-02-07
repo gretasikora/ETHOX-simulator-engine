@@ -109,6 +109,8 @@ From the repo root:
 python main.py
 ```
 
+Note: personality traits are generated at startup using `personalities/sampling.py`, which downloads the open BFI-2 dataset from CRAN. Ensure your environment has network access and the dependencies in `requirements.txt`.
+
 You should see:
 
 * prompts printed to stdout,
