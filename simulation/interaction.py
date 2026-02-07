@@ -140,41 +140,43 @@ def build_supervisor_summary_prompt(agents, event_message, include_initial=False
     opinion_lines = []
     for agent in agents:
         if include_initial and hasattr(agent, 'initial_opinion'):
-            opinion_lines.append(f"Agent {agent.id}:")
+            opinion_lines.append(f"Customer {agent.id}:")
             opinion_lines.append(f"  Initial: {agent.initial_opinion} (care: {agent.initial_care}, usage_effect: {agent.initial_usage_effect})")
             opinion_lines.append(f"  Final: {agent.opinion} (care: {agent.care}, usage_effect: {agent.usage_effect})")
         else:
-            opinion_lines.append(f"Agent {agent.id}: {agent.opinion} (care: {agent.care}/10, usage_effect: {agent.usage_effect})")
+            opinion_lines.append(f"Customer {agent.id}: {agent.opinion} (care: {agent.care}/10, usage_effect: {agent.usage_effect})")
 
     opinions_block = "\n".join(opinion_lines)
 
     change_instruction = ""
     if include_initial:
-        change_instruction = "\n6. How opinions and metrics shifted from initial reactions to final positions after social influence"
+        change_instruction = "\n7. How opinions and metrics shifted from initial reactions to final positions after social influence"
 
     return f"""
-You are analyzing a simulation of {len(agents)} agents with different personalities and shopping behaviors based on the BFI-2 psychological model.
+You are analyzing a simulation of {len(agents)} customers representing the client's diverse customer base. Each customer has different personality traits and shopping behaviors based on real demographic data and the BFI-2 psychological model.
+
+Your goal is to provide an insightful summary of customer reactions and the possible consequences for the client's platform.
 
 Event that triggered reactions:
 {event_message}
 
-{"Agent opinions (Initial → Final after social influence):" if include_initial else "Final agent opinions:"}
+{"Customer opinions (Initial → Final after social influence):" if include_initial else "Customer opinions:"}
 {opinions_block}
 
-Each agent has three metrics:
+Each customer has three metrics:
 - opinion: their qualitative reaction to the event
 - care: how much they care about the event (0-10 scale, 0=indifferent, 10=heavily care)
-- usage_effect: predicted impact on their Amazon usage (-5 to +5 scale, -5=heavily reduce usage, +5=heavily increase usage)
+- usage_effect: predicted impact on their platform usage (-5 to +5 scale, -5=heavily reduce usage, +5=heavily increase usage)
 
 Provide a comprehensive summary that includes:
 1. Overall sentiment distribution (positive/negative/neutral/indifferent)
 2. Care distribution and average engagement level with the event
 3. Predicted net impact on platform usage (distribution and average of usage_effect scores)
-4. Key themes or patterns in the qualitative responses
-5. Notable outliers or unique perspectives
-6. Degree of consensus or polarization in the network{change_instruction}
+4. Key themes or patterns in customer responses
+5. Unique customer perspectives
+6. Degree of consensus or polarization among the customer base{change_instruction}
 
-Keep the summary concise but insightful (3-5 paragraphs).
+Write in a professional consulting tone addressing the client about their customer base. Do not mention individuals as each profile represents a subpopulation (archetype). Keep the summary concise but insightful (3-5 paragraphs).
 """
 
 
