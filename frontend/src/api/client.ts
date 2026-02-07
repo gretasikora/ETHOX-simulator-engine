@@ -77,3 +77,57 @@ export async function uploadGraph(file: File): Promise<{ metadata: GraphMetadata
   }
   return res.json();
 }
+
+/** Simulation run request */
+export interface RunSimulationRequest {
+  trigger: string;
+  num_agents: number;
+}
+
+/** Graph shape returned by simulation API (agent_id as number, source/target as number) */
+export interface SimulationNodeData {
+  agent_id: number;
+  degree?: number;
+  cluster?: number;
+  traits?: Record<string, number>;
+  degree_centrality?: number;
+  betweenness_centrality?: number;
+  level_of_care?: number;
+  age?: number;
+  gender?: string;
+  x?: number;
+  y?: number;
+  [key: string]: unknown;
+}
+
+export interface SimulationEdgeData {
+  source: number;
+  target: number;
+  weight?: number;
+}
+
+export interface SimulationGraphData {
+  nodes: SimulationNodeData[];
+  edges: SimulationEdgeData[];
+}
+
+export interface RunSimulationResponse {
+  initial_graph: SimulationGraphData;
+  final_graph: SimulationGraphData;
+}
+
+export async function runSimulation(
+  trigger: string,
+  numAgents: number
+): Promise<RunSimulationResponse> {
+  const res = await fetch(`${BASE}/api/simulations/run/`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ trigger, num_agents: numAgents } satisfies RunSimulationRequest),
+  });
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    throw new Error((data.detail as string) || res.statusText || "Simulation run failed");
+  }
+  return res.json();
+}

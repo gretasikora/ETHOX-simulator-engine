@@ -199,14 +199,6 @@ export function Graph3D({
 
   const onEngineStop = useCallback(() => {
     const inst = fgRef.current;
-    if (inst?.cameraPosition && nodes.length > 0) {
-      const dist = Math.max(200, Math.cbrt(nodes.length) * 30);
-      inst.cameraPosition(
-        { x: dist, y: dist, z: dist },
-        { x: 0, y: 0, z: 0 },
-        0
-      );
-    }
     if (inst?.scene && inst?.renderer) {
       try {
         const scene = inst.scene();
@@ -230,6 +222,16 @@ export function Graph3D({
       } catch {
         // ignore
       }
+    }
+    // Force a re-render so scene config (lights, shadows) applies on first load.
+    // Without this, shadows/lighting may not appear until camera moves (e.g. Reset camera).
+    if (inst?.cameraPosition && nodes.length > 0) {
+      const dist = Math.max(200, Math.cbrt(nodes.length) * 30);
+      inst.cameraPosition(
+        { x: dist, y: dist, z: dist },
+        { x: 0, y: 0, z: 0 },
+        0
+      );
     }
   }, [nodes.length]);
 

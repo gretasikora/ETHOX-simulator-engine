@@ -1,24 +1,31 @@
 import { useEffect } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { useGraphStore } from "./store/useGraphStore";
+import { useSimulationStore } from "./store/useSimulationStore";
 import { useUIStore } from "./store/useUIStore";
 import { AppShell } from "./components/AppShell";
+import { RunSimulationPage } from "./pages/RunSimulationPage";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 
-export default function App() {
+function ExplorerPage() {
   const loadGraph = useGraphStore((s) => s.loadGraph);
+  const nodes = useGraphStore((s) => s.nodes);
   const loading = useGraphStore((s) => s.loading);
   const error = useGraphStore((s) => s.error);
   const addToast = useUIStore((s) => s.addToast);
+  const simulationStatus = useSimulationStore((s) => s.status);
 
   useEffect(() => {
-    loadGraph();
-  }, [loadGraph]);
+    if (nodes.length === 0 && simulationStatus !== "ready") {
+      loadGraph();
+    }
+  }, [nodes.length, simulationStatus, loadGraph]);
 
   useEffect(() => {
     if (error) addToast(error, "error");
   }, [error, addToast]);
 
-  if (loading) {
+  if (nodes.length === 0 && simulationStatus !== "ready" && loading) {
     return (
       <div className="flex h-screen w-screen items-center justify-center bg-aurora-bg0">
         <div className="flex flex-col items-center gap-4">
@@ -29,13 +36,13 @@ export default function App() {
     );
   }
 
-  if (error) {
+  if (nodes.length === 0 && simulationStatus !== "ready" && error) {
     return (
       <div className="flex h-screen w-screen items-center justify-center bg-aurora-bg0">
         <div className="surface-elevated max-w-md rounded-lg p-6 text-center">
           <p className="text-aurora-danger">{error}</p>
           <p className="mt-2 text-sm text-aurora-text2">
-            Ensure the backend is running at http://127.0.0.1:8000
+            Ensure the backend is running at http://127.0.0.1:8000, or run a simulation from /run
           </p>
           <button
             type="button"
@@ -53,5 +60,16 @@ export default function App() {
     <ErrorBoundary>
       <AppShell />
     </ErrorBoundary>
+  );
+}
+
+export default function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<RunSimulationPage />} />
+      <Route path="/run" element={<RunSimulationPage />} />
+      <Route path="/explorer" element={<ExplorerPage />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 }

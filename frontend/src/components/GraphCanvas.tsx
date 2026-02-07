@@ -7,6 +7,7 @@ import { useGraphStore } from "../store/useGraphStore";
 import { useUIStore } from "../store/useUIStore";
 import { useExperimentStore } from "../store/useExperimentStore";
 import { usePlaybackStore } from "../store/usePlaybackStore";
+import { useSimulationStore } from "../store/useSimulationStore";
 import {
   buildGraphology,
   applyFilters,
@@ -70,6 +71,9 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
   const playbackRuns = usePlaybackStore((s) => s.runs);
   const playbackColorMode = usePlaybackStore((s) => s.colorMode);
 
+  const simulationNodeSizeOverride = useSimulationStore((s) => s.nodeSizeOverrideById);
+  const simulationIsAnimating = useSimulationStore((s) => s.isAnimating);
+
   const playbackAgentState = useMemo(() => {
     const run = playbackRunId ? playbackRuns.find((r) => r.id === playbackRunId) : null;
     if (!run?.frames?.length) return null;
@@ -92,6 +96,8 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
   const playbackAgentStateRef = useRef<Record<string, { opinion: number; sentiment: number; adoption: number }> | null>(null);
   const playbackTargetedRef = useRef<string[]>([]);
   const playbackColorModeRef = useRef<"cluster" | "opinion">("opinion");
+  const simulationNodeSizeOverrideRef = useRef<Record<string, number>>({});
+  const simulationIsAnimatingRef = useRef(false);
   const exploreModeRef = useRef(exploreMode);
   const pathFromRef = useRef(pathFrom);
   const pathToRef = useRef(pathTo);
@@ -104,6 +110,8 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
   playbackAgentStateRef.current = playbackAgentState;
   playbackTargetedRef.current = playbackTargetedIds;
   playbackColorModeRef.current = playbackColorMode;
+  simulationNodeSizeOverrideRef.current = simulationNodeSizeOverride;
+  simulationIsAnimatingRef.current = simulationIsAnimating;
   exploreModeRef.current = exploreMode;
   pathFromRef.current = pathFrom;
   pathToRef.current = pathTo;
@@ -181,6 +189,15 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
       nodeReducer: (node, data) => {
         const attrs = graph.getNodeAttributes(node);
         if (attrs.hidden) return { ...data, hidden: true };
+        const simOverride = simulationNodeSizeOverrideRef.current;
+        const simAnimating = simulationIsAnimatingRef.current;
+        if (simAnimating && simOverride && simOverride[node] != null) {
+          return {
+            ...data,
+            size: simOverride[node],
+            label: data.label,
+          };
+        }
         const agentState = playbackAgentStateRef.current;
         const targetedPlayback = playbackTargetedRef.current;
         const colorModePlayback = playbackColorModeRef.current;
@@ -368,7 +385,7 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
   useEffect(() => {
     const sigma = sigmaRef.current;
     if (sigma) sigma.refresh();
-  }, [highlightedNodeIds, highlightedEdgeKeys, appliedTargetIds, playbackAgentState, playbackTargetedIds, playbackColorMode]);
+  }, [highlightedNodeIds, highlightedEdgeKeys, appliedTargetIds, playbackAgentState, playbackTargetedIds, playbackColorMode, simulationNodeSizeOverride, simulationIsAnimating]);
 
   // Do not animate camera on node select - it zoomed in too far (ratio 0.3) and
   // made the rest of the network disappear. The selected node is still highlighted
