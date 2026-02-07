@@ -1,21 +1,39 @@
 # main.py
+<<<<<<< HEAD
 from simulation.init_network import init_agents
 from simulation.interaction import broadcast_trigger, update_opinion_from_neighbors, supervisor_summarize
 from simulation.network import build_adjacency_matrix, visualize_adjacency_matrix, compute_influencibility, similarity_score, precompute_personality_context
 from config import TRIGGER_EVENT_MESSAGE
+=======
+>>>>>>> 1271765 (connected network)
 from pathlib import Path
 
-agents = init_agents()
+from simulation.init_network import init_agents
+# from simulation.interaction import broadcast_trigger  # LLM
+from simulation.network import build_adjacency_matrix, visualize_adjacency_matrix
+# from config import TRIGGER_EVENT_MESSAGE  # LLM
 
+<<<<<<< HEAD
 context = precompute_personality_context(agents)
 
 adjacency = build_adjacency_matrix(agents, context)
+=======
+from backend.data.generate_network_from_simulation import export_network_json
+
+agents = init_agents()
+adjacency = build_adjacency_matrix(agents)
+
+# Export network for backend/website
+backend_data = Path(__file__).parent / "backend" / "data"
+export_network_json(agents, adjacency, backend_data / "network.json")
+
+>>>>>>> 1271765 (connected network)
 out_dir = Path("simulation") / "outputs"
 out_dir.mkdir(parents=True, exist_ok=True)
 labels = {i: str(a.id) for i, a in enumerate(agents)}
 visualize_adjacency_matrix(adjacency, out_dir / "network.png", labels=labels)
 
-broadcast_trigger(agents, TRIGGER_EVENT_MESSAGE)
+# broadcast_trigger(agents, TRIGGER_EVENT_MESSAGE)  # LLM — requires OPENAI_API_KEY
 
 # Store initial opinions before social influence for comparison
 for agent in agents:
