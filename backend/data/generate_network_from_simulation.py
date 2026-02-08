@@ -122,7 +122,7 @@ def build_network_data(agents, adjacency, agent_id_as_int: bool = False) -> dict
         if level_of_care is None and text_opinion:
             care = getattr(a, "care", None)
             level_of_care = round(care / 10.0, 4) if care is not None else None
-        effect_on_usage = getattr(a, "effect_on_usage", None)
+        effect_on_usage = getattr(a, "effect_on_usage", None) or getattr(a, "usage_effect", None)
         if effect_on_usage is None and text_opinion:
             effect_on_usage = getattr(a, "change_in_support", None)
         node = {
@@ -148,7 +148,7 @@ def build_network_data(agents, adjacency, agent_id_as_int: bool = False) -> dict
         initial_care = getattr(a, "initial_care", None)
         if initial_care is not None:
             node["initial_level_of_care"] = round(float(initial_care) / 10.0, 4)
-        initial_usage = getattr(a, "initial_change_in_support", None)
+        initial_usage = getattr(a, "initial_usage_effect", None) or getattr(a, "initial_change_in_support", None)
         if initial_usage is not None:
             node["initial_effect_on_usage"] = int(initial_usage)
         nodes.append(node)

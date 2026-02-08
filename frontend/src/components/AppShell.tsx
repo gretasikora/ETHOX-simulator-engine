@@ -1,4 +1,7 @@
 import { useRef, useState, useCallback, useEffect, useMemo } from "react";
+import { CareImpactOverlay } from "./CareImpactOverlay";
+import { CareLegend } from "./CareLegend";
+import { Link } from "react-router-dom";
 import { ChevronDown } from "lucide-react";
 import { AppHeader } from "./AppHeader";
 import { SidebarFilters } from "./SidebarFilters";
@@ -42,6 +45,43 @@ export function AppShell() {
   const nodes = useGraphStore((s) => s.nodes);
   const edges = useGraphStore((s) => s.edges);
   const traitKeys = useGraphStore((s) => s.traitKeys);
+
+  const simulationNodeSizeOverride = useSimulationStore((s) => s.nodeSizeOverrideById);
+  const simulationIsAnimating = useSimulationStore((s) => s.isAnimating);
+  const careGlowById = useSimulationStore((s) => s.careGlowById);
+  const careEdgeSweepIntensity = useSimulationStore((s) => s.careEdgeSweepIntensity);
+  const careAnimationStatus = useSimulationStore((s) => s.careAnimationStatus);
+  const animationProgress = useSimulationStore((s) => s.animationProgress);
+  const simulationPhase = useSimulationStore((s) => s.phase);
+  const simulationInitialGraph = useSimulationStore((s) => s.initialGraph);
+  const simulationFinalGraph = useSimulationStore((s) => s.finalGraph);
+
+  const simulationInitialPhase3D =
+    simulationPhase === "pre_trigger" &&
+    !!simulationInitialGraph &&
+    !!simulationFinalGraph &&
+    careAnimationStatus === "idle" &&
+    !simulationIsAnimating;
+
+  const [overlayFading3D, setOverlayFading3D] = useState(false);
+  const prevAnimating3DRef = useRef(false);
+  useEffect(() => {
+    const wasAnimating = prevAnimating3DRef.current;
+    prevAnimating3DRef.current = simulationIsAnimating;
+    if (wasAnimating && !simulationIsAnimating) {
+      setOverlayFading3D(true);
+      const t = setTimeout(() => {
+        setOverlayFading3D(false);
+      }, 250);
+      return () => clearTimeout(t);
+    }
+  }, [simulationIsAnimating]);
+
+  const showCareOverlay3D =
+    careAnimationStatus === "animating" ||
+    (simulationIsAnimating && animationProgress < 1) ||
+    overlayFading3D;
+  const showCareLegend3D = careAnimationStatus === "done" || (simulationIsAnimating && animationProgress > 0);
   const fgData = useMemo(() => {
     const { nodes: fgNodes, links: fgLinks, capped } = exportVisibleGraphToForceGraphData(
       nodes,
@@ -91,7 +131,10 @@ export function AppShell() {
       <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
         {headerCollapsed ? (
           <div className="sticky top-0 z-20 flex h-9 shrink-0 items-center justify-between border-b border-aurora-border/50 bg-aurora-bg1/90 px-3 backdrop-blur-sm">
-            <span className="text-xs font-medium text-aurora-text1/90">Society Explorer</span>
+            <Link to="/" className="flex items-center gap-1.5">
+              <img src="/logo.png" alt="" className="h-6 w-6 object-contain" aria-hidden />
+              <img src="/epistemea.png" alt="EPISTEMEA" className="h-4 w-auto object-contain" />
+            </Link>
             <button
               type="button"
               onClick={() => setHeaderCollapsed(false)}
@@ -138,7 +181,18 @@ export function AppShell() {
                     colorBy={colorBy}
                     selectedTrait={selectedTrait || traitKeys[0] || ""}
                     sizeBy={sizeBy}
+                    simulationNodeSizeOverride={simulationNodeSizeOverride}
+                    simulationIsAnimating={simulationIsAnimating}
+                    careGlowById={careGlowById}
+                    simulationInitialPhase={simulationInitialPhase3D}
+                    careEdgeSweepIntensity={careEdgeSweepIntensity}
                   />
+                  <CareImpactOverlay
+                    visible={showCareOverlay3D}
+                    fading={overlayFading3D}
+                    progress={animationProgress}
+                  />
+                  <CareLegend visible={showCareLegend3D} />
                 </>
               )}
             </div>

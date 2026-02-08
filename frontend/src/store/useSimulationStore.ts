@@ -149,6 +149,7 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
       });
 
       useGraphStore.getState().setGraphData(initial.nodes, initial.edges);
+      useUIStore.getState().setSizeBy("level_of_care");
     } catch (e) {
       const msg = e instanceof Error ? e.message : "Simulation failed";
       set({ status: "error", error: msg });
@@ -268,7 +269,7 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
     const { initialGraph } = get();
     if (initialGraph) {
       useGraphStore.getState().setGraphData(initialGraph.nodes, initialGraph.edges);
-      useUIStore.getState().setSizeBy("degree");
+      useUIStore.getState().setSizeBy("level_of_care");
     } else {
       await useGraphStore.getState().loadGraph();
     }

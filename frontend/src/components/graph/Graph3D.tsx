@@ -2,7 +2,7 @@ import { useCallback, useRef, useMemo, useEffect } from "react";
 import ForceGraph3D from "react-force-graph-3d";
 import * as THREE from "three";
 import { RotateCcw } from "lucide-react";
-import { getAgeColor, getGenderShape, getGradientColor } from "../../utils/color";
+import { getAgeColor, getGenderShape, getGradientColor, blendHex } from "../../utils/color";
 import type { FGNode, FGLink } from "../../utils/graphExport";
 import {
   createNodeMesh,
@@ -11,6 +11,7 @@ import {
   configureSceneAtmosphere,
   addSceneLights,
   animateCameraToNode,
+  disableAllShadows,
 } from "./graph3dUtils";
 
 // Keyboard movement: base speed (units per second), scale by deltaTime
@@ -66,6 +67,12 @@ interface Graph3DProps {
   colorBy: "age" | "trait";
   selectedTrait: string;
   sizeBy: "degree" | "level_of_care";
+  /** Care animation: override node sizes during animation (2D base size 4-18 → 3D scale) */
+  simulationNodeSizeOverride?: Record<string, number>;
+  simulationIsAnimating?: boolean;
+  careGlowById?: Record<string, { glowStrength: number; borderColor: string }>;
+  simulationInitialPhase?: boolean;
+  careEdgeSweepIntensity?: number;
 }
 
 function getNodeColor(
@@ -85,6 +92,8 @@ function getNodeColor(
   return getGradientColor(v, 0, 1);
 }
 
+const BASE_SIZE_2D = 8; // 2D override range 4-18, base 8 -> scale 1
+
 export function Graph3D({
   nodes,
   links,
@@ -97,6 +106,11 @@ export function Graph3D({
   colorBy,
   selectedTrait,
   sizeBy,
+  simulationNodeSizeOverride = {},
+  simulationIsAnimating = false,
+  careGlowById = {},
+  simulationInitialPhase = false,
+  careEdgeSweepIntensity = 0,
 }: Graph3DProps) {
   const fgRef = useRef<{
     cameraPosition: (pos: { x: number; y: number; z: number }, lookAt?: { x: number; y: number; z: number }, ms?: number) => void;
@@ -212,13 +226,28 @@ export function Graph3D({
     (node: FGNode) => {
       const isSelected = selectedNodeId === node.id;
       const isHovered = hoveredNodeId === node.id;
-      const color = getNodeColor(node, showAgeEncoding, colorBy, selectedTrait);
+      let color = getNodeColor(node, showAgeEncoding, colorBy, selectedTrait);
       const shape = shapeForKey(node.gender, showGenderEncoding);
-      const loc = node.level_of_care ?? 0;
-      const sizeScale =
-        sizeBy === "level_of_care"
-          ? scaleLinear(Math.max(0, Math.min(10, loc)), 0, 10, 0.6, 1.4)
-          : 1;
+      let sizeScale: number;
+      if (simulationInitialPhase) {
+        sizeScale = 0.7; // uniform small size (pre-trigger)
+      } else if (simulationIsAnimating && simulationNodeSizeOverride[node.id] != null) {
+        // Map 2D override (4-18) to 3D scale: base 8 -> 1
+        sizeScale = simulationNodeSizeOverride[node.id] / BASE_SIZE_2D;
+        const glow = careGlowById[node.id];
+        if (glow && glow.glowStrength > 0 && glow.borderColor && glow.borderColor !== "transparent") {
+          const accentColor = glow.borderColor === "#26C6FF" ? "#26C6FF" : "#64748B";
+          color = blendHex(glow.glowStrength, color, accentColor);
+        }
+      } else {
+        // level_of_care from API is 0..1 (care/10); support legacy 0..10
+        const raw = node.level_of_care ?? 0;
+        const loc = raw > 1 ? raw / 10 : Math.max(0, Math.min(1, raw));
+        sizeScale =
+          sizeBy === "level_of_care"
+            ? scaleLinear(loc, 0, 1, 0.6, 1.4)
+            : 1;
+      }
       const mesh = createNodeMesh(shape, color, {
         hovered: isHovered,
         selected: isSelected,
@@ -237,7 +266,19 @@ export function Graph3D({
       }
       return group;
     },
-    [selectedNodeId, hoveredNodeId, showAgeEncoding, showGenderEncoding, colorBy, selectedTrait, sizeBy]
+    [
+      selectedNodeId,
+      hoveredNodeId,
+      showAgeEncoding,
+      showGenderEncoding,
+      colorBy,
+      selectedTrait,
+      sizeBy,
+      simulationNodeSizeOverride,
+      simulationIsAnimating,
+      careGlowById,
+      simulationInitialPhase,
+    ]
   );
 
   const nodeColor = useCallback(
@@ -252,9 +293,14 @@ export function Graph3D({
       const t = typeof link.target === "object" ? (link.target as FGNode).id : link.target;
       const highlight =
         s === hoveredNodeId || t === hoveredNodeId || s === selectedNodeId || t === selectedNodeId;
-      return highlight ? EDGE_COLOR_HIGHLIGHT : EDGE_COLOR_DIM;
+      if (highlight) return EDGE_COLOR_HIGHLIGHT;
+      // Edge sweep: increase opacity during care animation; base opacity kept bright
+      const sweep = careEdgeSweepIntensity;
+      const baseAlpha = 0.68;
+      const alpha = sweep > 0 ? Math.min(0.88, baseAlpha + 0.2 * sweep) : baseAlpha;
+      return `rgba(234,242,242,${alpha})`;
     },
-    [hoveredNodeId, selectedNodeId]
+    [hoveredNodeId, selectedNodeId, careEdgeSweepIntensity]
   );
 
   const linkWidth = useCallback(
@@ -302,6 +348,17 @@ export function Graph3D({
     [onNodeClick]
   );
 
+  const onEngineTick = useCallback(() => {
+    const inst = fgRef.current;
+    if (inst?.renderer) {
+      try {
+        disableAllShadows(inst.renderer());
+      } catch {
+        // ignore
+      }
+    }
+  }, []);
+
   const onEngineStop = useCallback(() => {
     const inst = fgRef.current;
     if (inst?.scene && inst?.renderer) {
@@ -309,6 +366,7 @@ export function Graph3D({
         const scene = inst.scene();
         const renderer = inst.renderer();
         configureSceneAtmosphere(scene, renderer);
+        disableAllShadows(renderer);
         const existingLights = scene.children.filter((c) => c instanceof THREE.Light);
         existingLights.forEach((l) => scene.remove(l));
         addSceneLights(scene);
@@ -349,7 +407,7 @@ export function Graph3D({
         nodeColor={nodeColor}
         linkColor={linkColor}
         linkWidth={linkWidth}
-        linkOpacity={0.75}
+        linkOpacity={careEdgeSweepIntensity > 0 ? 0.6 + 0.25 * careEdgeSweepIntensity : 0.75}
         linkDirectionalParticles={linkDirectionalParticles}
         linkDirectionalParticleWidth={0.8}
         linkDirectionalParticleColor={() => "rgba(38,198,255,0.5)"}
@@ -359,7 +417,9 @@ export function Graph3D({
         enableNodeDrag={false}
         showNavInfo={false}
         backgroundColor="rgba(5,11,16,0)"
-        d3VelocityDecay={0.3}
+        d3VelocityDecay={0.92}
+        d3AlphaDecay={0.04}
+        onEngineTick={onEngineTick}
         onEngineStop={onEngineStop}
       />
       <button

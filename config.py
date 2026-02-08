@@ -3,7 +3,7 @@ import random
 
 SEED = 42
 NUM_AGENTS = 20
-
+TRAIT_VARIANCE_SCALE = 0.65
 MODEL = "gpt-4.1-mini"
 MAX_TOKENS = 200
 TEMPERATURE = 0.4

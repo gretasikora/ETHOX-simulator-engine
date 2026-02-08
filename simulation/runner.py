@@ -39,7 +39,8 @@ def run_full_simulation(trigger: str, num_agents: int) -> tuple[dict[str, Any], 
     for agent in agents:
         agent.initial_opinion = agent.opinion
         agent.initial_care = agent.care
-        agent.initial_change_in_support = agent.change_in_support
+        agent.initial_usage_effect = getattr(agent, "usage_effect", agent.change_in_support)
+        agent.initial_change_in_support = getattr(agent, "usage_effect", agent.change_in_support)
 
     # Post-trigger graph: initial reactions (before agents talk to each other)
     post_trigger = build_network_data(agents, adjacency, agent_id_as_int=True)

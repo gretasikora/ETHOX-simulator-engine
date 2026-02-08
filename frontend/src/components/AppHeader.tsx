@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Listbox } from "@headlessui/react";
-import { LayoutGrid, FlaskConical, ChevronUp, Pencil, Play, RotateCcw } from "lucide-react";
+import { LayoutGrid, FlaskConical, ChevronUp, Pencil, Play, RotateCcw, Zap, MessageCircle } from "lucide-react";
 import { useUIStore } from "../store/useUIStore";
 import { useGraphStore } from "../store/useGraphStore";
 import { useSimulationStore } from "../store/useSimulationStore";
@@ -35,6 +35,9 @@ export function AppHeader({ onSearchSelect: _onSearchSelect }: AppHeaderProps) {
   const runSimulation = useSimulationStore((s) => s.runSimulation);
   const revertToDefault = useSimulationStore((s) => s.revertToDefault);
   const applySimulationGraph = useSimulationStore((s) => s.applySimulationGraph);
+  const applyTrigger = useSimulationStore((s) => s.applyTrigger);
+  const startAnimation = useSimulationStore((s) => s.startAnimation);
+  const phase = useSimulationStore((s) => s.phase);
 
   const toggleGroupBase =
     "rounded px-2 py-1 text-xs font-medium transition-all duration-150";
@@ -44,6 +47,10 @@ export function AppHeader({ onSearchSelect: _onSearchSelect }: AppHeaderProps) {
 
   return (
     <header className="top-bar group sticky top-0 z-20 flex min-h-12 shrink-0 flex-wrap items-center gap-2 border-b border-aurora-border/60 bg-aurora-bg1/90 px-4 py-2 backdrop-blur-sm sm:gap-3 md:gap-5 md:px-5">
+      <Link to="/" className="flex shrink-0 items-center gap-2 sm:gap-3">
+        <img src="/logo.png" alt="" className="h-8 w-8 object-contain" aria-hidden />
+        <img src="/epistemea.png" alt="EPISTEMEA" className="h-5 w-auto object-contain sm:h-6" />
+      </Link>
       <div className="flex shrink-0 items-center gap-1 sm:gap-2">
         <button
           type="button"
@@ -155,6 +162,62 @@ export function AppHeader({ onSearchSelect: _onSearchSelect }: AppHeaderProps) {
           <Pencil className="h-4 w-4" />
           <span className="hidden sm:inline">Change simulation</span>
         </Link>
+        {simulationInput.trigger && (
+          <button
+            type="button"
+            onClick={() => runSimulation(simulationInput.trigger, simulationInput.numAgents)}
+            disabled={status === "loading_initial"}
+            className="aurora-gradient flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium text-aurora-bg0 shadow-aurora-glow-sm transition-all hover:opacity-95 hover:shadow-aurora-glow active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed sm:rounded-xl sm:px-4 sm:py-2"
+          >
+            {status === "loading_initial" ? (
+              <span className="h-4 w-4 animate-spin rounded-full border-2 border-aurora-bg0/30 border-t-aurora-bg0" />
+            ) : (
+              <Play className="h-4 w-4" />
+            )}
+            <span className="hidden sm:inline">Run</span>
+          </button>
+        )}
+        {phase === "pre_trigger" && initialGraph && (
+          <button
+            type="button"
+            onClick={() => applyTrigger()}
+            className="flex items-center gap-1.5 rounded-lg border border-aurora-accent1/60 bg-aurora-surface0/60 px-3 py-1.5 text-sm font-medium text-aurora-accent1 transition-all hover:bg-aurora-surface2/80 hover:text-aurora-accent0 active:scale-[0.98] sm:rounded-xl sm:px-4 sm:py-2"
+          >
+            <Zap className="h-4 w-4" />
+            <span className="hidden sm:inline">Apply trigger</span>
+          </button>
+        )}
+        {phase === "post_trigger" && (
+          <button
+            type="button"
+            onClick={() => startAnimation()}
+            className="aurora-gradient flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium text-aurora-bg0 shadow-aurora-glow-sm transition-all hover:opacity-95 hover:shadow-aurora-glow active:scale-[0.98] sm:rounded-xl sm:px-4 sm:py-2"
+          >
+            <MessageCircle className="h-4 w-4" />
+            <span className="hidden sm:inline">Let them talk</span>
+          </button>
+        )}
+        {phase === "finished" && initialGraph && (
+          viewMode === "simulation" ? (
+            <button
+              type="button"
+              onClick={() => revertToDefault()}
+              className="flex items-center gap-1.5 rounded-lg border border-aurora-border/70 bg-aurora-surface0/60 px-3 py-1.5 text-sm font-medium text-aurora-text1 transition-all hover:bg-aurora-surface2/80 hover:text-aurora-text0 active:scale-[0.98] sm:rounded-xl sm:px-4 sm:py-2"
+            >
+              <RotateCcw className="h-4 w-4" />
+              <span className="hidden sm:inline">Revert</span>
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => applySimulationGraph()}
+              className="flex items-center gap-1.5 rounded-lg border border-aurora-accent1/60 bg-aurora-surface0/60 px-3 py-1.5 text-sm font-medium text-aurora-accent1 transition-all hover:bg-aurora-surface2/80 hover:text-aurora-accent0 active:scale-[0.98] sm:rounded-xl sm:px-4 sm:py-2"
+            >
+              <RotateCcw className="h-4 w-4" />
+              <span className="hidden sm:inline">Re-run</span>
+            </button>
+          )
+        )}
         {false && (
           <button
             type="button"

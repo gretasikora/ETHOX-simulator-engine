@@ -44,10 +44,10 @@ export function createNodeMesh(
   const isHighlight = opts.hovered || opts.selected;
   const material = new THREE.MeshStandardMaterial({
     color,
-    metalness: 0.18,
-    roughness: 0.45,
-    emissive: isHighlight ? color : "#000000",
-    emissiveIntensity: opts.selected ? 0.5 : opts.hovered ? 0.25 : 0,
+    metalness: 0.08,
+    roughness: 0.5,
+    emissive: color,
+    emissiveIntensity: opts.selected ? 0.5 : opts.hovered ? 0.35 : 0.22,
   });
   const mesh = new THREE.Mesh(geometry, material);
   mesh.castShadow = false;
@@ -73,8 +73,10 @@ export function createHaloRing(): THREE.Mesh {
 
 const labelTextureCache: Record<string, THREE.CanvasTexture> = {};
 
+const LABEL_CACHE_KEY = "noshadow-v1";
 function createLabelCanvasTexture(text: string): THREE.CanvasTexture {
-  if (labelTextureCache[text]) return labelTextureCache[text];
+  const key = `${text}-${LABEL_CACHE_KEY}`;
+  if (labelTextureCache[key]) return labelTextureCache[key];
   const padding = 10;
   const fontSize = 12;
   const font = `${fontSize}px Inter, system-ui, sans-serif`;
@@ -105,13 +107,14 @@ function createLabelCanvasTexture(text: string): THREE.CanvasTexture {
   ctx.lineWidth = 1;
   ctx.stroke();
   ctx.fillStyle = "#EAF2F2";
-  ctx.shadowColor = "rgba(0,0,0,0.5)";
-  ctx.shadowBlur = 2;
-  ctx.shadowOffsetY = 1;
+  ctx.shadowColor = "transparent";
+  ctx.shadowBlur = 0;
+  ctx.shadowOffsetX = 0;
+  ctx.shadowOffsetY = 0;
   ctx.fillText(text, padding, padding + fontSize * 0.8);
   const tex = new THREE.CanvasTexture(canvas);
   tex.needsUpdate = true;
-  labelTextureCache[text] = tex;
+  labelTextureCache[key] = tex;
   return tex;
 }
 
@@ -151,22 +154,28 @@ export function configureSceneAtmosphere(
 
 export function addSceneLights(scene: THREE.Scene): void {
   // Hemisphere: sky (top) + ground (bottom) for even illumination at any camera angle
-  const hemi = new THREE.HemisphereLight(0x4a6a7a, 0x1a2a35, 0.65);
+  const hemi = new THREE.HemisphereLight(0x6a8a9a, 0x2a3a45, 0.75);
+  hemi.castShadow = false;
   scene.add(hemi);
-  const ambient = new THREE.AmbientLight(0x2a3d44, 0.5);
+  const ambient = new THREE.AmbientLight(0x3a4d54, 0.6);
   scene.add(ambient);
-  const key = new THREE.DirectionalLight(0xe8f4f4, 0.55);
+  const key = new THREE.DirectionalLight(0xe8f4f4, 0.7);
   key.position.set(120, 180, 100);
   key.castShadow = false;
   scene.add(key);
-  const fill = new THREE.DirectionalLight(0xa8c4d0, 0.35);
+  const fill = new THREE.DirectionalLight(0xa8c4d0, 0.5);
   fill.position.set(-100, 60, -80);
   fill.castShadow = false;
   scene.add(fill);
-  const rim = new THREE.PointLight(0x26c6ff, 0.3, 400);
+  const rim = new THREE.PointLight(0x26c6ff, 0.4, 400);
   rim.position.set(-150, -80, 120);
   rim.castShadow = false;
   scene.add(rim);
+}
+
+/** Disable all WebGL shadowing - call every frame to override any library re-enabling */
+export function disableAllShadows(renderer: THREE.WebGLRenderer): void {
+  renderer.shadowMap.enabled = false;
 }
 
 export function animateCameraToNode(

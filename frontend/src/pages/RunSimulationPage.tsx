@@ -34,6 +34,10 @@ export function RunSimulationPage() {
 
   return (
     <div className="flex min-h-screen w-full flex-col items-center justify-center bg-aurora-bg0 p-8">
+      <Link to="/" className="mb-8 flex items-center gap-3">
+        <img src="/logo.png" alt="" className="h-10 w-10 object-contain" aria-hidden />
+        <img src="/epistemea.png" alt="EPISTEMEA" className="h-7 w-auto object-contain" />
+      </Link>
       <div className="surface-elevated w-full max-w-lg rounded-2xl border border-aurora-border/40 p-8 shadow-aurora-glow-sm">
         <h1 className="mb-6 text-xl font-semibold tracking-tight text-aurora-text0">
           Run Simulation
