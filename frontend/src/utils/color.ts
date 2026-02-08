@@ -41,6 +41,11 @@ export function getGenderShape(gender: string | undefined | null): NodeShapeType
   return "diamond";
 }
 
+/** Blend two hex colors by factor t (0 = A, 1 = B) */
+export function blendHex(t: number, hexA: string, hexB: string): string {
+  return lerpHex(t, hexA, hexB);
+}
+
 /** Interpolate between aurora accent-0 (teal) and accent-2 (violet) for trait/centrality */
 function lerpHex(t: number, hexA: string, hexB: string): string {
   const parse = (hex: string) => {

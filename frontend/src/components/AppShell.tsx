@@ -61,7 +61,6 @@ export function AppShell() {
 
   const simulationStatus = useSimulationStore((s) => s.status);
   const startAnimation = useSimulationStore((s) => s.startAnimation);
-  const isAnimating = useSimulationStore((s) => s.isAnimating);
 
   const open = selectedNodeId != null;
 
@@ -176,17 +175,6 @@ export function AppShell() {
       </ErrorBoundary>
 
       <ExperimentPanel />
-
-      {isAnimating && (
-        <div className="fixed right-4 top-16 z-40 flex flex-col gap-2">
-          <div className="rounded-lg border border-aurora-accent1/50 bg-aurora-surface1/95 px-4 py-2.5 text-sm text-aurora-text0 backdrop-blur-sm shadow-aurora-glow-sm">
-            Applying event impact…
-          </div>
-          <div className="rounded-lg border border-aurora-border/50 bg-aurora-surface1/90 px-3 py-2 text-xs text-aurora-text2">
-            Bigger nodes = increased care, smaller = decreased care
-          </div>
-        </div>
-      )}
 
       <ToastContainer />
     </div>

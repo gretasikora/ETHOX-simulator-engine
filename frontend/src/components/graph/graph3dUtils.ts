@@ -150,13 +150,20 @@ export function configureSceneAtmosphere(
 }
 
 export function addSceneLights(scene: THREE.Scene): void {
-  const ambient = new THREE.AmbientLight(0x2a3d44, 0.55);
+  // Hemisphere: sky (top) + ground (bottom) for even illumination at any camera angle
+  const hemi = new THREE.HemisphereLight(0x4a6a7a, 0x1a2a35, 0.65);
+  scene.add(hemi);
+  const ambient = new THREE.AmbientLight(0x2a3d44, 0.5);
   scene.add(ambient);
-  const key = new THREE.DirectionalLight(0xe8f4f4, 0.7);
+  const key = new THREE.DirectionalLight(0xe8f4f4, 0.55);
   key.position.set(120, 180, 100);
   key.castShadow = false;
   scene.add(key);
-  const rim = new THREE.PointLight(0x26c6ff, 0.35, 400);
+  const fill = new THREE.DirectionalLight(0xa8c4d0, 0.35);
+  fill.position.set(-100, 60, -80);
+  fill.castShadow = false;
+  scene.add(fill);
+  const rim = new THREE.PointLight(0x26c6ff, 0.3, 400);
   rim.position.set(-150, -80, 120);
   rim.castShadow = false;
   scene.add(rim);

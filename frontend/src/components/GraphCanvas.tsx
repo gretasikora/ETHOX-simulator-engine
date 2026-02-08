@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback, useMemo } from "react";
+import { useEffect, useRef, useCallback, useMemo, useState } from "react";
 import Sigma from "sigma";
 import Graph from "graphology";
 import { random as randomLayout } from "graphology-layout";
@@ -14,9 +14,11 @@ import {
   applyVisualAttributes,
   type GraphUIState,
 } from "../utils/graph";
-import { hexToRgba, getOpinionColor } from "../utils/color";
+import { hexToRgba, getOpinionColor, blendHex } from "../utils/color";
 import { NodeSquareProgram, NodeTriangleProgram, NodeDiamondProgram } from "../sigma-shapes/NodeShapePrograms";
 import { edgeKey } from "../utils/graphAlgorithms";
+import { CareImpactOverlay } from "./CareImpactOverlay";
+import { CareLegend } from "./CareLegend";
 
 interface GraphCanvasProps {
   graphRef: React.MutableRefObject<Graph | null>;
@@ -73,6 +75,10 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
 
   const simulationNodeSizeOverride = useSimulationStore((s) => s.nodeSizeOverrideById);
   const simulationIsAnimating = useSimulationStore((s) => s.isAnimating);
+  const careGlowById = useSimulationStore((s) => s.careGlowById);
+  const careEdgeSweepIntensity = useSimulationStore((s) => s.careEdgeSweepIntensity);
+  const careAnimationStatus = useSimulationStore((s) => s.careAnimationStatus);
+  const animationProgress = useSimulationStore((s) => s.animationProgress);
 
   const playbackAgentState = useMemo(() => {
     const run = playbackRunId ? playbackRuns.find((r) => r.id === playbackRunId) : null;
@@ -98,6 +104,8 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
   const playbackColorModeRef = useRef<"cluster" | "opinion">("opinion");
   const simulationNodeSizeOverrideRef = useRef<Record<string, number>>({});
   const simulationIsAnimatingRef = useRef(false);
+  const careGlowByIdRef = useRef<Record<string, { glowStrength: number; borderColor: string }>>({});
+  const careEdgeSweepIntensityRef = useRef(0);
   const exploreModeRef = useRef(exploreMode);
   const pathFromRef = useRef(pathFrom);
   const pathToRef = useRef(pathTo);
@@ -112,6 +120,8 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
   playbackColorModeRef.current = playbackColorMode;
   simulationNodeSizeOverrideRef.current = simulationNodeSizeOverride;
   simulationIsAnimatingRef.current = simulationIsAnimating;
+  careGlowByIdRef.current = careGlowById;
+  careEdgeSweepIntensityRef.current = careEdgeSweepIntensity;
   exploreModeRef.current = exploreMode;
   pathFromRef.current = pathFrom;
   pathToRef.current = pathTo;
@@ -191,10 +201,18 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
         if (attrs.hidden) return { ...data, hidden: true };
         const simOverride = simulationNodeSizeOverrideRef.current;
         const simAnimating = simulationIsAnimatingRef.current;
+        const careGlow = careGlowByIdRef.current;
         if (simAnimating && simOverride && simOverride[node] != null) {
+          let color = data.color as string;
+          const glow = careGlow?.[node];
+          if (glow && glow.glowStrength > 0 && glow.borderColor && glow.borderColor !== "transparent") {
+            const accentColor = glow.borderColor === "#26C6FF" ? "#26C6FF" : "#64748B";
+            color = blendHex(glow.glowStrength, color, accentColor);
+          }
           return {
             ...data,
             size: simOverride[node],
+            color,
             label: data.label,
           };
         }
@@ -294,17 +312,22 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
           const key = edgeKey(source, target);
           const inHighlight = edgeKeysSet.includes(key);
           if (inHighlight) return { ...data, color: "rgba(38,198,255,0.55)" };
-          return { ...data, color: "rgba(234,242,242,0.04)" };
+          const sweep = careEdgeSweepIntensityRef.current;
+          const opacity = sweep > 0 ? 0.04 + 0.12 * sweep : 0.04;
+          return { ...data, color: `rgba(234,242,242,${opacity})` };
         }
         const [source, target] = graph.extremities(edge);
         const focus = selectedRef.current || hoveredRef.current;
-        const connected =
-          focus && (source === focus || target === focus);
-        if (connected)
-          return { ...data, color: "rgba(38,198,255,0.55)" };
-        if (focus)
-          return { ...data, color: "rgba(234,242,242,0.04)" };
-        return data;
+        const connected = focus && (source === focus || target === focus);
+        if (connected) return { ...data, color: "rgba(38,198,255,0.55)" };
+        if (focus) {
+          const sweep = careEdgeSweepIntensityRef.current;
+          const opacity = sweep > 0 ? 0.04 + 0.12 * sweep : 0.04;
+          return { ...data, color: `rgba(234,242,242,${opacity})` };
+        }
+        const sweep = careEdgeSweepIntensityRef.current;
+        const opacity = sweep > 0 ? Math.min(0.35, 0.12 + 0.2 * sweep) : 0.12;
+        return { ...data, color: `rgba(234,242,242,${opacity})` };
       },
     };
 
@@ -385,13 +408,36 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
   useEffect(() => {
     const sigma = sigmaRef.current;
     if (sigma) sigma.refresh();
-  }, [highlightedNodeIds, highlightedEdgeKeys, appliedTargetIds, playbackAgentState, playbackTargetedIds, playbackColorMode, simulationNodeSizeOverride, simulationIsAnimating]);
+  }, [highlightedNodeIds, highlightedEdgeKeys, appliedTargetIds, playbackAgentState, playbackTargetedIds, playbackColorMode, simulationNodeSizeOverride, simulationIsAnimating, careGlowById, careEdgeSweepIntensity]);
 
   // Do not animate camera on node select - it zoomed in too far (ratio 0.3) and
   // made the rest of the network disappear. The selected node is still highlighted
   // by the node reducer; the drawer shows details without changing the view.
 
   const showEmptyState = nodes.length > 0 && visibleNodeIds.length === 0;
+
+  const [overlayFading, setOverlayFading] = useState(false);
+  const overlayFadingRef = useRef(false);
+  const prevAnimatingRef = useRef(false);
+  useEffect(() => {
+    const wasAnimating = prevAnimatingRef.current;
+    prevAnimatingRef.current = simulationIsAnimating;
+    if (wasAnimating && !simulationIsAnimating) {
+      setOverlayFading(true);
+      overlayFadingRef.current = true;
+      const t = setTimeout(() => {
+        setOverlayFading(false);
+        overlayFadingRef.current = false;
+      }, 250);
+      return () => clearTimeout(t);
+    }
+  }, [simulationIsAnimating]);
+
+  const showCareOverlay =
+    careAnimationStatus === "animating" ||
+    (simulationIsAnimating && animationProgress < 1) ||
+    overlayFading;
+  const showCareLegend = careAnimationStatus === "done" || (simulationIsAnimating && animationProgress > 0);
 
   return (
     <div className="absolute inset-0 flex flex-col overflow-hidden rounded-2xl border border-aurora-border/40 bg-aurora-surface0/30 shadow-sm">
@@ -405,6 +451,8 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
             background: "radial-gradient(ellipse 85% 85% at 50% 50%, rgba(10, 29, 36, 0.25) 0%, rgba(5, 11, 16, 0.5) 60%, rgba(5, 11, 16, 0.92) 100%)",
           }}
         />
+        <CareImpactOverlay visible={showCareOverlay} fading={overlayFading} progress={animationProgress} />
+        <CareLegend visible={showCareLegend} />
       </div>
       {showEmptyState && (
         <div className="absolute inset-0 flex items-center justify-center bg-aurora-bg0/90 backdrop-blur-[1px]">

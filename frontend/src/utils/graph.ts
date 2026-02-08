@@ -2,6 +2,7 @@ import Graph from "graphology";
 import type { NodeData, EdgeData } from "../api/client";
 import { getAgeColor, getGenderShape, getGradientColor } from "./color";
 import { scaleLinear } from "./math";
+import { computeCareSize } from "./careSizing";
 
 export interface GraphFilters {
   clusters: number[];
@@ -54,8 +55,8 @@ export function buildGraphology(
     if (sizeBy === "degree") {
       size = scaleLinear(node.degree ?? 0, 0, maxDegree, 3, 15);
     } else if (sizeBy === "level_of_care") {
-      const loc = node.level_of_care ?? 0;
-      size = scaleLinear(Math.max(0, Math.min(10, loc)), 0, 10, 3, 15);
+      const loc = node.level_of_care ?? 0.5;
+      size = computeCareSize(loc, 8);
     } else {
       size = scaleLinear(node.degree_centrality ?? 0, 0, maxCentrality, 3, 15);
     }
@@ -183,8 +184,8 @@ export function applyVisualAttributes(
     if (sizeBy === "degree") {
       size = scaleLinear((attrs.degree as number) ?? 0, 0, maxDegree, 3, 15);
     } else if (sizeBy === "level_of_care") {
-      const loc = (attrs.level_of_care as number) ?? 0;
-      size = scaleLinear(Math.max(0, Math.min(10, loc)), 0, 10, 3, 15);
+      const loc = (attrs.level_of_care as number) ?? 0.5;
+      size = computeCareSize(loc, 8);
     } else {
       size = scaleLinear((attrs.degree_centrality as number) ?? 0, 0, maxCentrality, 3, 15);
     }

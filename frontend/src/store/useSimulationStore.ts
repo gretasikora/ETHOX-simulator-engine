@@ -3,6 +3,9 @@ import { runSimulation as runSimulationApi } from "../api/client";
 import type { NodeData, EdgeData } from "../api/client";
 import type { SimulationGraphData, SimulationNodeData, SimulationEdgeData } from "../api/client";
 import { useGraphStore } from "./useGraphStore";
+import { useUIStore } from "./useUIStore";
+import { easeInOutCubic } from "../utils/easing";
+import { computeCareSize, computeCareGlow } from "../utils/careSizing";
 
 function normalizeNode(n: SimulationNodeData): NodeData {
   return {
@@ -28,31 +31,35 @@ function normalizeGraph(g: SimulationGraphData): { nodes: NodeData[]; edges: Edg
 }
 
 export type SimulationStatus = "idle" | "loading" | "ready";
+export type SimulationViewMode = "simulation" | "default";
+
+export type CareAnimationStatus = "idle" | "animating" | "done";
+
+export interface CareGlowData {
+  glowStrength: number;
+  borderColor: string;
+}
 
 export interface SimulationState {
   simulationInput: { trigger: string; numAgents: number };
   initialGraph: { nodes: NodeData[]; edges: EdgeData[] } | null;
   finalGraph: { nodes: NodeData[]; edges: EdgeData[] } | null;
   status: SimulationStatus;
+  viewMode: SimulationViewMode;
   error: string | null;
-  /** 0..1 progress of level_of_care transition animation */
   animationProgress: number;
-  /** true while animation is running */
   isAnimating: boolean;
+  careAnimationStatus: CareAnimationStatus;
+  careEdgeSweepIntensity: number;
+  nodeSizeOverrideById: Record<string, number>;
+  careGlowById: Record<string, CareGlowData>;
+  setSimulationInput: (trigger: string, numAgents: number) => void;
   runSimulation: (trigger: string, numAgents: number) => Promise<void>;
+  revertToDefault: () => Promise<void>;
+  applySimulationGraph: () => void;
   startAnimation: () => void;
-  /** Call when animation completes */
   finishAnimation: () => void;
   reset: () => void;
-  /** Map agent_id -> size override during animation */
-  nodeSizeOverrideById: Record<string, number>;
-}
-
-const ANIMATION_DURATION_MS = 1200;
-const SIZE_K = 2; // multiplier for delta effect
-
-function easeInOutCubic(t: number): number {
-  return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 }
 
 export const useSimulationStore = create<SimulationState>((set, get) => ({
@@ -60,10 +67,18 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
   initialGraph: null,
   finalGraph: null,
   status: "idle",
+  viewMode: "default",
   error: null,
   animationProgress: 0,
   isAnimating: false,
+  careAnimationStatus: "idle",
+  careEdgeSweepIntensity: 0,
   nodeSizeOverrideById: {},
+  careGlowById: {},
+
+  setSimulationInput: (trigger: string, numAgents: number) => {
+    set({ simulationInput: { trigger, numAgents } });
+  },
 
   runSimulation: async (trigger: string, numAgents: number) => {
     set({ status: "loading", error: null });
@@ -77,12 +92,12 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
         initialGraph: initial,
         finalGraph: final,
         status: "ready",
+        viewMode: "simulation",
         error: null,
         animationProgress: 0,
         isAnimating: false,
       });
 
-      // Load initial graph into graph store
       useGraphStore.getState().setGraphData(initial.nodes, initial.edges);
     } catch (e) {
       const msg = e instanceof Error ? e.message : "Simulation failed";
@@ -95,34 +110,37 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
     const { initialGraph, finalGraph } = get();
     if (!initialGraph || !finalGraph) return;
 
-    set({ isAnimating: true, animationProgress: 0 });
+    set({
+      isAnimating: true,
+      animationProgress: 0,
+      careAnimationStatus: "animating",
+      careEdgeSweepIntensity: 0,
+      nodeSizeOverrideById: {},
+      careGlowById: {},
+    });
 
-    const initialByNode = new Map<string, number>();
-    const finalByNode = new Map<string, number>();
-    for (const n of initialGraph.nodes) {
-      initialByNode.set(n.agent_id, n.level_of_care ?? 0.5);
-    }
-    for (const n of finalGraph.nodes) {
-      finalByNode.set(n.agent_id, n.level_of_care ?? 0.5);
-    }
-
-    const deltas = new Map<string, number>();
     const baseSize = 8;
-    for (const n of initialGraph.nodes) {
-      const id = n.agent_id;
-      const initLoc = initialByNode.get(id) ?? 0.5;
-      const finalLoc = finalByNode.get(id) ?? initLoc;
-      deltas.set(id, finalLoc - initLoc);
-    }
+    const targetSizesByNode = new Map<string, number>();
+    const glowByNode = new Map<string, { glowStrength: number; borderColor: string }>();
     for (const n of finalGraph.nodes) {
-      const id = n.agent_id;
-      if (!deltas.has(id)) {
-        const finalLoc = finalByNode.get(id) ?? 0.5;
-        deltas.set(id, finalLoc); // new node: grow in
+      const id = String(n.agent_id);
+      const loc = n.level_of_care ?? 0.5;
+      targetSizesByNode.set(id, computeCareSize(loc, baseSize));
+      const glow = computeCareGlow(loc);
+      glowByNode.set(id, { glowStrength: glow.glowStrength, borderColor: glow.borderColor });
+    }
+    // Nodes not in final graph: use base size and no glow
+    for (const n of initialGraph.nodes) {
+      const id = String(n.agent_id);
+      if (!targetSizesByNode.has(id)) {
+        targetSizesByNode.set(id, baseSize);
+        glowByNode.set(id, { glowStrength: 0, borderColor: "transparent" });
       }
     }
 
     const start = performance.now();
+    const ANIMATION_DURATION_MS = 1200;
+    const EDGE_SWEEP_MS = 300;
 
     const tick = () => {
       const elapsed = performance.now() - start;
@@ -130,13 +148,33 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
       const progress = easeInOutCubic(rawProgress);
 
       const nodeSizeOverrideById: Record<string, number> = {};
-      deltas.forEach((delta, id) => {
-        const deltaAnimated = delta * progress;
-        const size = Math.max(2, Math.min(24, baseSize * (1 + SIZE_K * deltaAnimated)));
-        nodeSizeOverrideById[id] = size;
+      const careGlowById: Record<string, { glowStrength: number; borderColor: string }> = {};
+      targetSizesByNode.forEach((targetSize, id) => {
+        const currentSize = baseSize + (targetSize - baseSize) * progress;
+        nodeSizeOverrideById[id] = currentSize;
+        const glow = glowByNode.get(id);
+        if (glow && glow.glowStrength > 0) {
+          careGlowById[id] = {
+            glowStrength: glow.glowStrength * progress,
+            borderColor: glow.borderColor,
+          };
+        }
       });
 
-      set({ animationProgress: progress, nodeSizeOverrideById });
+      let careEdgeSweepIntensity = 0;
+      if (elapsed < EDGE_SWEEP_MS) {
+        careEdgeSweepIntensity = easeInOutCubic(elapsed / EDGE_SWEEP_MS);
+      } else {
+        const sweepOut = elapsed - EDGE_SWEEP_MS;
+        careEdgeSweepIntensity = Math.max(0, 1 - easeInOutCubic(sweepOut / EDGE_SWEEP_MS));
+      }
+
+      set({
+        animationProgress: progress,
+        nodeSizeOverrideById,
+        careGlowById,
+        careEdgeSweepIntensity,
+      });
 
       if (rawProgress < 1) {
         requestAnimationFrame(tick);
@@ -152,13 +190,29 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
     const { finalGraph } = get();
     if (finalGraph) {
       useGraphStore.getState().setGraphData(finalGraph.nodes, finalGraph.edges);
+      useUIStore.getState().setSizeBy("level_of_care");
     }
     set({
       isAnimating: false,
       animationProgress: 1,
+      careAnimationStatus: "done",
+      careEdgeSweepIntensity: 0,
       nodeSizeOverrideById: {},
+      careGlowById: {},
       status: "idle",
     });
+  },
+
+  revertToDefault: async () => {
+    set({ viewMode: "default" });
+    await useGraphStore.getState().loadGraph();
+  },
+
+  applySimulationGraph: () => {
+    const { initialGraph } = get();
+    if (!initialGraph) return;
+    useGraphStore.getState().setGraphData(initialGraph.nodes, initialGraph.edges);
+    set({ viewMode: "simulation" });
   },
 
   reset: () => {
@@ -166,10 +220,14 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
       initialGraph: null,
       finalGraph: null,
       status: "idle",
+      viewMode: "default",
       error: null,
       animationProgress: 0,
       isAnimating: false,
+      careAnimationStatus: "idle",
+      careEdgeSweepIntensity: 0,
       nodeSizeOverrideById: {},
+      careGlowById: {},
     });
   },
 }));

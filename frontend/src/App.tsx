@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useGraphStore } from "./store/useGraphStore";
 import { useSimulationStore } from "./store/useSimulationStore";
@@ -14,12 +14,22 @@ function ExplorerPage() {
   const error = useGraphStore((s) => s.error);
   const addToast = useUIStore((s) => s.addToast);
   const simulationStatus = useSimulationStore((s) => s.status);
+  const simulationInput = useSimulationStore((s) => s.simulationInput);
+  const runSimulation = useSimulationStore((s) => s.runSimulation);
+  const autoRunAttempted = useRef(false);
 
   useEffect(() => {
-    if (nodes.length === 0 && simulationStatus !== "ready") {
+    if (nodes.length > 0) return;
+
+    if (simulationInput.trigger && !autoRunAttempted.current) {
+      autoRunAttempted.current = true;
+      // Auto-run simulation so the graph is ready immediately
+      runSimulation(simulationInput.trigger, simulationInput.numAgents);
+    } else if (!simulationInput.trigger && simulationStatus !== "ready") {
+      // No simulation input — load default graph (e.g. Skip to Explorer)
       loadGraph();
     }
-  }, [nodes.length, simulationStatus, loadGraph]);
+  }, [nodes.length, simulationInput.trigger, simulationInput.numAgents, simulationStatus, runSimulation, loadGraph]);
 
   useEffect(() => {
     if (error) addToast(error, "error");
