@@ -6,26 +6,29 @@ from llm.client import llm_generate, llm_supervisor
 
 def build_trigger_prompt(agent, event_message):
     return f"""
-You are Agent {agent.id}. You are a customer of Amazon's online marketplace.
+You are Agent {agent.id}. You are a voter evaluating a policy narrative.
 
 You have been assigned a personality profile based on the BFI-2, a validated psychological instrument measuring 15 personality facets across 5 major domains.
 Each trait is scored from 1 (very low) to 5 (very high). A lower score means that your personality is closer to the opposite of the mentioned trait, and a higher score means that you are strong on the mentioned trait.
-Your personality shapes HOW you interact, make decisions, and react to situations. 
+Your personality shapes HOW you interpret information, make decisions, and react to political messaging. 
 
 Your personality:
 {agent.traits}
 
-You have been assigned a shopping behavior profile. Act accordingly.
+You have been assigned a voter profile. Act accordingly.
 Your profile:
-{agent.customer_behavior}
+{agent.voter_profile}
 
-Event:
+Policy narrative or claim:
 {event_message}
 
 Return JSON only with these keys:
-  opinion: string (given an honest reaction to the event, one concise sentence)
-  care: number from 0 to 10 (how much you care about the event, 0 being indifferent, 10 being heavily care)
-  usage_effect: number from -5 to 5 (impact of the event on your usage level, -5 being heavily reduce usage, 5 being heavily increase usage)
+  opinion: string - your critical and honest opinion of the policy/event, whether that is negative/positive. This should reflect how the policy/event affects you.
+  care: number from 0 to 10 (how much you care about this policy/claim, 0 being indifferent, 10 being heavily care)
+  change_in_support: number from -5 to 5 (impact on your support for the government/party who made the announcement compared to your initial support level, -5 being strongly oppose, 5 strongly support)
+
+You are receiving official political communications, so be critical - these are the polished, nice versions of the events/news.
+
 No extra text.
 """
 
@@ -83,45 +86,46 @@ def build_opinion_update_prompt(agent, event_message, neighbor_opinions, weights
         lines.append(f"- Agent {neighbor_id} (weight {w:.3f}): {opinion}")
     neighbor_block = "\n".join(lines) if lines else "(no neighbors)"
     return f"""
-You are Agent {agent.id}. You are a customer of Amazon's online marketplace.
+You are Agent {agent.id}. You are a voter evaluating a policy narrative.
 
 You have been assigned a personality profile based on the BFI-2, a validated psychological instrument measuring 15 personality facets across 5 major domains.
 Each trait is scored from 1 (very low) to 5 (very high). A lower score means that your personality is closer to the opposite of the mentioned trait, and a higher score means that you are strong on the mentioned trait.
-Your personality shapes HOW you interact, make decisions, and react to situations. 
+Your personality shapes HOW you interpret information, make decisions, and react to political messaging. 
 
 Your personality:
 {agent.traits}
 
-You have been assigned a shopping behavior profile. Act accordingly.
+You have been assigned a voter profile. Act accordingly.
 Your profile:
-{agent.customer_behavior}
+{agent.voter_profile}
 
-Event:
+Policy narrative or claim:
 {event_message}
 
-Your current opinion on the event:
+Your current interpretation:
 {agent.opinion}
 
-Your current score of how much you are impacted by the event (0-10, 0 being indifferent, 10 being heavily care):
+Your current score of how much you care (0-10, 0 being indifferent, 10 being heavily care):
 {agent.care}
 
-Your current usage effect score (-5 to 5, -5 being heavily reduce usage, 5 being heavily increase usage):
-{agent.usage_effect}
+Your current support score (-5 to 5, -5 being strongly oppose, 5 being strongly support):
+{agent.change_in_support}
 
-Your self-weight is {self_weight:.3f}. The neighbors below have weighted opinions:
+Your self-weight is {self_weight:.3f}. The neighbors below have weighted interpretations:
 {neighbor_block}
 
 Return JSON only with these keys:
-  opinion: string (one concise sentence)
-  care: number from 0 to 10 (how much you care)
-  usage_effect: number from -5 to 5 (impact on your usage level)
-No extra text. Use neighbor weights to update your stance:
+  opinion: string - your critical and honest opinion of the policy/event. This should reflect how the policy/event affects you.
+  care: number from 0 to 10 (how much you care about this policy/claim, 0 being indifferent, 10 being heavily care)
+  change_in_support: number from -5 to 5 (impact on your support for the government/party who made the announcement compared to your initial support level, -5 being strongly oppose, 5 strongly support)
+No extra text. Use neighbor weights to update your interpretation:
  - Higher weights should influence you more.
- - If no neighbors, keep your opinion unchanged.
+
+You are receiving official political communications, so be critical - these are the polished, nice versions of the events/news.
 """
 
-def update_opinion_from_neighbors(agent, event_message, neighbor_opinions, weights, self_weight=0.5):
-    print("\n", agent.id, "\n", agent.opinion, agent.care, agent.usage_effect)
+def update_opinion_from_neighbors(agent, event_message, neighbor_opinions, weights, self_weight=1.0):
+    print("\n", agent.id, "\n", agent.opinion, agent.care, agent.change_in_support)
     prompt = build_opinion_update_prompt(agent, event_message, neighbor_opinions, weights, self_weight=self_weight)
     raw = llm_generate(prompt).strip()
     parsed = _parse_json_response(raw)
@@ -159,30 +163,30 @@ def build_supervisor_summary_prompt(agents, event_message, include_initial=False
         change_instruction = "\n7. How opinions and metrics shifted from initial reactions to final positions after social influence"
 
     return f"""
-You are analyzing a simulation of {len(agents)} customers representing the client's diverse customer base. Each customer has different personality traits and shopping behaviors based on real demographic data and the BFI-2 psychological model.
+You are analyzing a simulation of {len(agents)} voters representing diverse segments of the electorate. Each voter has different personality traits and political behaviors based on real demographic data and the BFI-2 psychological model.
 
-Your goal is to provide an insightful summary of customer reactions and the possible consequences for the client's platform.
+Your goal is to provide an insightful summary of how different groups interpret a policy narrative, where misunderstandings arise, and how interpretations spread through social networks.
 
-Event that triggered reactions:
+Policy narrative or claim:
 {event_message}
 
-{"Customer opinions (Initial → Final after social influence):" if include_initial else "Customer opinions:"}
+{"Voter interpretations (Initial → Final after social influence):" if include_initial else "Voter interpretations:"}
 {opinions_block}
 
-Each customer has three metrics:
-- opinion: their qualitative reaction to the event
-- care: how much they care about the event (0-10 scale, 0=indifferent, 10=heavily care)
-- usage_effect: predicted impact on their platform usage (-5 to +5 scale, -5=heavily reduce usage, +5=heavily increase usage)
+Each voter has three metrics:
+- opinion: their interpretation of what the policy/claim means or does
+- care: how much they care about this policy/claim (0-10 scale, 0=indifferent, 10=heavily care)
+- change_in_support: their support level (-5 to +5 scale, -5=strongly oppose, +5=strongly support)
 
 Provide a comprehensive summary that includes:
-1. Overall sentiment distribution (positive/negative/neutral/indifferent)
-2. Care distribution and average engagement level with the event
-3. Predicted net impact on platform usage (distribution and average of usage_effect scores)
-4. Key themes or patterns in customer responses
-5. Unique customer perspectives
-6. Degree of consensus or polarization among the customer base{change_instruction}
+1. Top perceived meanings (what different groups think the policy does)
+2. Care distribution and average engagement level
+3. Support distribution (distribution and average of change_in_support scores)
+4. Misunderstanding clusters and phrases that trigger them
+5. Polarization patterns (which groups diverge and why)
+6. Degree of consensus or fragmentation across voter segments{change_instruction}
 
-Write in a professional consulting tone addressing the client about their customer base. Do not mention individuals as each profile represents a subpopulation (archetype). Keep the summary concise but insightful (3-5 paragraphs).
+Write in a professional consulting tone for policy communication strategists. Do not mention individuals as each profile represents a voter subgroup. Keep the summary concise but insightful (3-5 paragraphs).
 """
 
 
