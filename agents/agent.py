@@ -7,7 +7,7 @@ class Agent:
         self.memory = {}
         self.opinion = ""
         self.care = 0
-        self.usage_effect = 0
+        self.change_in_support = 0
 
     def remember(self, other_id, summary):
         self.memory[int(other_id)] = summary

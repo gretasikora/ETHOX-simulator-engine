@@ -7,23 +7,17 @@ from personalities.sampling import generate_personality_traits
 
 def init_agents():
     agents = []
-    print("hi")
 
-    customer_df = pd.read_csv("datasets/Amazon Customer Behavior Survey.csv")
+    voter_df = pd.read_csv("datasets/voter_opinion_survey_350.csv")
     random.seed(SEED)
-    # pandas automatically uses line 1 as header, so indices 0-N map to CSV lines 2-(N+2)
-    available_lines = list(range(len(customer_df)))  # All data rows, header excluded by pandas
+    available_lines = list(range(len(voter_df)))
     selected_indices = random.sample(available_lines, NUM_AGENTS)
     
     traits_list = generate_personality_traits(n=NUM_AGENTS, seed=SEED)
-    # traits_list = ["Rude, disagree with everything, think lowly of everyone else", "Homophobic, very vocal","Gay, love talking about it"]
+    print(traits_list)
     
-    # Assign both personality and customer behavior to each agent
     for i in range(NUM_AGENTS):
-        customer_behavior = customer_df.iloc[selected_indices[i]].to_dict()
-        agents.append(Agent(i, traits_list[i], customer_behavior))
-        print(f"Agent {i}: Line {selected_indices[i] + 2} (CSV row)")
-        print(customer_behavior)
-        print(traits_list[i])
+        voter_profile = voter_df.iloc[selected_indices[i]].to_dict()
+        agents.append(Agent(i, traits_list[i], voter_profile))
     
     return agents

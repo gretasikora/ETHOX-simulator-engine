@@ -17,12 +17,6 @@ visualize_adjacency_matrix(adjacency, out_dir / "network.png", labels=labels)
 
 broadcast_trigger(agents, TRIGGER_EVENT_MESSAGE)
 
-# Store initial opinions before social influence for comparison
-for agent in agents:
-    agent.initial_opinion = agent.opinion
-    agent.initial_care = agent.care
-    agent.initial_usage_effect = agent.usage_effect
-
 print("\n\n\n\n")
 
 for i, agent in enumerate(agents):
@@ -37,15 +31,13 @@ for i, agent in enumerate(agents):
             weights[other.id] = care
     update_opinion_from_neighbors(agent, TRIGGER_EVENT_MESSAGE, neighbor_opinions, weights, self_weight=1.0)
 
-# Generate supervisor summary
+summary = supervisor_summarize(agents, TRIGGER_EVENT_MESSAGE, include_initial=True)
 print("\n" + "="*80)
 print("SUPERVISOR SUMMARY")
 print("="*80)
-summary = supervisor_summarize(agents, TRIGGER_EVENT_MESSAGE, include_initial=True)
 print(summary)
 print("="*80)
 
-# Save supervisor summary to file
 with open(out_dir / "supervisor_summary.txt", "w") as f:
     f.write(f"Event: {TRIGGER_EVENT_MESSAGE}\n\n")
     f.write(summary)
