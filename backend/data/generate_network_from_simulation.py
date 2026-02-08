@@ -18,10 +18,10 @@ import networkx as nx
 
 
 from simulation.init_network import init_agents
-from simulation.network import build_adjacency_matrix
+from simulation.network import build_adjacency_matrix, precompute_personality_context
 
 
-def _adjacency_to_edges(matrix: np.ndarray) -> list[dict]:
+def _adjacency_to_edges(matrix: np.ndarray, as_strings: bool = True) -> list[dict]:
     """Convert NxN adjacency matrix to edges list. Undirected: one edge per (i,j) with i<j."""
     n = matrix.shape[0]
     edges = []
@@ -29,9 +29,10 @@ def _adjacency_to_edges(matrix: np.ndarray) -> list[dict]:
         for j in range(i + 1, n):
             w = max(matrix[i, j], matrix[j, i])
             if w > 0:
+                src, tgt = (str(i), str(j)) if as_strings else (i, j)
                 edges.append({
-                    "source": str(i),
-                    "target": str(j),
+                    "source": src,
+                    "target": tgt,
                     "weight": round(float(w), 4),
                 })
     return edges
@@ -77,11 +78,15 @@ def _normalize_trait_1_5_to_0_1(val: float) -> float:
     return round(float(np.clip((val - 1.0) / 4.0, 0.0, 1.0)), 4)
 
 
-def export_network_json(agents, adjacency, out_path: Path | None = None) -> Path:
-    """Convert agents + adjacency matrix to backend network.json format. Returns path written."""
+def build_network_data(agents, adjacency, agent_id_as_int: bool = False) -> dict:
+    """
+    Convert agents + adjacency matrix to graph data dict.
+    Returns {"nodes": [...], "edges": [...]}.
+    agent_id_as_int: if True, use int for agent_id/source/target (API format); else str (network.json format).
+    """
     n = len(agents)
-
-    edges = _adjacency_to_edges(adjacency)
+    as_strings = not agent_id_as_int
+    edges = _adjacency_to_edges(adjacency, as_strings=as_strings)
     degree = _compute_degree(edges, n)
     clusters = _compute_clusters(edges, n)
 
@@ -128,11 +133,17 @@ def export_network_json(agents, adjacency, out_path: Path | None = None) -> Path
         cb = getattr(a, "customer_behavior", None) or {}
         age = _age_from_group(cb.get("age_group"))
         gender = _normalize_gender(cb.get("gender"))
+        # These come from the simulation (LLM), not the CSV. Agent uses care/usage_effect/opinion.
+        text_opinion = getattr(a, "text_opinion", None) or getattr(a, "opinion", None) or ""
         level_of_care = getattr(a, "level_of_care", None)
+        if level_of_care is None and text_opinion:
+            care = getattr(a, "care", None)
+            level_of_care = round(care / 10.0, 4) if care is not None else None
         effect_on_usage = getattr(a, "effect_on_usage", None)
-        text_opinion = getattr(a, "text_opinion", None) or ""
+        if effect_on_usage is None and text_opinion:
+            effect_on_usage = getattr(a, "usage_effect", None)
         node = {
-            "agent_id": str(i),
+            "agent_id": i if agent_id_as_int else str(i),
             "degree": degree[i],
             "cluster": clusters[i],
             "traits": traits,
@@ -144,13 +155,18 @@ def export_network_json(agents, adjacency, out_path: Path | None = None) -> Path
         if gender is not None:
             node["gender"] = gender
         if level_of_care is not None:
-            node["level_of_care"] = int(level_of_care)
+            node["level_of_care"] = round(float(level_of_care), 4)  # 0..1 for frontend
         if effect_on_usage is not None:
             node["effect_on_usage"] = int(effect_on_usage)
         node["text_opinion"] = str(text_opinion)
         nodes.append(node)
 
-    data = {"nodes": nodes, "edges": edges}
+    return {"nodes": nodes, "edges": edges}
+
+
+def export_network_json(agents, adjacency, out_path: Path | None = None) -> Path:
+    """Convert agents + adjacency matrix to backend network.json format. Returns path written."""
+    data = build_network_data(agents, adjacency, agent_id_as_int=False)
     if out_path is None:
         out_path = Path(__file__).parent / "network.json"
     out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -164,7 +180,8 @@ def export_network() -> Path:
     print("Initializing agents...")
     agents = init_agents()
     print("Building adjacency matrix...")
-    adjacency = build_adjacency_matrix(agents)
+    context = precompute_personality_context(agents)
+    adjacency = build_adjacency_matrix(agents, context)
     path = export_network_json(agents, adjacency)
     edges = _adjacency_to_edges(adjacency)
     print(f"Wrote {path} ({len(agents)} nodes, {len(edges)} edges)")

@@ -14,6 +14,7 @@ import { useGraphStore } from "../store/useGraphStore";
 import { useSimulationStore } from "../store/useSimulationStore";
 import { exportVisibleGraphToForceGraphData } from "../utils/graphExport";
 import { ErrorBoundary } from "./ErrorBoundary";
+import { PipelineStatusDebug } from "./PipelineStatusDebug";
 import type Graph from "graphology";
 
 export function AppShell() {
@@ -65,7 +66,7 @@ export function AppShell() {
   const open = selectedNodeId != null;
 
   useEffect(() => {
-    if (simulationStatus === "ready") {
+    if (simulationStatus === "initial_ready") {
       startAnimation();
     }
   }, [simulationStatus, startAnimation]);
@@ -176,6 +177,7 @@ export function AppShell() {
 
       <ExperimentPanel />
 
+      <PipelineStatusDebug />
       <ToastContainer />
     </div>
   );

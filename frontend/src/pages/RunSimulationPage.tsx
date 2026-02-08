@@ -101,7 +101,7 @@ export function RunSimulationPage() {
             type="submit"
             className="aurora-gradient flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-medium text-aurora-bg0 shadow-aurora-glow-sm transition-all hover:opacity-95 hover:shadow-aurora-glow active:scale-[0.98]"
           >
-            Continue to Explorer
+            Generate society
           </button>
         </form>
       </div>

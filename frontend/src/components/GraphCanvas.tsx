@@ -79,6 +79,8 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
   const careEdgeSweepIntensity = useSimulationStore((s) => s.careEdgeSweepIntensity);
   const careAnimationStatus = useSimulationStore((s) => s.careAnimationStatus);
   const animationProgress = useSimulationStore((s) => s.animationProgress);
+  const simulationInitialGraph = useSimulationStore((s) => s.initialGraph);
+  const simulationFinalGraph = useSimulationStore((s) => s.finalGraph);
 
   const playbackAgentState = useMemo(() => {
     const run = playbackRunId ? playbackRuns.find((r) => r.id === playbackRunId) : null;
@@ -106,6 +108,7 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
   const simulationIsAnimatingRef = useRef(false);
   const careGlowByIdRef = useRef<Record<string, { glowStrength: number; borderColor: string }>>({});
   const careEdgeSweepIntensityRef = useRef(0);
+  const simulationInitialPhaseRef = useRef(false);
   const exploreModeRef = useRef(exploreMode);
   const pathFromRef = useRef(pathFrom);
   const pathToRef = useRef(pathTo);
@@ -122,6 +125,12 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
   simulationIsAnimatingRef.current = simulationIsAnimating;
   careGlowByIdRef.current = careGlowById;
   careEdgeSweepIntensityRef.current = careEdgeSweepIntensity;
+  simulationInitialPhaseRef.current = Boolean(
+    simulationInitialGraph &&
+      simulationFinalGraph &&
+      careAnimationStatus === "idle" &&
+      !simulationIsAnimating
+  );
   exploreModeRef.current = exploreMode;
   pathFromRef.current = pathFrom;
   pathToRef.current = pathTo;
@@ -202,6 +211,10 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
         const simOverride = simulationNodeSizeOverrideRef.current;
         const simAnimating = simulationIsAnimatingRef.current;
         const careGlow = careGlowByIdRef.current;
+        const simInitialPhase = simulationInitialPhaseRef.current;
+        if (simInitialPhase) {
+          return { ...data, size: 8, label: data.label };
+        }
         if (simAnimating && simOverride && simOverride[node] != null) {
           let color = data.color as string;
           const glow = careGlow?.[node];
@@ -408,7 +421,21 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
   useEffect(() => {
     const sigma = sigmaRef.current;
     if (sigma) sigma.refresh();
-  }, [highlightedNodeIds, highlightedEdgeKeys, appliedTargetIds, playbackAgentState, playbackTargetedIds, playbackColorMode, simulationNodeSizeOverride, simulationIsAnimating, careGlowById, careEdgeSweepIntensity]);
+  }, [
+    highlightedNodeIds,
+    highlightedEdgeKeys,
+    appliedTargetIds,
+    playbackAgentState,
+    playbackTargetedIds,
+    playbackColorMode,
+    simulationNodeSizeOverride,
+    simulationIsAnimating,
+    careGlowById,
+    careEdgeSweepIntensity,
+    simulationInitialGraph,
+    simulationFinalGraph,
+    careAnimationStatus,
+  ]);
 
   // Do not animate camera on node select - it zoomed in too far (ratio 0.3) and
   // made the rest of the network disappear. The selected node is still highlighted

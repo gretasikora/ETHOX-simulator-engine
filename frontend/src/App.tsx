@@ -11,7 +11,9 @@ function ExplorerPage() {
   const loadGraph = useGraphStore((s) => s.loadGraph);
   const nodes = useGraphStore((s) => s.nodes);
   const loading = useGraphStore((s) => s.loading);
-  const error = useGraphStore((s) => s.error);
+  const graphError = useGraphStore((s) => s.error);
+  const simulationError = useSimulationStore((s) => s.error);
+  const error = graphError || simulationError;
   const addToast = useUIStore((s) => s.addToast);
   const simulationStatus = useSimulationStore((s) => s.status);
   const simulationInput = useSimulationStore((s) => s.simulationInput);
@@ -25,7 +27,10 @@ function ExplorerPage() {
       autoRunAttempted.current = true;
       // Auto-run simulation so the graph is ready immediately
       runSimulation(simulationInput.trigger, simulationInput.numAgents);
-    } else if (!simulationInput.trigger && simulationStatus !== "ready") {
+    } else if (
+      !simulationInput.trigger &&
+      !["initial_ready", "animating", "finished"].includes(simulationStatus)
+    ) {
       // No simulation input — load default graph (e.g. Skip to Explorer)
       loadGraph();
     }
@@ -35,7 +40,7 @@ function ExplorerPage() {
     if (error) addToast(error, "error");
   }, [error, addToast]);
 
-  if (nodes.length === 0 && simulationStatus !== "ready" && loading) {
+  if (nodes.length === 0 && !["initial_ready", "animating", "finished"].includes(simulationStatus) && loading) {
     return (
       <div className="flex h-screen w-screen items-center justify-center bg-aurora-bg0">
         <div className="flex flex-col items-center gap-4">
@@ -46,7 +51,8 @@ function ExplorerPage() {
     );
   }
 
-  if (nodes.length === 0 && simulationStatus !== "ready" && error) {
+  if (nodes.length === 0 && !["initial_ready", "animating", "finished"].includes(simulationStatus) && error) {
+    const isSimulationError = simulationStatus === "error";
     return (
       <div className="flex h-screen w-screen items-center justify-center bg-aurora-bg0">
         <div className="surface-elevated max-w-md rounded-lg p-6 text-center">
@@ -56,7 +62,7 @@ function ExplorerPage() {
           </p>
           <button
             type="button"
-            onClick={() => loadGraph()}
+            onClick={() => (isSimulationError ? runSimulation(simulationInput.trigger, simulationInput.numAgents) : loadGraph())}
             className="aurora-gradient mt-4 rounded-lg px-4 py-2 text-sm font-medium text-aurora-bg0 shadow-aurora-glow-sm"
           >
             Retry

@@ -3,7 +3,7 @@
     {
       "agent_id": "0",
       "degree": 9,
-      "cluster": 1,
+      "cluster": 0,
       "traits": {
         "Sociability": 0.625,
         "Assertiveness": 0.65,
@@ -22,17 +22,15 @@
         "Creative Imagination": 0.625
       },
       "degree_centrality": 0.4737,
-      "betweenness_centrality": 0.2883,
+      "betweenness_centrality": 0.0898,
       "age": 32,
       "gender": "female",
-      "level_of_care": 7,
-      "effect_on_usage": 2,
-      "text_opinion": "I think this product is useful for daily tasks."
+      "text_opinion": ""
     },
     {
       "agent_id": "1",
-      "degree": 8,
-      "cluster": 2,
+      "degree": 7,
+      "cluster": 0,
       "traits": {
         "Sociability": 0.45,
         "Assertiveness": 0.425,
@@ -50,18 +48,16 @@
         "Aesthetic Sensitivity": 1.0,
         "Creative Imagination": 0.8
       },
-      "degree_centrality": 0.4211,
-      "betweenness_centrality": 0.1498,
+      "degree_centrality": 0.3684,
+      "betweenness_centrality": 0.061,
       "age": 22,
       "gender": "female",
-      "level_of_care": 4,
-      "effect_on_usage": -1,
-      "text_opinion": "Not sure yet\u2014need to try it longer."
+      "text_opinion": ""
     },
     {
       "agent_id": "2",
-      "degree": 8,
-      "cluster": 0,
+      "degree": 9,
+      "cluster": 3,
       "traits": {
         "Sociability": 0.575,
         "Assertiveness": 0.7,
@@ -79,18 +75,16 @@
         "Aesthetic Sensitivity": 0.475,
         "Creative Imagination": 0.8
       },
-      "degree_centrality": 0.4211,
-      "betweenness_centrality": 0.0553,
+      "degree_centrality": 0.4737,
+      "betweenness_centrality": 0.1131,
       "age": 55,
       "gender": "female",
-      "level_of_care": 9,
-      "effect_on_usage": 4,
-      "text_opinion": "Helps me stay organized; would recommend."
+      "text_opinion": ""
     },
     {
       "agent_id": "3",
-      "degree": 9,
-      "cluster": 3,
+      "degree": 4,
+      "cluster": 0,
       "traits": {
         "Sociability": 0.425,
         "Assertiveness": 0.425,
@@ -108,18 +102,16 @@
         "Aesthetic Sensitivity": 0.525,
         "Creative Imagination": 0.7
       },
-      "degree_centrality": 0.4737,
-      "betweenness_centrality": 0.1698,
+      "degree_centrality": 0.2105,
+      "betweenness_centrality": 0.0031,
       "age": 55,
       "gender": "female",
-      "level_of_care": 5,
-      "effect_on_usage": 0,
-      "text_opinion": "A bit expensive but the quality is good."
+      "text_opinion": ""
     },
     {
       "agent_id": "4",
-      "degree": 5,
-      "cluster": 1,
+      "degree": 6,
+      "cluster": 0,
       "traits": {
         "Sociability": 0.975,
         "Assertiveness": 0.6,
@@ -137,17 +129,15 @@
         "Aesthetic Sensitivity": 0.525,
         "Creative Imagination": 0.9
       },
-      "degree_centrality": 0.2632,
-      "betweenness_centrality": 0.0326,
+      "degree_centrality": 0.3158,
+      "betweenness_centrality": 0.0187,
       "age": 32,
       "gender": "male",
-      "level_of_care": 8,
-      "effect_on_usage": 3,
-      "text_opinion": "Wish it had better support for my use case."
+      "text_opinion": ""
     },
     {
       "agent_id": "5",
-      "degree": 7,
+      "degree": 8,
       "cluster": 1,
       "traits": {
         "Sociability": 0.875,
@@ -166,18 +156,16 @@
         "Aesthetic Sensitivity": 0.475,
         "Creative Imagination": 0.45
       },
-      "degree_centrality": 0.3684,
-      "betweenness_centrality": 0.028,
+      "degree_centrality": 0.4211,
+      "betweenness_centrality": 0.0792,
       "age": 22,
       "gender": "female",
-      "level_of_care": 6,
-      "effect_on_usage": -2,
-      "text_opinion": "I think this product is useful for daily tasks."
+      "text_opinion": ""
     },
     {
       "agent_id": "6",
-      "degree": 7,
-      "cluster": 0,
+      "degree": 5,
+      "cluster": 3,
       "traits": {
         "Sociability": 0.45,
         "Assertiveness": 0.475,
@@ -195,18 +183,16 @@
         "Aesthetic Sensitivity": 0.55,
         "Creative Imagination": 0.375
       },
-      "degree_centrality": 0.3684,
-      "betweenness_centrality": 0.0391,
+      "degree_centrality": 0.2632,
+      "betweenness_centrality": 0.0231,
       "age": 32,
       "gender": "female",
-      "level_of_care": 3,
-      "effect_on_usage": 1,
-      "text_opinion": "Not sure yet\u2014need to try it longer."
+      "text_opinion": ""
     },
     {
       "agent_id": "7",
       "degree": 11,
-      "cluster": 0,
+      "cluster": 1,
       "traits": {
         "Sociability": 0.65,
         "Assertiveness": 0.475,
@@ -225,16 +211,14 @@
         "Creative Imagination": 0.65
       },
       "degree_centrality": 0.5789,
-      "betweenness_centrality": 0.2416,
+      "betweenness_centrality": 0.1789,
       "age": 22,
       "gender": "female",
-      "level_of_care": 7,
-      "effect_on_usage": 2,
-      "text_opinion": "Helps me stay organized; would recommend."
+      "text_opinion": ""
     },
     {
       "agent_id": "8",
-      "degree": 2,
+      "degree": 3,
       "cluster": 2,
       "traits": {
         "Sociability": 0.3,
@@ -253,18 +237,16 @@
         "Aesthetic Sensitivity": 0.925,
         "Creative Imagination": 0.7
       },
-      "degree_centrality": 0.1053,
-      "betweenness_centrality": 0.0,
+      "degree_centrality": 0.1579,
+      "betweenness_centrality": 0.0051,
       "age": 22,
       "gender": "male",
-      "level_of_care": 2,
-      "effect_on_usage": -3,
-      "text_opinion": "A bit expensive but the quality is good."
+      "text_opinion": ""
     },
     {
       "agent_id": "9",
-      "degree": 4,
-      "cluster": 1,
+      "degree": 5,
+      "cluster": 2,
       "traits": {
         "Sociability": 0.775,
         "Assertiveness": 0.8,
@@ -282,17 +264,15 @@
         "Aesthetic Sensitivity": 0.75,
         "Creative Imagination": 0.925
       },
-      "degree_centrality": 0.2105,
-      "betweenness_centrality": 0.0275,
+      "degree_centrality": 0.2632,
+      "betweenness_centrality": 0.0283,
       "age": 32,
       "gender": "female",
-      "level_of_care": 10,
-      "effect_on_usage": 5,
-      "text_opinion": "Wish it had better support for my use case."
+      "text_opinion": ""
     },
     {
       "agent_id": "10",
-      "degree": 1,
+      "degree": 5,
       "cluster": 1,
       "traits": {
         "Sociability": 0.575,
@@ -311,17 +291,15 @@
         "Aesthetic Sensitivity": 0.425,
         "Creative Imagination": 0.25
       },
-      "degree_centrality": 0.0526,
-      "betweenness_centrality": 0.0,
+      "degree_centrality": 0.2632,
+      "betweenness_centrality": 0.0139,
       "age": 32,
       "gender": "female",
-      "level_of_care": 4,
-      "effect_on_usage": -1,
-      "text_opinion": "I think this product is useful for daily tasks."
+      "text_opinion": ""
     },
     {
       "agent_id": "11",
-      "degree": 3,
+      "degree": 6,
       "cluster": 0,
       "traits": {
         "Sociability": 0.275,
@@ -340,13 +318,11 @@
         "Aesthetic Sensitivity": 0.7,
         "Creative Imagination": 0.875
       },
-      "degree_centrality": 0.1579,
-      "betweenness_centrality": 0.0019,
+      "degree_centrality": 0.3158,
+      "betweenness_centrality": 0.107,
       "age": 55,
       "gender": "female",
-      "level_of_care": 8,
-      "effect_on_usage": 3,
-      "text_opinion": "Not sure yet\u2014need to try it longer."
+      "text_opinion": ""
     },
     {
       "agent_id": "12",
@@ -370,17 +346,15 @@
         "Creative Imagination": 0.75
       },
       "degree_centrality": 0.2632,
-      "betweenness_centrality": 0.0497,
+      "betweenness_centrality": 0.0136,
       "age": 22,
       "gender": "female",
-      "level_of_care": 5,
-      "effect_on_usage": 0,
-      "text_opinion": "Helps me stay organized; would recommend."
+      "text_opinion": ""
     },
     {
       "agent_id": "13",
-      "degree": 3,
-      "cluster": 0,
+      "degree": 2,
+      "cluster": 1,
       "traits": {
         "Sociability": 0.125,
         "Assertiveness": 0.375,
@@ -398,17 +372,15 @@
         "Aesthetic Sensitivity": 0.9,
         "Creative Imagination": 0.425
       },
-      "degree_centrality": 0.1579,
+      "degree_centrality": 0.1053,
       "betweenness_centrality": 0.0,
       "age": 22,
       "gender": "female",
-      "level_of_care": 6,
-      "effect_on_usage": 1,
-      "text_opinion": "A bit expensive but the quality is good."
+      "text_opinion": ""
     },
     {
       "agent_id": "14",
-      "degree": 4,
+      "degree": 6,
       "cluster": 2,
       "traits": {
         "Sociability": 0.55,
@@ -427,17 +399,15 @@
         "Aesthetic Sensitivity": 0.85,
         "Creative Imagination": 0.925
       },
-      "degree_centrality": 0.2105,
-      "betweenness_centrality": 0.0283,
+      "degree_centrality": 0.3158,
+      "betweenness_centrality": 0.0432,
       "age": 32,
       "gender": "female",
-      "level_of_care": 9,
-      "effect_on_usage": 4,
-      "text_opinion": "Wish it had better support for my use case."
+      "text_opinion": ""
     },
     {
       "agent_id": "15",
-      "degree": 2,
+      "degree": 3,
       "cluster": 3,
       "traits": {
         "Sociability": 0.425,
@@ -456,18 +426,16 @@
         "Aesthetic Sensitivity": 0.65,
         "Creative Imagination": 0.625
       },
-      "degree_centrality": 0.1053,
-      "betweenness_centrality": 0.0119,
+      "degree_centrality": 0.1579,
+      "betweenness_centrality": 0.0049,
       "age": 22,
       "gender": "male",
-      "level_of_care": 1,
-      "effect_on_usage": -4,
-      "text_opinion": "I think this product is useful for daily tasks."
+      "text_opinion": ""
     },
     {
       "agent_id": "16",
-      "degree": 2,
-      "cluster": 0,
+      "degree": 0,
+      "cluster": 4,
       "traits": {
         "Sociability": 0.25,
         "Assertiveness": 0.275,
@@ -485,18 +453,16 @@
         "Aesthetic Sensitivity": 0.5,
         "Creative Imagination": 0.4
       },
-      "degree_centrality": 0.1053,
+      "degree_centrality": 0.0,
       "betweenness_centrality": 0.0,
       "age": 22,
       "gender": "female",
-      "level_of_care": 3,
-      "effect_on_usage": -2,
-      "text_opinion": "Not sure yet\u2014need to try it longer."
+      "text_opinion": ""
     },
     {
       "agent_id": "17",
-      "degree": 3,
-      "cluster": 1,
+      "degree": 1,
+      "cluster": 0,
       "traits": {
         "Sociability": 0.05,
         "Assertiveness": 0.6,
@@ -514,18 +480,16 @@
         "Aesthetic Sensitivity": 0.825,
         "Creative Imagination": 1.0
       },
-      "degree_centrality": 0.1579,
-      "betweenness_centrality": 0.0019,
+      "degree_centrality": 0.0526,
+      "betweenness_centrality": 0.0,
       "age": 32,
       "gender": "male",
-      "level_of_care": 7,
-      "effect_on_usage": 2,
-      "text_opinion": "Helps me stay organized; would recommend."
+      "text_opinion": ""
     },
     {
       "agent_id": "18",
-      "degree": 2,
-      "cluster": 3,
+      "degree": 4,
+      "cluster": 1,
       "traits": {
         "Sociability": 0.475,
         "Assertiveness": 0.325,
@@ -543,18 +507,16 @@
         "Aesthetic Sensitivity": 0.7,
         "Creative Imagination": 0.825
       },
-      "degree_centrality": 0.1053,
-      "betweenness_centrality": 0.0095,
+      "degree_centrality": 0.2105,
+      "betweenness_centrality": 0.0082,
       "age": 22,
       "gender": "female",
-      "level_of_care": 0,
-      "effect_on_usage": -5,
-      "text_opinion": "A bit expensive but the quality is good."
+      "text_opinion": ""
     },
     {
       "agent_id": "19",
-      "degree": 3,
-      "cluster": 0,
+      "degree": 5,
+      "cluster": 3,
       "traits": {
         "Sociability": 0.025,
         "Assertiveness": 0.3,
@@ -572,260 +534,273 @@
         "Aesthetic Sensitivity": 0.675,
         "Creative Imagination": 0.6
       },
-      "degree_centrality": 0.1579,
-      "betweenness_centrality": 0.0049,
+      "degree_centrality": 0.2632,
+      "betweenness_centrality": 0.0218,
       "age": 32,
       "gender": "female",
-      "level_of_care": 5,
-      "effect_on_usage": 0,
-      "text_opinion": "Wish it had better support for my use case."
+      "text_opinion": ""
     }
   ],
   "edges": [
     {
       "source": "0",
+      "target": "1",
+      "weight": 0.6855
+    },
+    {
+      "source": "0",
       "target": "3",
-      "weight": 0.8683
+      "weight": 0.692
     },
     {
       "source": "0",
       "target": "4",
-      "weight": 0.84
+      "weight": 0.6723
     },
     {
       "source": "0",
       "target": "5",
-      "weight": 0.82
-    },
-    {
-      "source": "0",
-      "target": "7",
-      "weight": 0.8
+      "weight": 0.689
     },
     {
       "source": "0",
       "target": "9",
-      "weight": 0.8683
+      "weight": 0.7498
     },
     {
       "source": "0",
       "target": "10",
-      "weight": 0.8333
+      "weight": 0.6509
+    },
+    {
+      "source": "0",
+      "target": "11",
+      "weight": 0.6863
     },
     {
       "source": "0",
       "target": "12",
-      "weight": 0.82
+      "weight": 0.6275
     },
     {
       "source": "0",
-      "target": "15",
-      "weight": 0.8633
-    },
-    {
-      "source": "0",
-      "target": "17",
-      "weight": 0.8267
+      "target": "19",
+      "weight": 0.6932
     },
     {
       "source": "1",
-      "target": "2",
-      "weight": 0.785
-    },
-    {
-      "source": "1",
-      "target": "3",
-      "weight": 0.81
-    },
-    {
-      "source": "1",
-      "target": "5",
-      "weight": 0.805
+      "target": "4",
+      "weight": 0.6702
     },
     {
       "source": "1",
       "target": "6",
-      "weight": 0.8267
+      "weight": 0.699
     },
     {
       "source": "1",
       "target": "7",
-      "weight": 0.795
+      "weight": 0.6366
     },
     {
       "source": "1",
       "target": "8",
-      "weight": 0.8833
+      "weight": 0.6411
     },
     {
       "source": "1",
-      "target": "12",
-      "weight": 0.8383
+      "target": "11",
+      "weight": 0.6551
     },
     {
       "source": "1",
-      "target": "14",
-      "weight": 0.8583
+      "target": "18",
+      "weight": 0.6904
     },
     {
       "source": "2",
       "target": "3",
-      "weight": 0.7983
+      "weight": 0.6611
     },
     {
       "source": "2",
       "target": "4",
-      "weight": 0.8
+      "weight": 0.6495
     },
     {
       "source": "2",
       "target": "5",
-      "weight": 0.84
+      "weight": 0.6972
     },
     {
       "source": "2",
       "target": "6",
-      "weight": 0.8183
+      "weight": 0.6444
     },
     {
       "source": "2",
       "target": "7",
-      "weight": 0.8667
+      "weight": 0.6597
     },
     {
       "source": "2",
       "target": "11",
-      "weight": 0.83
+      "weight": 0.7016
     },
     {
       "source": "2",
-      "target": "13",
-      "weight": 0.7833
-    },
-    {
-      "source": "3",
-      "target": "5",
-      "weight": 0.8217
-    },
-    {
-      "source": "3",
-      "target": "6",
-      "weight": 0.83
-    },
-    {
-      "source": "3",
-      "target": "7",
-      "weight": 0.845
-    },
-    {
-      "source": "3",
       "target": "12",
-      "weight": 0.8283
+      "weight": 0.6298
     },
     {
-      "source": "3",
-      "target": "18",
-      "weight": 0.8317
+      "source": "2",
+      "target": "15",
+      "weight": 0.6551
     },
     {
-      "source": "3",
+      "source": "2",
       "target": "19",
-      "weight": 0.8467
+      "weight": 0.6415
+    },
+    {
+      "source": "3",
+      "target": "4",
+      "weight": 0.7169
+    },
+    {
+      "source": "3",
+      "target": "7",
+      "weight": 0.6457
     },
     {
       "source": "4",
       "target": "5",
-      "weight": 0.87
+      "weight": 0.6954
     },
     {
       "source": "4",
-      "target": "7",
-      "weight": 0.8333
-    },
-    {
-      "source": "4",
-      "target": "9",
-      "weight": 0.8583
-    },
-    {
-      "source": "5",
-      "target": "6",
-      "weight": 0.8383
+      "target": "14",
+      "weight": 0.759
     },
     {
       "source": "5",
       "target": "7",
-      "weight": 0.85
+      "weight": 0.6027
     },
     {
-      "source": "6",
-      "target": "7",
-      "weight": 0.815
+      "source": "5",
+      "target": "8",
+      "weight": 0.6466
     },
     {
-      "source": "6",
+      "source": "5",
+      "target": "10",
+      "weight": 0.6616
+    },
+    {
+      "source": "5",
       "target": "13",
-      "weight": 0.8117
+      "weight": 0.6253
+    },
+    {
+      "source": "5",
+      "target": "18",
+      "weight": 0.6401
     },
     {
       "source": "6",
-      "target": "16",
-      "weight": 0.8533
+      "target": "7",
+      "weight": 0.598
+    },
+    {
+      "source": "6",
+      "target": "15",
+      "weight": 0.6388
+    },
+    {
+      "source": "6",
+      "target": "19",
+      "weight": 0.6575
+    },
+    {
+      "source": "7",
+      "target": "9",
+      "weight": 0.6988
+    },
+    {
+      "source": "7",
+      "target": "10",
+      "weight": 0.6613
     },
     {
       "source": "7",
       "target": "11",
-      "weight": 0.8367
+      "weight": 0.6095
     },
     {
       "source": "7",
       "target": "13",
-      "weight": 0.7733
+      "weight": 0.6043
     },
     {
       "source": "7",
-      "target": "16",
-      "weight": 0.805
+      "target": "14",
+      "weight": 0.6073
     },
     {
       "source": "7",
-      "target": "19",
-      "weight": 0.805
+      "target": "18",
+      "weight": 0.6207
     },
     {
       "source": "8",
       "target": "14",
-      "weight": 0.8417
+      "weight": 0.6851
+    },
+    {
+      "source": "9",
+      "target": "12",
+      "weight": 0.6012
     },
     {
       "source": "9",
       "target": "14",
-      "weight": 0.835
+      "weight": 0.7007
     },
     {
       "source": "9",
-      "target": "17",
-      "weight": 0.8417
+      "target": "15",
+      "weight": 0.6709
+    },
+    {
+      "source": "10",
+      "target": "11",
+      "weight": 0.6619
+    },
+    {
+      "source": "10",
+      "target": "12",
+      "weight": 0.6092
     },
     {
       "source": "11",
-      "target": "19",
-      "weight": 0.8383
+      "target": "17",
+      "weight": 0.6213
     },
     {
       "source": "12",
       "target": "14",
-      "weight": 0.8467
+      "weight": 0.6243
     },
     {
-      "source": "12",
-      "target": "17",
-      "weight": 0.84
+      "source": "14",
+      "target": "19",
+      "weight": 0.693
     },
     {
-      "source": "15",
-      "target": "18",
-      "weight": 0.86
+      "source": "18",
+      "target": "19",
+      "weight": 0.6602
     }
   ]
 }

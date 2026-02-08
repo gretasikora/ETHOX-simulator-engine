@@ -1,3 +1,5 @@
+import uuid
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -126,7 +128,9 @@ class RunSimulationView(APIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
+        simulation_id = str(uuid.uuid4())
         return Response({
+            "simulation_id": simulation_id,
             "initial_graph": initial_graph,
             "final_graph": final_graph,
         })

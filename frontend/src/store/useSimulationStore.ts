@@ -30,7 +30,13 @@ function normalizeGraph(g: SimulationGraphData): { nodes: NodeData[]; edges: Edg
   };
 }
 
-export type SimulationStatus = "idle" | "loading" | "ready";
+export type SimulationStatus =
+  | "idle"
+  | "loading_initial"
+  | "initial_ready"
+  | "animating"
+  | "finished"
+  | "error";
 export type SimulationViewMode = "simulation" | "default";
 
 export type CareAnimationStatus = "idle" | "animating" | "done";
@@ -81,7 +87,7 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
   },
 
   runSimulation: async (trigger: string, numAgents: number) => {
-    set({ status: "loading", error: null });
+    set({ status: "loading_initial", error: null });
     try {
       const resp = await runSimulationApi(trigger, numAgents);
       const initial = normalizeGraph(resp.initial_graph);
@@ -91,7 +97,7 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
         simulationInput: { trigger, numAgents },
         initialGraph: initial,
         finalGraph: final,
-        status: "ready",
+        status: "initial_ready",
         viewMode: "simulation",
         error: null,
         animationProgress: 0,
@@ -101,7 +107,7 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
       useGraphStore.getState().setGraphData(initial.nodes, initial.edges);
     } catch (e) {
       const msg = e instanceof Error ? e.message : "Simulation failed";
-      set({ status: "idle", error: msg });
+      set({ status: "error", error: msg });
       throw e;
     }
   },
@@ -111,6 +117,7 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
     if (!initialGraph || !finalGraph) return;
 
     set({
+      status: "animating",
       isAnimating: true,
       animationProgress: 0,
       careAnimationStatus: "animating",
@@ -193,13 +200,13 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
       useUIStore.getState().setSizeBy("level_of_care");
     }
     set({
+      status: "finished",
       isAnimating: false,
       animationProgress: 1,
       careAnimationStatus: "done",
       careEdgeSweepIntensity: 0,
       nodeSizeOverrideById: {},
       careGlowById: {},
-      status: "idle",
     });
   },
 

@@ -1,8 +1,16 @@
 import os
 from pathlib import Path
 
+from dotenv import load_dotenv
+
 BASE_DIR = Path(__file__).resolve().parent.parent
+PROJECT_ROOT = BASE_DIR.parent
+load_dotenv(PROJECT_ROOT / ".env")
+
 DATA_DIR = BASE_DIR / "data"
+
+# OpenAI API key (required for LLM/simulation). Set OPENAI_API_KEY in .env or environment.
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 
 SECRET_KEY = "dev-secret-key-change-in-production"
 DEBUG = True

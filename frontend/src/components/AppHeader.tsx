@@ -219,10 +219,10 @@ export function AppHeader({ onSearchSelect }: AppHeaderProps) {
           <button
             type="button"
             onClick={() => runSimulation(simulationInput.trigger, simulationInput.numAgents)}
-            disabled={status === "loading"}
+            disabled={status === "loading_initial"}
             className="aurora-gradient flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium text-aurora-bg0 shadow-aurora-glow-sm transition-all hover:opacity-95 hover:shadow-aurora-glow active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed sm:rounded-xl sm:px-4 sm:py-2"
           >
-            {status === "loading" ? (
+            {status === "loading_initial" ? (
               <span className="h-4 w-4 animate-spin rounded-full border-2 border-aurora-bg0/30 border-t-aurora-bg0" />
             ) : (
               <Play className="h-4 w-4" />
