@@ -242,8 +242,16 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
   },
 
   revertToDefault: async () => {
+    const { initialGraph } = get();
+    if (initialGraph) {
+      // Restore the original graph from before simulation effects (undo impacts of talking)
+      useGraphStore.getState().setGraphData(initialGraph.nodes, initialGraph.edges);
+      useUIStore.getState().setSizeBy("degree");
+    } else {
+      // No simulation run yet; load the default graph from the API
+      await useGraphStore.getState().loadGraph();
+    }
     set({ viewMode: "default" });
-    await useGraphStore.getState().loadGraph();
   },
 
   applySimulationGraph: () => {

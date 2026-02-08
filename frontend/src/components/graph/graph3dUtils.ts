@@ -39,7 +39,7 @@ export function createNodeMesh(
   color: string,
   opts: { hovered?: boolean; selected?: boolean; sizeScale?: number }
 ): THREE.Mesh {
-  const size = 0.5;
+  const size = 0.75;
   const geometry = getCachedGeometry(shape, size);
   const isHighlight = opts.hovered || opts.selected;
   const material = new THREE.MeshStandardMaterial({
@@ -52,7 +52,7 @@ export function createNodeMesh(
   const mesh = new THREE.Mesh(geometry, material);
   mesh.castShadow = false;
   mesh.receiveShadow = false;
-  const baseScale = opts.selected ? 4.5 : opts.hovered ? 3.45 : 3;
+  const baseScale = opts.selected ? 5.5 : opts.hovered ? 4.2 : 3.8;
   const sizeScale = opts.sizeScale ?? 1;
   mesh.scale.setScalar(baseScale * sizeScale);
   return mesh;

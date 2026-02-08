@@ -1,4 +1,4 @@
-import { useCallback, useRef, useMemo } from "react";
+import { useCallback, useRef, useMemo, useEffect } from "react";
 import ForceGraph3D from "react-force-graph-3d";
 import * as THREE from "three";
 import { RotateCcw } from "lucide-react";
@@ -13,11 +13,30 @@ import {
   animateCameraToNode,
 } from "./graph3dUtils";
 
-const EDGE_COLOR_DIM = "rgba(234,242,242,0.12)";
-const EDGE_COLOR_HIGHLIGHT = "rgba(38,198,255,0.6)";
-const LINK_WIDTH_DIM = 0.4;
-const LINK_WIDTH_HIGHLIGHT = 1.2;
-const MAX_LINK_WIDTH = 1.8;
+// Keyboard movement: base speed (units per second), scale by deltaTime
+const KEYBOARD_BASE_SPEED = 120;
+const KEYBOARD_SPEED_SHIFT = 2;
+const KEYBOARD_SPEED_ALT = 0.4;
+const KEYBOARD_MAX_DISTANCE = 8000;
+
+const MOVEMENT_KEYS = new Set([
+  "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight",
+  "KeyW", "KeyA", "KeyS", "KeyD", "KeyQ", "KeyE",
+]);
+const IGNORE_TAG_NAMES = new Set(["INPUT", "TEXTAREA", "SELECT"]);
+
+function shouldIgnoreKeyboard(ev: KeyboardEvent): boolean {
+  const el = document.activeElement;
+  if (el && (IGNORE_TAG_NAMES.has((el as HTMLElement).tagName) || (el as HTMLElement).isContentEditable)) return true;
+  if (document.querySelector('[role="dialog"]')) return true;
+  return false;
+}
+
+const EDGE_COLOR_DIM = "rgba(234,242,242,0.38)";
+const EDGE_COLOR_HIGHLIGHT = "rgba(38,198,255,0.75)";
+const LINK_WIDTH_DIM = 0.9;
+const LINK_WIDTH_HIGHLIGHT = 1.8;
+const MAX_LINK_WIDTH = 2.5;
 
 type ShapeKey = "sphere" | "box" | "cone" | "octahedron";
 
@@ -84,8 +103,108 @@ export function Graph3D({
     scene?: () => THREE.Scene;
     camera?: () => THREE.Camera;
     renderer?: () => THREE.WebGLRenderer;
+    controls?: () => { target?: THREE.Vector3 };
     lights?: (lights: THREE.Light[]) => unknown;
   } | null>(null);
+
+  const pressedKeys = useRef<Set<string>>(new Set());
+  const shiftPressed = useRef(false);
+  const altPressed = useRef(false);
+  const animationFrameId = useRef<number | null>(null);
+  const lastTime = useRef<number>(0);
+  const forwardVec = useRef(new THREE.Vector3());
+  const rightVec = useRef(new THREE.Vector3());
+  const upVec = useRef(new THREE.Vector3());
+  const deltaVec = useRef(new THREE.Vector3());
+
+  const updateCameraPosition = useCallback((deltaTimeSec: number) => {
+    const inst = fgRef.current;
+    const camFn = inst?.camera;
+    const controlsFn = inst?.controls;
+    if (!camFn || !controlsFn) return;
+    const camera = camFn();
+    const controls = controlsFn();
+    if (!camera || !(camera instanceof THREE.Object3D)) return;
+
+    const speedMult = shiftPressed.current ? KEYBOARD_SPEED_SHIFT : (altPressed.current ? KEYBOARD_SPEED_ALT : 1);
+    const speed = KEYBOARD_BASE_SPEED * speedMult * (deltaTimeSec || 1 / 60);
+
+    camera.getWorldDirection(forwardVec.current);
+    forwardVec.current.normalize();
+    rightVec.current.crossVectors(forwardVec.current, camera.up).normalize();
+    upVec.current.copy(camera.up).normalize();
+
+    deltaVec.current.set(0, 0, 0);
+    const keys = pressedKeys.current;
+    if (keys.has("ArrowUp") || keys.has("KeyW")) deltaVec.current.add(forwardVec.current);
+    if (keys.has("ArrowDown") || keys.has("KeyS")) deltaVec.current.sub(forwardVec.current);
+    if (keys.has("ArrowLeft") || keys.has("KeyA")) deltaVec.current.sub(rightVec.current);
+    if (keys.has("ArrowRight") || keys.has("KeyD")) deltaVec.current.add(rightVec.current);
+    if (keys.has("KeyQ")) deltaVec.current.add(upVec.current);
+    if (keys.has("KeyE")) deltaVec.current.sub(upVec.current);
+
+    if (deltaVec.current.lengthSq() > 0) {
+      deltaVec.current.normalize().multiplyScalar(speed);
+      camera.position.add(deltaVec.current);
+      const target = controls?.target;
+      if (target && target instanceof THREE.Vector3) target.add(deltaVec.current);
+      const dist = camera.position.length();
+      if (dist > KEYBOARD_MAX_DISTANCE) {
+        const scale = KEYBOARD_MAX_DISTANCE / dist;
+        camera.position.multiplyScalar(scale);
+        if (target && target instanceof THREE.Vector3) target.multiplyScalar(scale);
+      }
+    }
+  }, []);
+
+  const runLoop = useCallback(() => {
+    const t = performance.now() / 1000;
+    const prev = lastTime.current;
+    lastTime.current = t;
+    const deltaTimeSec = prev > 0 ? Math.min(t - prev, 1 / 15) : 1 / 60;
+    updateCameraPosition(deltaTimeSec);
+    if (pressedKeys.current.size > 0) {
+      animationFrameId.current = requestAnimationFrame(runLoop);
+    } else {
+      animationFrameId.current = null;
+    }
+  }, [updateCameraPosition]);
+
+  const handleKeyDown = useCallback((ev: KeyboardEvent) => {
+    if (shouldIgnoreKeyboard(ev)) return;
+    if (ev.key === "Shift") { shiftPressed.current = true; return; }
+    if (ev.key === "Alt") { altPressed.current = true; return; }
+    if (!MOVEMENT_KEYS.has(ev.code)) return;
+    ev.preventDefault();
+    const keys = pressedKeys.current;
+    const wasEmpty = keys.size === 0;
+    keys.add(ev.code);
+    if (wasEmpty) {
+      lastTime.current = performance.now() / 1000;
+      animationFrameId.current = requestAnimationFrame(runLoop);
+    }
+  }, [runLoop]);
+
+  const handleKeyUp = useCallback((ev: KeyboardEvent) => {
+    if (ev.key === "Shift") { shiftPressed.current = false; return; }
+    if (ev.key === "Alt") { altPressed.current = false; return; }
+    if (!MOVEMENT_KEYS.has(ev.code)) return;
+    ev.preventDefault();
+    pressedKeys.current.delete(ev.code);
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown, { passive: false });
+    window.addEventListener("keyup", handleKeyUp, { passive: false });
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keyup", handleKeyUp);
+      if (animationFrameId.current != null) {
+        cancelAnimationFrame(animationFrameId.current);
+        animationFrameId.current = null;
+      }
+    };
+  }, [handleKeyDown, handleKeyUp]);
 
   const graphData = useMemo(() => ({ nodes, links }), [nodes, links]);
 
@@ -146,7 +265,7 @@ export function Graph3D({
         s === hoveredNodeId || t === hoveredNodeId || s === selectedNodeId || t === selectedNodeId;
       if (highlight) return LINK_WIDTH_HIGHLIGHT;
       const w = link.value ?? 1;
-      return Math.min(MAX_LINK_WIDTH, LINK_WIDTH_DIM + w * 0.4);
+      return Math.min(MAX_LINK_WIDTH, LINK_WIDTH_DIM + w * 0.5);
     },
     [hoveredNodeId, selectedNodeId]
   );
@@ -230,7 +349,7 @@ export function Graph3D({
         nodeColor={nodeColor}
         linkColor={linkColor}
         linkWidth={linkWidth}
-        linkOpacity={0.5}
+        linkOpacity={0.75}
         linkDirectionalParticles={linkDirectionalParticles}
         linkDirectionalParticleWidth={0.8}
         linkDirectionalParticleColor={() => "rgba(38,198,255,0.5)"}
@@ -252,6 +371,12 @@ export function Graph3D({
         <RotateCcw className="h-4 w-4" />
         Reset camera
       </button>
+      <p
+        className="absolute bottom-4 right-4 z-10 text-[10px] text-aurora-text2/80 select-none pointer-events-none"
+        aria-hidden
+      >
+        Move: WASD / Arrow keys · Q/E up-down · Shift/Alt speed
+      </p>
     </div>
   );
 }

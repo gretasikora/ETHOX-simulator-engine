@@ -1,8 +1,8 @@
 /** Age → color: young = cool teal/cyan, middle = blue/violet, older = amber/orange. Missing/invalid = neutral. */
-const AGE_COLOR_LOW = "#2DD4BF";   // teal (young)
-const AGE_COLOR_MID = "#7C3AED";   // violet (middle)
-const AGE_COLOR_HIGH = "#F59E0B";  // amber (older)
-const AGE_NEUTRAL = "#64748B";     // muted slate when missing
+const AGE_COLOR_LOW = "#5EEAD4";   // teal (young) - brighter
+const AGE_COLOR_MID = "#A78BFA";   // violet (middle) - brighter
+const AGE_COLOR_HIGH = "#FBBF24";  // amber (older) - brighter
+const AGE_NEUTRAL = "#94A3B8";     // muted slate when missing - brighter
 
 export const AGE_COLOR_MIN = 18;
 export const AGE_COLOR_MAX = 80;
@@ -45,8 +45,8 @@ function lerpHex(t: number, hexA: string, hexB: string): string {
   return `#${[r, g, b].map((x) => Math.max(0, Math.min(255, x)).toString(16).padStart(2, "0")).join("")}`;
 }
 
-const AURORA_LOW = "#2AFADF";
-const AURORA_HIGH = "#7C3AED";
+const AURORA_LOW = "#67FFF5";
+const AURORA_HIGH = "#A78BFA";
 
 export function getGradientColor(value: number, min: number, max: number): string {
   const range = max - min;

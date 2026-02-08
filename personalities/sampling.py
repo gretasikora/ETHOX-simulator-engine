@@ -25,7 +25,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from .calculate_demographics import calculate_gender_ratio, calculate_age_group_ratios
-from config import NUM_AGENTS
+from config import NUM_AGENTS, TRAIT_VARIANCE_SCALE
 
 
 # -----------------------------
@@ -526,14 +526,18 @@ def sample_society(
     Sigma: np.ndarray,
     seed: int = 123,
     clamp_1_5: bool = True,
+    variance_scale: float = 1.0,
 ) -> pd.DataFrame:
     """
     Sample n people:
       1) sample gender ~ p_gender
       2) sample age_group ~ p_age
-      3) traits ~ MVN(mu_{g,a}, Sigma)
+      3) traits ~ MVN(mu_{g,a}, variance_scale^2 * Sigma)
+
+    variance_scale: 1.0 = full BFI-2 variance (many extremes). <1.0 pulls traits toward cell means.
     """
     rng = np.random.default_rng(seed)
+    Sigma_scaled = (variance_scale ** 2) * Sigma
 
     p_gender = normalize_probs(p_gender)
     p_age = normalize_probs(p_age)
@@ -547,7 +551,7 @@ def sample_society(
     X = np.zeros((n, len(FACETS)))
     for i in range(n):
         mu = cell_mu[(gender_draw[i], age_draw[i])]
-        x = rng.multivariate_normal(mean=mu, cov=Sigma)
+        x = rng.multivariate_normal(mean=mu, cov=Sigma_scaled)
         if clamp_1_5:
             x = np.clip(x, 1.0, 5.0)
         x = np.round(x, 1)
@@ -598,6 +602,7 @@ def generate_personality_traits(
         Sigma=Sigma,
         seed=seed,
         clamp_1_5=True,
+        variance_scale=TRAIT_VARIANCE_SCALE,
     )
 
     traits_list: List[Dict[str, float]] = []
@@ -610,11 +615,14 @@ def generate_personality_traits(
 # -----------------------------
 # 10) Generate society on demand (for simulation / API)
 # -----------------------------
-def generate_society(n: int, seed: int = 42) -> pd.DataFrame:
+def generate_society(n: int, seed: int = 42, variance_scale: float | None = None) -> pd.DataFrame:
     """
     Generate n agents with BFI-2 traits, gender, age_group.
     Same structure as synthetic_society_*.csv. No file I/O.
+    variance_scale: if None, uses config.TRAIT_VARIANCE_SCALE.
     """
+    if variance_scale is None:
+        variance_scale = TRAIT_VARIANCE_SCALE
     df_bfi2 = load_bfi2_data(local_paths=['./BFI2.csv'], verbose=False)
     age_col = "age" if "age" in df_bfi2.columns else "Age"
     gender_col = "gender" if "gender" in df_bfi2.columns else "Gender"
@@ -634,6 +642,7 @@ def generate_society(n: int, seed: int = 42) -> pd.DataFrame:
         Sigma=Sigma,
         seed=seed,
         clamp_1_5=True,
+        variance_scale=variance_scale,
     )
 
 
@@ -686,6 +695,7 @@ def main():
         Sigma=Sigma,
         seed=42,
         clamp_1_5=True,
+        variance_scale=TRAIT_VARIANCE_SCALE,
     )
 
     # Quick checks: do demographics match input (approximately)?
