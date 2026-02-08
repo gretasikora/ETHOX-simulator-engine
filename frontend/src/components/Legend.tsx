@@ -39,12 +39,6 @@ export function Legend() {
               <div className="mt-0.5 flex justify-between text-aurora-text2/80">0 — 1</div>
             </div>
           )}
-          {colorBy === "centrality" && (
-            <div>
-              <div className="aurora-gradient h-1.5 w-28 rounded opacity-90" />
-              <div className="mt-0.5 flex justify-between text-aurora-text2/80">Low — High</div>
-            </div>
-          )}
         </div>
         {showGenderEncoding && (
         <div>
@@ -74,7 +68,7 @@ export function Legend() {
         <div>
           <div className="font-medium uppercase tracking-[0.1em] text-aurora-text2/90">Size</div>
           <div className="text-aurora-text1/90">
-            {sizeBy === "degree" ? "Degree" : sizeBy === "level_of_care" ? "Level of care" : "Centrality"}
+            {sizeBy === "degree" ? "Degree" : "Level of care"}
           </div>
         </div>
       </div>

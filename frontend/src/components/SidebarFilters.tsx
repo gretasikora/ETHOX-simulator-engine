@@ -129,7 +129,7 @@ export function SidebarFilters({
             label="Node encoding"
             open={filtersSectionOpen.nodeEncoding}
             onToggle={() => setFiltersSectionOpen("nodeEncoding", !filtersSectionOpen.nodeEncoding)}
-            hint="Color = selected encoding (age, trait, or centrality). Shape = gender when enabled."
+            hint="Color = selected encoding (age or trait). Shape = gender when enabled."
           />
           {filtersSectionOpen.nodeEncoding && (
           <div className="rounded-lg border border-aurora-border/60 bg-aurora-surface0/60 p-2.5 space-y-3">

@@ -15,7 +15,6 @@ export interface Insight {
 /** All thresholds in one place */
 export const THRESHOLDS = {
   density: { loose: 0.02, dense: 0.15 },
-  cohesion: { highSilo: 0.7, moderate: 0.4 },
   giniInfluence: { concentrated: 0.45, veryConcentrated: 0.6 },
   top5BetweennessShare: { highBrokerage: 0.6 },
   polarization: { high: 0.4, moderate: 0.25 },
@@ -56,26 +55,6 @@ export function generateInsights(
     });
   }
 
-  if (structural.cohesion > THRESHOLDS.cohesion.highSilo) {
-    list.push({
-      id: nextId(),
-      severity: "watch",
-      title: "Strong cluster silos",
-      body: "Messaging may not cross groups easily; consider bridge agents.",
-      metricRefs: ["cohesion"],
-      metricValues: { cohesion: structural.cohesion.toFixed(2) },
-    });
-  } else if (structural.cohesion > THRESHOLDS.cohesion.moderate) {
-    list.push({
-      id: nextId(),
-      severity: "info",
-      title: "Moderate clustering",
-      body: "Some separation between clusters; cross-group outreach may require targeted efforts.",
-      metricRefs: ["cohesion"],
-      metricValues: { cohesion: structural.cohesion.toFixed(2) },
-    });
-  }
-
   if (structural.giniInfluence > THRESHOLDS.giniInfluence.veryConcentrated) {
     list.push({
       id: nextId(),
@@ -104,17 +83,6 @@ export function generateInsights(
       body: "A few bridge agents connect communities; losing them could fragment the network.",
       metricRefs: ["top5BetweennessShare"],
       metricValues: { top5BetweennessShare: (structural.top5BetweennessShare * 100).toFixed(0) + "%" },
-    });
-  }
-
-  if (structural.externalConnectivity < 0.3) {
-    list.push({
-      id: nextId(),
-      severity: "watch",
-      title: "Low external connectivity",
-      body: "Most edges stay within clusters; cross-cluster diffusion may be limited.",
-      metricRefs: ["externalConnectivity"],
-      metricValues: { externalConnectivity: structural.externalConnectivity.toFixed(2) },
     });
   }
 
@@ -153,7 +121,7 @@ export function generateInsights(
         id: nextId(),
         severity: "watch",
         title: "Moderate opinion spread",
-        body: "Opinions are diverging; monitor for emerging clusters of resistance or support.",
+        body: "Opinions are diverging; monitor for emerging pockets of resistance or support.",
         metricRefs: ["polarization"],
         metricValues: { polarization: live.polarization.toFixed(2) },
       });
@@ -182,32 +150,6 @@ export function generateInsights(
           meanAdoptionDay0: liveAtDay0.meanAdoption.toFixed(2),
         },
       });
-    }
-
-    for (const c of live.topNegativeClusters.slice(0, 2)) {
-      if (c.meanOpinion < -0.2) {
-        list.push({
-          id: nextId(),
-          severity: "watch",
-          title: `Cluster ${c.clusterId} resistance pocket`,
-          body: `Cluster ${c.clusterId} shows strongly negative mean opinion; likely resistance pocket.`,
-          metricRefs: ["clusterOpinions"],
-          metricValues: { clusterId: c.clusterId, meanOpinion: c.meanOpinion.toFixed(2), size: c.size },
-        });
-      }
-    }
-
-    for (const c of live.topPositiveClusters.slice(0, 2)) {
-      if (c.meanOpinion > 0.3) {
-        list.push({
-          id: nextId(),
-          severity: "info",
-          title: `Cluster ${c.clusterId} supportive`,
-          body: `Cluster ${c.clusterId} shows positive mean opinion; receptive to messaging.`,
-          metricRefs: ["clusterOpinions"],
-          metricValues: { clusterId: c.clusterId, meanOpinion: c.meanOpinion.toFixed(2), size: c.size },
-        });
-      }
     }
 
     if (live.giniOpinion > 0.4) {

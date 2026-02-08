@@ -18,8 +18,8 @@ export function RunSimulationPage() {
     const n = Number(numAgents);
     if (Number.isNaN(n) || !Number.isInteger(n)) {
       errs.numAgents = "Must be a whole number.";
-    } else if (n < 10 || n > 5000) {
-      errs.numAgents = "Must be between 10 and 5000.";
+    } else if (n < 1) {
+      errs.numAgents = "Must be at least 1.";
     }
     setValidationErrors(errs);
     return Object.keys(errs).length === 0;
@@ -82,15 +82,13 @@ export function RunSimulationPage() {
             <input
               id="numAgents"
               type="number"
-              min={10}
-              max={5000}
-              step={10}
+              min={1}
               value={numAgents}
-              onChange={(e) => setNumAgents(Number(e.target.value) || 10)}
+              onChange={(e) => setNumAgents(Number(e.target.value) || 1)}
               className="w-full rounded-lg border border-aurora-border/70 bg-aurora-surface0/80 px-3 py-2.5 text-sm text-aurora-text0 focus:border-aurora-accent1 focus:outline-none focus:ring-1 focus:ring-aurora-accent1/50"
             />
             <p className="mt-1 text-xs text-aurora-text2">
-              Min 10, max 5000, step 10
+              Any positive whole number
             </p>
             {validationErrors.numAgents && (
               <p className="mt-1.5 text-xs text-aurora-danger">{validationErrors.numAgents}</p>

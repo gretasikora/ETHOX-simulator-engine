@@ -5,9 +5,6 @@ export interface StructuralMetrics {
   agentCount: number;
   edgeCount: number;
   density: number;
-  withinClusterEdges: number;
-  cohesion: number;
-  externalConnectivity: number;
   giniInfluence: number;
   avgBetweenness: number;
   top5BetweennessShare: number;
@@ -21,9 +18,6 @@ export interface LiveMetrics {
   adoptionAbove70Share: number;
   meanOpinion: number;
   giniOpinion: number;
-  clusterOpinions: { clusterId: number; meanOpinion: number; size: number }[];
-  topPositiveClusters: { clusterId: number; meanOpinion: number; size: number }[];
-  topNegativeClusters: { clusterId: number; meanOpinion: number; size: number }[];
 }
 
 export interface SocietyMetrics {
@@ -57,26 +51,8 @@ export function computeStructuralMetrics(
 ): StructuralMetrics {
   const N = nodes.length;
   const E = edges.length;
-  const nodeById = new Map<string, NodeData>();
-  nodes.forEach((n) => nodeById.set(String(n.agent_id), n));
-
-  let withinClusterEdges = 0;
-  const edgeHasWithinCluster = "within_cluster" in (edges[0] ?? {});
-  for (const e of edges) {
-    const src = nodeById.get(String(e.source));
-    const tgt = nodeById.get(String(e.target));
-    if (edgeHasWithinCluster && typeof (e as EdgeData & { within_cluster?: boolean }).within_cluster === "boolean") {
-      if ((e as EdgeData & { within_cluster: boolean }).within_cluster) withinClusterEdges++;
-    } else if (src && tgt && src.cluster === tgt.cluster) {
-      withinClusterEdges++;
-    }
-  }
-
   const maxEdges = N < 2 ? 0 : (N * (N - 1)) / 2;
   const density = maxEdges === 0 ? 0 : (2 * E) / (N * (N - 1));
-
-  const cohesion = E === 0 ? 0 : withinClusterEdges / E;
-  const externalConnectivity = 1 - cohesion;
 
   const influenceScores = nodes.map((n) => getInfluenceScore(n));
   const giniInfluence = gini(influenceScores);
@@ -95,9 +71,6 @@ export function computeStructuralMetrics(
     agentCount: N,
     edgeCount: E,
     density,
-    withinClusterEdges,
-    cohesion,
-    externalConnectivity,
     giniInfluence,
     avgBetweenness,
     top5BetweennessShare,
@@ -132,23 +105,6 @@ export function computeLiveMetrics(
   const opinionShifted = opinions.map((o) => (o + 1) / 2);
   const giniOpinion = gini(opinionShifted);
 
-  const clusterSums = new Map<number, { sum: number; count: number }>();
-  for (const node of nodes) {
-    const o = agents[String(node.agent_id)]?.opinion ?? 0;
-    const c = node.cluster;
-    const cur = clusterSums.get(c) ?? { sum: 0, count: 0 };
-    clusterSums.set(c, { sum: cur.sum + o, count: cur.count + 1 });
-  }
-  const clusterOpinions = Array.from(clusterSums.entries()).map(([clusterId, { sum, count }]) => ({
-    clusterId,
-    meanOpinion: count === 0 ? 0 : sum / count,
-    size: count,
-  }));
-
-  const byMean = [...clusterOpinions].sort((a, b) => b.meanOpinion - a.meanOpinion);
-  const topPositiveClusters = byMean.slice(0, 3);
-  const topNegativeClusters = [...clusterOpinions].sort((a, b) => a.meanOpinion - b.meanOpinion).slice(0, 3);
-
   return {
     polarization,
     polarizationP90P10,
@@ -157,85 +113,6 @@ export function computeLiveMetrics(
     adoptionAbove70Share,
     meanOpinion,
     giniOpinion,
-    clusterOpinions,
-    topPositiveClusters,
-    topNegativeClusters,
   };
 }
 
-export interface ClusterRow {
-  clusterId: number;
-  size: number;
-  internalEdges: number;
-  totalEdgesInvolved: number;
-  cohesionWithin: number;
-  avgInfluence: number;
-  meanOpinion?: number;
-  adoptionShare?: number;
-}
-
-export function computeClusterBreakdown(
-  nodes: NodeData[],
-  edges: EdgeData[],
-  agents?: Record<string, AgentFrameState>
-): ClusterRow[] {
-  const nodeById = new Map<string, NodeData>();
-  nodes.forEach((n) => nodeById.set(String(n.agent_id), n));
-
-  const clusterNodes = new Map<number, NodeData[]>();
-  for (const n of nodes) {
-    const list = clusterNodes.get(n.cluster) ?? [];
-    list.push(n);
-    clusterNodes.set(n.cluster, list);
-  }
-
-  const internalEdgesByCluster = new Map<number, number>();
-  const totalEdgesByCluster = new Map<number, number>();
-  for (const e of edges) {
-    const src = nodeById.get(String(e.source));
-    const tgt = nodeById.get(String(e.target));
-    if (!src || !tgt) continue;
-    const c1 = src.cluster;
-    const c2 = tgt.cluster;
-    totalEdgesByCluster.set(c1, (totalEdgesByCluster.get(c1) ?? 0) + 1);
-    totalEdgesByCluster.set(c2, (totalEdgesByCluster.get(c2) ?? 0) + 1);
-    if (c1 === c2) internalEdgesByCluster.set(c1, (internalEdgesByCluster.get(c1) ?? 0) + 1);
-  }
-
-  function getInfluence(n: NodeData) {
-    const t = n.traits ?? {};
-    const v = t.social_influence;
-    if (typeof v === "number") return v;
-    return n.degree_centrality ?? 0;
-  }
-
-  const rows: ClusterRow[] = [];
-  for (const [clusterId, list] of clusterNodes) {
-    const internalEdges = internalEdgesByCluster.get(clusterId) ?? 0;
-    const totalEdgesInvolved = totalEdgesByCluster.get(clusterId) ?? 0;
-    const cohesionWithin = totalEdgesInvolved === 0 ? 0 : internalEdges / totalEdgesInvolved;
-    const avgInfluence =
-      list.length === 0 ? 0 : list.reduce((a, n) => a + getInfluence(n), 0) / list.length;
-
-    let meanOpinion: number | undefined;
-    let adoptionShare: number | undefined;
-    if (agents) {
-      const opinions = list.map((n) => agents[String(n.agent_id)]?.opinion ?? 0);
-      const adoptions = list.map((n) => agents[String(n.agent_id)]?.adoption ?? 0);
-      meanOpinion = opinions.length ? opinions.reduce((a, b) => a + b, 0) / opinions.length : 0;
-      adoptionShare = adoptions.length ? adoptions.filter((x) => x > 0.7).length / adoptions.length : 0;
-    }
-
-    rows.push({
-      clusterId,
-      size: list.length,
-      internalEdges,
-      totalEdgesInvolved,
-      cohesionWithin,
-      avgInfluence,
-      meanOpinion,
-      adoptionShare,
-    });
-  }
-  return rows;
-}

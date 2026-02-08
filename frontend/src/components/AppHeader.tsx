@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Listbox } from "@headlessui/react";
-import { Search, LayoutGrid, FlaskConical, ChevronUp, Pencil, Play, RotateCcw } from "lucide-react";
+import { LayoutGrid, FlaskConical, ChevronUp, Pencil, Play, RotateCcw } from "lucide-react";
 import { useUIStore } from "../store/useUIStore";
 import { useGraphStore } from "../store/useGraphStore";
 import { useSimulationStore } from "../store/useSimulationStore";
@@ -10,9 +10,7 @@ interface AppHeaderProps {
   onSearchSelect: (agentId: string) => void;
 }
 
-export function AppHeader({ onSearchSelect }: AppHeaderProps) {
-  const searchQuery = useUIStore((s) => s.searchQuery);
-  const setSearchQuery = useUIStore((s) => s.setSearchQuery);
+export function AppHeader({ onSearchSelect: _onSearchSelect }: AppHeaderProps) {
   const colorBy = useUIStore((s) => s.colorBy);
   const setColorBy = useUIStore((s) => s.setColorBy);
   const sizeBy = useUIStore((s) => s.sizeBy);
@@ -20,7 +18,6 @@ export function AppHeader({ onSearchSelect }: AppHeaderProps) {
   const selectedTrait = useUIStore((s) => s.selectedTrait);
   const setSelectedTrait = useUIStore((s) => s.setSelectedTrait);
   const traitKeys = useGraphStore((s) => s.traitKeys);
-  const nodes = useGraphStore((s) => s.nodes);
   const exploreMode = useUIStore((s) => s.exploreMode);
   const setExploreMode = useUIStore((s) => s.setExploreMode);
   const experiments = useExperimentStore((s) => s.experiments);
@@ -38,33 +35,6 @@ export function AppHeader({ onSearchSelect }: AppHeaderProps) {
   const runSimulation = useSimulationStore((s) => s.runSimulation);
   const revertToDefault = useSimulationStore((s) => s.revertToDefault);
   const applySimulationGraph = useSimulationStore((s) => s.applySimulationGraph);
-
-  const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      const q = (e.currentTarget.value || "").trim().toLowerCase();
-      const found = nodes.find(
-        (n) =>
-          String(n.agent_id).toLowerCase() === q ||
-          String(n.agent_id).toLowerCase().includes(q)
-      );
-      if (found) {
-        setSearchQuery(String(found.agent_id));
-        onSearchSelect(String(found.agent_id));
-      }
-    }
-  };
-
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
-    const q = e.target.value.trim().toLowerCase();
-    if (!q) return;
-    const found = nodes.find(
-      (n) =>
-        String(n.agent_id).toLowerCase() === q ||
-        String(n.agent_id).toLowerCase().includes(q)
-    );
-    if (found) onSearchSelect(String(found.agent_id));
-  };
 
   const toggleGroupBase =
     "rounded px-2 py-1 text-xs font-medium transition-all duration-150";
@@ -89,7 +59,7 @@ export function AppHeader({ onSearchSelect }: AppHeaderProps) {
         <div className="flex items-center gap-2 sm:gap-3">
           <span className="hidden text-[10px] uppercase tracking-wider text-aurora-text2/80 sm:inline">Color</span>
           <div className="flex rounded-md bg-aurora-surface0/40 p-0.5">
-            {(["age", "trait", "centrality"] as const).map((opt) => (
+            {(["age", "trait"] as const).map((opt) => (
               <button
                 key={opt}
                 type="button"
@@ -143,7 +113,7 @@ export function AppHeader({ onSearchSelect }: AppHeaderProps) {
         <div className="flex items-center gap-2">
           <span className="hidden text-[10px] uppercase tracking-wider text-aurora-text2/80 sm:inline">Size</span>
           <div className="flex rounded-md bg-aurora-surface0/40 p-0.5">
-            {(["degree", "centrality", "level_of_care"] as const).map((opt) => (
+            {(["degree", "level_of_care"] as const).map((opt) => (
               <button
                 key={opt}
                 type="button"

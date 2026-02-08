@@ -1,18 +1,12 @@
 import { useMemo } from "react";
 import type { Experiment, ExperimentTargetParams } from "../../types/experiment";
 import type { NodeData } from "../../api/client";
-import type { ClusterInfo } from "../../store/useGraphStore";
-import {
-  computeTargets,
-  computeCrossClusterEdgeCounts,
-} from "../../utils/experimentTargeting";
-import { getClusterColor } from "../../utils/color";
+import { computeTargets } from "../../utils/experimentTargeting";
 
 interface TargetModeControlsProps {
   experiment: Experiment;
   nodes: NodeData[];
   edges: { source: string; target: string; weight: number }[];
-  clusterList: ClusterInfo[];
   onExperimentUpdate: (patch: Partial<Experiment>) => void;
   manualTargetIds: string[];
   onClearManual: () => void;
@@ -22,7 +16,6 @@ interface TargetModeControlsProps {
 
 const TARGET_MODES: { value: Experiment["targetMode"]; label: string }[] = [
   { value: "all", label: "All agents" },
-  { value: "clusters", label: "By cluster(s)" },
   { value: "top_influencers", label: "Top influencers" },
   { value: "bridge_nodes", label: "Bridge nodes" },
   { value: "manual", label: "Manual selection" },
@@ -32,7 +25,6 @@ export function TargetModeControls({
   experiment,
   nodes,
   edges,
-  clusterList,
   onExperimentUpdate,
   manualTargetIds,
   onClearManual,
@@ -49,11 +41,6 @@ export function TargetModeControls({
         : experiment;
     return computeTargets(expWithManual, nodes, edges);
   }, [experiment, targetMode, params, manualTargetIds, nodes, edges]);
-
-  const crossClusterCounts = useMemo(
-    () => computeCrossClusterEdgeCounts(nodes, edges),
-    [nodes, edges]
-  );
 
   const topInfluencerPreview = useMemo(() => {
     if (targetMode !== "top_influencers") return [];
@@ -73,29 +60,12 @@ export function TargetModeControls({
 
   const topBridgePreview = useMemo(() => {
     if (targetMode !== "bridge_nodes") return [];
-    const method = params.bridgeMethod ?? "betweenness";
     const topN = Math.max(1, Math.min(50, params.topN ?? 10));
-    if (method === "betweenness") {
-      return [...nodes]
-        .sort((a, b) => (b.betweenness_centrality ?? 0) - (a.betweenness_centrality ?? 0))
-        .slice(0, topN)
-        .map((n) => String(n.agent_id));
-    }
     return [...nodes]
-      .sort(
-        (a, b) =>
-          (crossClusterCounts.get(String(b.agent_id)) ?? 0) -
-          (crossClusterCounts.get(String(a.agent_id)) ?? 0)
-      )
+      .sort((a, b) => (b.betweenness_centrality ?? 0) - (a.betweenness_centrality ?? 0))
       .slice(0, topN)
       .map((n) => String(n.agent_id));
-  }, [targetMode, params.bridgeMethod, params.topN, nodes, crossClusterCounts]);
-
-  const clusterTargetCount = useMemo(() => {
-    if (targetMode !== "clusters") return 0;
-    const set = new Set(params.clusters ?? []);
-    return nodes.filter((n) => set.has(n.cluster)).length;
-  }, [targetMode, params.clusters, nodes]);
+  }, [targetMode, params.topN, nodes]);
 
   return (
     <div className="space-y-3">
@@ -124,39 +94,6 @@ export function TargetModeControls({
         <p className="text-sm text-aurora-text2">Targets: {nodes.length} agents</p>
       )}
 
-      {targetMode === "clusters" && (
-        <div className="space-y-2">
-          <p className="text-xs text-aurora-text2">Select clusters</p>
-          <div className="flex flex-wrap gap-2">
-            {clusterList.map((c) => {
-              const selected = (params.clusters ?? []).includes(c.id);
-              return (
-                <button
-                  key={c.id}
-                  type="button"
-                  onClick={() => {
-                    const next = selected
-                      ? (params.clusters ?? []).filter((x) => x !== c.id)
-                      : [...(params.clusters ?? []), c.id].sort((a, b) => a - b);
-                    onExperimentUpdate({ targetParams: { ...params, clusters: next } });
-                  }}
-                  className={`flex items-center gap-2 rounded-lg border px-2 py-1.5 text-sm ${
-                    selected ? "border-aurora-accent1 bg-aurora-accent1/20" : "border-aurora-border bg-aurora-surface1"
-                  }`}
-                >
-                  <span
-                    className="h-2.5 w-2.5 rounded-full"
-                    style={{ backgroundColor: getClusterColor(c.id) }}
-                  />
-                  Cluster {c.id} ({c.count})
-                </button>
-              );
-            })}
-          </div>
-          <p className="text-sm text-aurora-text2">Targets: {clusterTargetCount} agents</p>
-        </div>
-      )}
-
       {targetMode === "top_influencers" && (
         <div className="space-y-2">
           <div>
@@ -174,8 +111,6 @@ export function TargetModeControls({
               className="mt-1 w-full rounded border border-aurora-border bg-aurora-surface1 px-2 py-1.5 text-sm text-aurora-text0"
             >
               <option value="social_influence">Social influence (trait)</option>
-              <option value="degree_centrality">Degree centrality</option>
-              <option value="betweenness_centrality">Betweenness centrality</option>
             </select>
           </div>
           <div>
@@ -205,24 +140,6 @@ export function TargetModeControls({
 
       {targetMode === "bridge_nodes" && (
         <div className="space-y-2">
-          <div>
-            <label className="text-xs text-aurora-text2">Method</label>
-            <select
-              value={params.bridgeMethod ?? "betweenness"}
-              onChange={(e) =>
-                onExperimentUpdate({
-                  targetParams: {
-                    ...params,
-                    bridgeMethod: e.target.value as "betweenness" | "cross_cluster_edges",
-                  },
-                })
-              }
-              className="mt-1 w-full rounded border border-aurora-border bg-aurora-surface1 px-2 py-1.5 text-sm text-aurora-text0"
-            >
-              <option value="betweenness">Betweenness centrality</option>
-              <option value="cross_cluster_edges">Cross-cluster edges</option>
-            </select>
-          </div>
           <div>
             <label className="text-xs text-aurora-text2">Top N (1–50)</label>
             <input
@@ -302,7 +219,7 @@ export function TargetModeControls({
         </div>
       )}
 
-      {targetMode !== "all" && targetMode !== "manual" && targetMode !== "clusters" && (
+      {targetMode !== "all" && targetMode !== "manual" && (
         <p className="text-sm text-aurora-text2">Targets: {previewTargets.length} agents</p>
       )}
     </div>

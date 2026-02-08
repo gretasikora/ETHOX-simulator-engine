@@ -114,9 +114,9 @@ class RunSimulationView(APIView):
                 {"detail": "'num_agents' must be an integer."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        if num_agents < 10 or num_agents > 5000:
+        if num_agents < 1:
             return Response(
-                {"detail": "'num_agents' must be between 10 and 5000."},
+                {"detail": "'num_agents' must be at least 1."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 

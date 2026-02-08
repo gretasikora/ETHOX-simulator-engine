@@ -1,10 +1,8 @@
 # simulation/init_network.py
-from pathlib import Path
-
-import pandas as pd
 from agents.agent import Agent
+from personalities.sampling import FACETS, generate_society
 
-# BFI-2 facet columns in synthetic society CSV
+# BFI-2 facet columns (matches personalities/sampling FACETS)
 FACET_COLUMNS = [
     "Sociability", "Assertiveness", "Energy Level", "Compassion", "Respectfulness",
     "Trust", "Organization", "Productiveness", "Responsibility",
@@ -12,17 +10,13 @@ FACET_COLUMNS = [
     "Intellectual Curiosity", "Aesthetic Sensitivity", "Creative Imagination",
 ]
 
-_PROJECT_ROOT = Path(__file__).resolve().parent.parent
-SYNTHETIC_SOCIETY_PATH = _PROJECT_ROOT / "synthetic_society_20.csv"
 
-
-def init_agents():
+def init_agents(num_agents: int) -> list[Agent]:
     """
-    Load agents from synthetic_society_20.csv.
-    CSV provides only: traits (BFI-2), gender, age_group.
-    level_of_care, effect_on_usage, text_opinion are determined by the simulation (LLM), not the CSV.
+    Generate num_agents with BFI-2 traits and demographics.
+    level_of_care, effect_on_usage, text_opinion are determined by the simulation (LLM).
     """
-    df = pd.read_csv(str(SYNTHETIC_SOCIETY_PATH))
+    df = generate_society(n=num_agents)
     agents = []
     for i in range(len(df)):
         row = df.iloc[i]

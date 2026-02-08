@@ -36,20 +36,10 @@ export function generateDemoRun(options: GenerateDemoRunOptions): PlaybackRun {
   const adj = buildAdjacency(edges);
 
   const targetedSet = new Set(targetedAgentIds.map((id) => String(id)));
-  const clusterBias = new Map<number, number>();
-  for (const n of nodes) {
-    const c = n.cluster;
-    if (!clusterBias.has(c)) {
-      clusterBias.set(c, (rng() - 0.5) * 0.15);
-    }
-  }
 
-  const initialOpinion = (id: string): number => {
-    const node = nodes.find((n) => String(n.agent_id) === id);
-    if (!node) return 0;
+  const initialOpinion = (_id: string): number => {
     const base = (rng() - 0.5) * 0.4;
-    const bias = clusterBias.get(node.cluster) ?? 0;
-    return clamp(base + bias, -0.2, 0.2);
+    return clamp(base, -0.2, 0.2);
   };
 
   const initialAdoption = (): number => rng() * 0.1;

@@ -6,7 +6,7 @@ import forceAtlas2 from "graphology-layout-forceatlas2";
 import { useGraphStore } from "../store/useGraphStore";
 import { useUIStore } from "../store/useUIStore";
 import { useExperimentStore } from "../store/useExperimentStore";
-import { usePlaybackStore } from "../store/usePlaybackStore";
+import { usePlaybackStore, type PlaybackColorMode } from "../store/usePlaybackStore";
 import { useSimulationStore } from "../store/useSimulationStore";
 import {
   buildGraphology,
@@ -103,7 +103,7 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
   const isManualTargetModeRef = useRef(false);
   const playbackAgentStateRef = useRef<Record<string, { opinion: number; sentiment: number; adoption: number }> | null>(null);
   const playbackTargetedRef = useRef<string[]>([]);
-  const playbackColorModeRef = useRef<"cluster" | "opinion">("opinion");
+  const playbackColorModeRef = useRef<PlaybackColorMode>("opinion");
   const simulationNodeSizeOverrideRef = useRef<Record<string, number>>({});
   const simulationIsAnimatingRef = useRef(false);
   const careGlowByIdRef = useRef<Record<string, { glowStrength: number; borderColor: string }>>({});
@@ -382,8 +382,7 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
     };
   }, [nodes, edges]);
 
-  const effectiveColorBy =
-    playbackAgentState && playbackColorMode === "cluster" ? "age" : colorBy;
+  const effectiveColorBy = colorBy;
 
   useEffect(() => {
     const graph = graphInstanceRef.current;
@@ -397,7 +396,6 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
       sizeBy,
       selectedTrait || traitKeys[0] || "",
       traitKeys,
-      [],
       showAgeEncoding,
       showGenderEncoding
     );

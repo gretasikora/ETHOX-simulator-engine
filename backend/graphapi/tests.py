@@ -11,8 +11,8 @@ from .services import clear_cache
 def make_minimal_graph():
     return {
         "nodes": [
-            {"agent_id": "agent_0", "degree": 2, "cluster": 0, "traits": {"spending": 0.5}, "degree_centrality": 0.1, "betweenness_centrality": 0.01},
-            {"agent_id": "agent_1", "degree": 1, "cluster": 0, "traits": {"spending": 0.6}, "degree_centrality": 0.05, "betweenness_centrality": 0.0},
+            {"agent_id": "agent_0", "degree": 2, "traits": {"spending": 0.5}, "degree_centrality": 0.1, "betweenness_centrality": 0.01},
+            {"agent_id": "agent_1", "degree": 1, "traits": {"spending": 0.6}, "degree_centrality": 0.05, "betweenness_centrality": 0.0},
         ],
         "edges": [
             {"source": "agent_0", "target": "agent_1", "weight": 0.8},

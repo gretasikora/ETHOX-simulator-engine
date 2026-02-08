@@ -10,13 +10,13 @@ Used when you only run the backend and never run the simulation or CSV-based ini
 
 | Step | File | What happens |
 |------|------|--------------|
-| 1 | **`backend/data/generate_network.py`** | Defines `TRAIT_KEYS`: `spending`, `loyalty`, `social_influence`, `risk_tolerance`, `price_sensitivity`, `tech_adoption`, `impulsiveness`, `environmental_consciousness`. For each node, builds a `traits` dict: each key gets a value in [0, 1] (random base + cluster bias + jitter). Also sets `age`, `gender`, `cluster`, centralities. Writes **`backend/data/network.json`** (nodes + edges). |
-| 2 | **`backend/data/network.json`** | On-disk graph: each node has `agent_id`, `traits` (dict of trait name → 0–1), `cluster`, `degree`, `degree_centrality`, `betweenness_centrality`, `age`, `gender`. |
+| 1 | **`backend/data/generate_network.py`** | Defines `TRAIT_KEYS`: `spending`, `loyalty`, `social_influence`, `risk_tolerance`, `price_sensitivity`, `tech_adoption`, `impulsiveness`, `environmental_consciousness`. For each node, builds a `traits` dict: each key gets a value in [0, 1] (random base + jitter). Also sets `age`, `gender`, centralities. Writes **`backend/data/network.json`** (nodes + edges). |
+| 2 | **`backend/data/network.json`** | On-disk graph: each node has `agent_id`, `traits` (dict of trait name → 0–1), `degree`, `degree_centrality`, `betweenness_centrality`, `age`, `gender`. |
 | 3 | **`backend/graphapi/services.py`** | `load_graph()` reads `network.json`, normalizes each node so `node["traits"]` is a dict (default `{}`). `get_metadata(graph)` walks all nodes and collects `trait_keys` = sorted union of all trait names. |
-| 4 | **`backend/graphapi/views.py`** | `GraphView.get()` returns `{ "nodes": graph["nodes"], "edges": graph["edges"], "metadata": { "trait_keys": [...], "clusters": {...}, ... } }`. |
+| 4 | **`backend/graphapi/views.py`** | `GraphView.get()` returns `{ "nodes": graph["nodes"], "edges": graph["edges"], "metadata": { "trait_keys": [...], ... } }`. |
 | 5 | **Frontend** | `frontend/src/api/client.ts`: `fetchGraph()` calls `/api/graph/`. `NodeData` has `traits: Record<string, number>`. `useGraphStore` stores `nodes`, `metadata.trait_keys` → `traitKeys`. UI uses `traitKeys` for Color-by Trait, trait filter, and agent drawer. |
 
-**Trait source in this pipeline:** Only **`backend/data/generate_network.py`** (hardcoded `TRAIT_KEYS` + random 0–1 values with cluster bias). No CSV, no simulation.
+**Trait source in this pipeline:** Only **`backend/data/generate_network.py`** (hardcoded `TRAIT_KEYS` + random 0–1 values). No CSV, no simulation.
 
 ---
 
@@ -29,7 +29,7 @@ Used when you run the simulation init from a **CSV** and then export the graph f
 | 1 | **CSV (e.g. `synthetic_society_20.csv` / `synthetic_society_200.csv`)** | Contains BFI-2–style columns: `Sociability`, `Assertiveness`, `Energy Level`, `Compassion`, `Respectfulness`, `Trust`, `Organization`, `Productiveness`, `Responsibility`, `Anxiety`, `Depression`, `Emotional Volatility`, `Intellectual Curiosity`, `Aesthetic Sensitivity`, `Creative Imagination`, plus `gender`, `age_group`. Each row = one agent; trait columns are typically 1–5. (This CSV can be produced by **`personalities/sampling.py`** via `generate_personality_traits()` or by exporting BFI-2 data; the repo may also ship a pre-made CSV.) |
 | 2 | **`simulation/init_network.py`** | Reads the CSV (`SYNTHETIC_SOCIETY_PATH` = `synthetic_society_20.csv`). For each row, builds `traits = { col: float(row[col]) for col in FACET_COLUMNS }` (BFI-2 facet names). Creates **`Agent(i, traits, customer_behavior)`** (`agents/agent.py`: `Agent` holds `self.traits`). |
 | 3 | **`simulation/network.py`** | Uses `agents` and their `traits` (e.g. `compute_extrovertedness(traits_1_to_5)`, `compute_influencibility`, similarity, sampling). Builds the adjacency matrix that defines who is connected to whom. |
-| 4 | **`backend/data/generate_network_from_simulation.py`** | Calls `init_agents()` (from `simulation.init_network`) and `build_adjacency_matrix()` (from `simulation.network`). For each agent, copies `a.traits` and **normalizes 1–5 → 0–1** via `_normalize_trait_1_5_to_0_1` so the frontend trait filters/colors work. Builds nodes (with `agent_id`, `traits`, `cluster`, degree, centralities) and edges, then writes **`backend/data/network.json`**. |
+| 4 | **`backend/data/generate_network_from_simulation.py`** | Calls `init_agents()` (from `simulation.init_network`) and `build_adjacency_matrix()` (from `simulation.network`). For each agent, copies `a.traits` and **normalizes 1–5 → 0–1** via `_normalize_trait_1_5_to_0_1` so the frontend trait filters/colors work. Builds nodes (with `agent_id`, `traits`, degree, centralities) and edges, then writes **`backend/data/network.json`**. |
 | 5 | **Same as Pipeline 1 from here** | **`backend/data/network.json`** → **`backend/graphapi/services.py`** (`load_graph`, `get_metadata`) → **`backend/graphapi/views.py`** (GraphView) → **frontend** (`fetchGraph`, `useGraphStore`, trait dropdowns, filters, drawer). |
 
 **Trait source in this pipeline:** The **CSV** (e.g. `synthetic_society_*.csv`) read by **`simulation/init_network.py`**; optionally that CSV can be generated by **`personalities/sampling.py`** (`generate_personality_traits()` + export to CSV, or similar).

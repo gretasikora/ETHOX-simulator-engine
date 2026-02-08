@@ -6,7 +6,6 @@ import { computeTargets } from "../../utils/experimentTargeting";
 
 const TARGET_MODE_LABELS: Record<Experiment["targetMode"], string> = {
   all: "All agents",
-  clusters: "By cluster(s)",
   top_influencers: "Top influencers",
   bridge_nodes: "Bridge nodes",
   manual: "Manual selection",

@@ -11,7 +11,6 @@ interface UIState {
   hoveredNodeId: string | null;
   visibleNodeIds: string[];
   insightsPanelOpen: boolean;
-  selectedClusterId: number | null;
   exploreMode: "none" | "path" | "neighborhood";
   pathFrom: string | null;
   pathTo: string | null;
@@ -22,15 +21,14 @@ interface UIState {
   highlightedEdgeKeys: string[];
   exploreStatus: string;
   searchQuery: string;
-  colorBy: "age" | "trait" | "centrality";
-  sizeBy: "degree" | "centrality" | "level_of_care";
+  colorBy: "age" | "trait";
+  sizeBy: "degree" | "level_of_care";
   selectedTrait: string;
   showLabels: boolean;
   showAgeEncoding: boolean;
   showGenderEncoding: boolean;
   graphViewMode: "2d" | "3d";
   filters: {
-    clusters: number[];
     degreeRange: [number, number];
     traitRange: [number, number];
   };
@@ -56,7 +54,6 @@ interface UIState {
   setHoveredNode: (id: string | null) => void;
   setVisibleNodeIds: (ids: string[]) => void;
   setInsightsPanelOpen: (open: boolean) => void;
-  setSelectedClusterId: (id: number | null) => void;
   setExploreMode: (mode: "none" | "path" | "neighborhood") => void;
   setPathFrom: (id: string | null) => void;
   setPathTo: (id: string | null) => void;
@@ -67,11 +64,10 @@ interface UIState {
   clearHighlight: () => void;
   setExploreStatus: (msg: string) => void;
   setSearchQuery: (q: string) => void;
-  setColorBy: (v: "age" | "trait" | "centrality") => void;
-  setSizeBy: (v: "degree" | "centrality" | "level_of_care") => void;
+  setColorBy: (v: "age" | "trait") => void;
+  setSizeBy: (v: "degree" | "level_of_care") => void;
   setSelectedTrait: (trait: string) => void;
   toggleLabels: () => void;
-  setClusterFilter: (clusters: number[]) => void;
   setDegreeRange: (range: [number, number]) => void;
   setTraitRange: (range: [number, number]) => void;
   resetFilters: () => void;
@@ -80,7 +76,6 @@ interface UIState {
 }
 
 const defaultFilters = (): UIState["filters"] => ({
-  clusters: [],
   degreeRange: [0, 999],
   traitRange: [0, 1],
 });
@@ -90,7 +85,6 @@ export const useUIStore = create<UIState>((set, get) => ({
   hoveredNodeId: null,
   visibleNodeIds: [],
   insightsPanelOpen: false,
-  selectedClusterId: null,
   exploreMode: "none",
   pathFrom: null,
   pathTo: null,
@@ -101,7 +95,7 @@ export const useUIStore = create<UIState>((set, get) => ({
   highlightedEdgeKeys: [],
   exploreStatus: "",
   searchQuery: "",
-  colorBy: "centrality",
+  colorBy: "trait",
   sizeBy: "degree",
   selectedTrait: "",
   showLabels: true,
@@ -131,7 +125,6 @@ export const useUIStore = create<UIState>((set, get) => ({
   setHoveredNode: (id) => set({ hoveredNodeId: id }),
   setVisibleNodeIds: (ids) => set({ visibleNodeIds: ids }),
   setInsightsPanelOpen: (open) => set({ insightsPanelOpen: open }),
-  setSelectedClusterId: (id) => set({ selectedClusterId: id }),
   setExploreMode: (mode) => set({ exploreMode: mode }),
   setPathFrom: (id) => set({ pathFrom: id }),
   setPathTo: (id) => set({ pathTo: id }),
@@ -149,8 +142,6 @@ export const useUIStore = create<UIState>((set, get) => ({
   setSelectedTrait: (trait) => set({ selectedTrait: trait }),
   toggleLabels: () => set((s) => ({ showLabels: !s.showLabels })),
 
-  setClusterFilter: (clusters) =>
-    set((s) => ({ filters: { ...s.filters, clusters } })),
   setDegreeRange: (degreeRange) =>
     set((s) => ({ filters: { ...s.filters, degreeRange } })),
   setTraitRange: (traitRange) =>

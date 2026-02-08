@@ -61,16 +61,6 @@ export function MetricCards({
         caption="Structural"
       />
       <Card
-        title="Cohesion"
-        value={structural.cohesion.toFixed(2)}
-        caption="Within-cluster / total edges"
-      />
-      <Card
-        title="External connectivity"
-        value={structural.externalConnectivity.toFixed(2)}
-        caption="1 − cohesion"
-      />
-      <Card
         title="Influence Gini"
         value={structural.giniInfluence.toFixed(2)}
         caption="Structural"

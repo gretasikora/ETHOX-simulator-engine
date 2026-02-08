@@ -72,7 +72,7 @@ export function TopBar({ onSearchSelect }: TopBarProps) {
       <div className="flex items-center gap-2">
         <span className="text-xs text-gray-500">Color by</span>
         <div className="flex rounded-lg border border-dark-700 p-0.5">
-          {(["age", "trait", "centrality"] as const).map((opt) => (
+          {(["age", "trait"] as const).map((opt) => (
             <button
               key={opt}
               type="button"
@@ -106,7 +106,7 @@ export function TopBar({ onSearchSelect }: TopBarProps) {
       <div className="flex items-center gap-2">
         <span className="text-xs text-gray-500">Size by</span>
         <div className="flex rounded-lg border border-dark-700 p-0.5">
-          {(["degree", "centrality", "level_of_care"] as const).map((opt) => (
+          {(["degree", "level_of_care"] as const).map((opt) => (
             <button
               key={opt}
               type="button"

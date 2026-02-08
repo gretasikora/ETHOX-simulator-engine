@@ -50,11 +50,6 @@ def get_metadata(graph):
     nodes = graph.get("nodes", [])
     edges = graph.get("edges", [])
 
-    clusters = {}
-    for node in nodes:
-        c = node.get("cluster", 0)
-        clusters[str(c)] = clusters.get(str(c), 0) + 1
-
     trait_keys_set = set()
     for node in nodes:
         traits = node.get("traits") or {}
@@ -64,7 +59,6 @@ def get_metadata(graph):
     return {
         "node_count": len(nodes),
         "edge_count": len(edges),
-        "clusters": clusters,
         "trait_keys": trait_keys,
     }
 
@@ -98,7 +92,6 @@ def get_node_detail(graph, agent_id):
             neighbors.append({
                 "agent_id": other_id,
                 "weight": weight,
-                "cluster": other_node.get("cluster", 0),
                 "degree": other_node.get("degree", 0),
             })
 

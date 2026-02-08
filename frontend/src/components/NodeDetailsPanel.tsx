@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { fetchNodeDetail, type NodeDetailResponse } from "../api/client";
 import { useUIStore } from "../store/useUIStore";
 import { StatCard } from "./StatCard";
-import { getClusterColor } from "../utils/color";
 
 export function NodeDetailsPanel() {
   const selectedNodeId = useUIStore((s) => s.selectedNodeId);
@@ -34,17 +33,6 @@ export function NodeDetailsPanel() {
           <h2 className="text-lg font-semibold text-white">
             Agent #{selectedNodeId}
           </h2>
-          {detail && (
-            <span
-              className="rounded-full px-2 py-0.5 text-xs font-medium text-white"
-              style={{
-                backgroundColor: getClusterColor(detail.node.cluster),
-                color: "rgba(0,0,0,0.7)",
-              }}
-            >
-              Cluster {detail.node.cluster}
-            </span>
-          )}
         </div>
         <button
           type="button"
@@ -66,14 +54,6 @@ export function NodeDetailsPanel() {
           <>
             <div className="grid grid-cols-3 gap-2">
               <StatCard label="Degree" value={detail.node.degree} />
-              <StatCard
-                label="Degree Centrality"
-                value={detail.node.degree_centrality.toFixed(3)}
-              />
-              <StatCard
-                label="Betweenness"
-                value={detail.node.betweenness_centrality.toFixed(3)}
-              />
             </div>
 
             <div className="mt-6">
@@ -113,10 +93,6 @@ export function NodeDetailsPanel() {
                       onClick={() => setSelectedNode(n.agent_id)}
                       className="flex w-full items-center gap-2 rounded px-2 py-2 text-left hover:bg-dark-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                     >
-                      <span
-                        className="h-2 w-2 shrink-0 rounded-full"
-                        style={{ backgroundColor: getClusterColor(n.cluster) }}
-                      />
                       <span className="min-w-0 flex-1 truncate text-sm text-gray-200">
                         {n.agent_id}
                       </span>

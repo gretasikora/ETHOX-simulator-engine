@@ -17,14 +17,14 @@ from simulation.network import (
 )
 
 
-def run_full_simulation(trigger: str) -> tuple[dict[str, Any], dict[str, Any]]:
+def run_full_simulation(trigger: str, num_agents: int) -> tuple[dict[str, Any], dict[str, Any]]:
     """
     Run the full simulation with LLM: broadcast trigger, social influence.
     Returns (initial_graph, final_graph, agents, adjacency).
     - initial_graph: structure + traits, no level_of_care (agents haven't reacted yet).
     - final_graph: structure + traits + level_of_care, effect_on_usage, text_opinion from LLM.
     """
-    agents = init_agents()
+    agents = init_agents(num_agents)
     context = precompute_personality_context(agents)
     adjacency = build_adjacency_matrix(agents, context)
 

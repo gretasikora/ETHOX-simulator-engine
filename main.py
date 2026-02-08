@@ -2,7 +2,7 @@
 """Run full simulation and optionally export files. Use run_full_simulation() for API."""
 from pathlib import Path
 
-from config import TRIGGER_EVENT_MESSAGE
+from config import NUM_AGENTS, TRIGGER_EVENT_MESSAGE
 from simulation.interaction import supervisor_summarize
 from simulation.network import visualize_adjacency_matrix
 from simulation.runner import run_full_simulation
@@ -11,7 +11,7 @@ from backend.data.generate_network_from_simulation import export_network_json
 
 if __name__ == "__main__":
     # Run full simulation (LLM calls)
-    initial, final, agents, adjacency = run_full_simulation(TRIGGER_EVENT_MESSAGE)
+    initial, final, agents, adjacency = run_full_simulation(TRIGGER_EVENT_MESSAGE, NUM_AGENTS)
 
     # Export network for backend/website
     backend_data = Path(__file__).parent / "backend" / "data"

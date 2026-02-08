@@ -49,28 +49,12 @@ def _compute_degree(edges: list[dict], n: int) -> list[int]:
 
 
 def _build_nx_graph(edges: list[dict], n: int) -> nx.Graph:
-    """Build NetworkX graph from edges for centrality/cluster computation."""
+    """Build NetworkX graph from edges for centrality computation."""
     G = nx.Graph()
     G.add_nodes_from(range(n))
     for e in edges:
         G.add_edge(int(e["source"]), int(e["target"]), weight=e["weight"])
     return G
-
-
-def _compute_clusters(edges: list[dict], n: int) -> list[int]:
-    """Assign cluster ids via community detection. Falls back to 0 if detection fails."""
-    if not edges:
-        return [0] * n
-    G = _build_nx_graph(edges, n)
-    try:
-        communities = list(nx.community.greedy_modularity_communities(G))
-    except Exception:
-        return [0] * n
-    node_to_cluster = {}
-    for cid, comm in enumerate(communities):
-        for node in comm:
-            node_to_cluster[node] = cid
-    return [node_to_cluster.get(i, 0) for i in range(n)]
 
 
 def _normalize_trait_1_5_to_0_1(val: float) -> float:
@@ -88,7 +72,6 @@ def build_network_data(agents, adjacency, agent_id_as_int: bool = False) -> dict
     as_strings = not agent_id_as_int
     edges = _adjacency_to_edges(adjacency, as_strings=as_strings)
     degree = _compute_degree(edges, n)
-    clusters = _compute_clusters(edges, n)
 
     G = _build_nx_graph(edges, n)
     deg_centrality = nx.degree_centrality(G)
@@ -145,7 +128,6 @@ def build_network_data(agents, adjacency, agent_id_as_int: bool = False) -> dict
         node = {
             "agent_id": i if agent_id_as_int else str(i),
             "degree": degree[i],
-            "cluster": clusters[i],
             "traits": traits,
             "degree_centrality": round(deg_centrality.get(i, 0.0), 4),
             "betweenness_centrality": round(betweenness.get(i, 0.0), 4),
@@ -159,6 +141,16 @@ def build_network_data(agents, adjacency, agent_id_as_int: bool = False) -> dict
         if effect_on_usage is not None:
             node["effect_on_usage"] = int(effect_on_usage)
         node["text_opinion"] = str(text_opinion)
+        # Initial values (set by runner after broadcast_trigger, before social influence)
+        initial_opinion = getattr(a, "initial_opinion", None)
+        if initial_opinion is not None:
+            node["initial_opinion"] = str(initial_opinion)
+        initial_care = getattr(a, "initial_care", None)
+        if initial_care is not None:
+            node["initial_level_of_care"] = round(float(initial_care) / 10.0, 4)
+        initial_usage = getattr(a, "initial_usage_effect", None)
+        if initial_usage is not None:
+            node["initial_effect_on_usage"] = int(initial_usage)
         nodes.append(node)
 
     return {"nodes": nodes, "edges": edges}

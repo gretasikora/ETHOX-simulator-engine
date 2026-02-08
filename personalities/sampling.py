@@ -608,7 +608,37 @@ def generate_personality_traits(
 
 
 # -----------------------------
-# 10) Putting it all together
+# 10) Generate society on demand (for simulation / API)
+# -----------------------------
+def generate_society(n: int, seed: int = 42) -> pd.DataFrame:
+    """
+    Generate n agents with BFI-2 traits, gender, age_group.
+    Same structure as synthetic_society_*.csv. No file I/O.
+    """
+    df_bfi2 = load_bfi2_data(local_paths=['./BFI2.csv'], verbose=False)
+    age_col = "age" if "age" in df_bfi2.columns else "Age"
+    gender_col = "gender" if "gender" in df_bfi2.columns else "Gender"
+    facets = score_facets_from_items(df_bfi2)
+    age = df_bfi2[age_col]
+    gender = df_bfi2[gender_col]
+    age_model = fit_age_models(facets, age=age, gender=gender, age_ref=29.0)
+    _, Sigma = build_covariance_from_R()
+    cell_mu = build_cell_means(age_model)
+    p_gender = calculate_gender_ratio()
+    p_age = calculate_age_group_ratios()
+    return sample_society(
+        n=n,
+        p_gender=p_gender,
+        p_age=p_age,
+        cell_mu=cell_mu,
+        Sigma=Sigma,
+        seed=seed,
+        clamp_1_5=True,
+    )
+
+
+# -----------------------------
+# 11) Putting it all together (CLI)
 # -----------------------------
 def main():
     # A) Load BFI2 dataset (local file or generate synthetic)

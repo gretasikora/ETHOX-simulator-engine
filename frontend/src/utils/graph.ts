@@ -5,14 +5,13 @@ import { scaleLinear } from "./math";
 import { computeCareSize } from "./careSizing";
 
 export interface GraphFilters {
-  clusters: number[];
   degreeRange: [number, number];
   traitRange: [number, number];
 }
 
 export interface GraphUIState {
-  colorBy: "age" | "trait" | "centrality";
-  sizeBy: "degree" | "centrality" | "level_of_care";
+  colorBy: "age" | "trait";
+  sizeBy: "degree" | "level_of_care";
   selectedTrait: string;
   traitKeys: string[];
   filters: GraphFilters;
@@ -25,17 +24,6 @@ function getMaxDegree(nodes: NodeData[]): number {
   return Math.max(1, ...nodes.map((n) => n.degree));
 }
 
-function getMaxCentrality(nodes: NodeData[]): number {
-  if (nodes.length === 0) return 1;
-  return Math.max(0.01, ...nodes.map((n) => n.degree_centrality ?? 0));
-}
-
-/** Min centrality so gradient uses full data range (better color variation). */
-function getMinCentrality(nodes: NodeData[]): number {
-  if (nodes.length === 0) return 0;
-  return Math.min(...nodes.map((n) => n.degree_centrality ?? 0));
-}
-
 export function buildGraphology(
   nodes: NodeData[],
   edges: EdgeData[],
@@ -43,9 +31,6 @@ export function buildGraphology(
 ): Graph {
   const graph = new Graph({ type: "undirected", multi: false });
   const maxDegree = getMaxDegree(nodes);
-  const maxCentrality = getMaxCentrality(nodes);
-  const minCentrality = getMinCentrality(nodes);
-  const centralityRange = Math.max(0.001, maxCentrality - minCentrality);
   const { colorBy, sizeBy, selectedTrait, showAgeEncoding, showGenderEncoding } = uiState;
 
   for (const node of nodes) {
@@ -54,22 +39,19 @@ export function buildGraphology(
     let size = 8;
     if (sizeBy === "degree") {
       size = scaleLinear(node.degree ?? 0, 0, maxDegree, 3, 15);
-    } else if (sizeBy === "level_of_care") {
+    } else {
       const loc = node.level_of_care ?? 0.5;
       size = computeCareSize(loc, 8);
-    } else {
-      size = scaleLinear(node.degree_centrality ?? 0, 0, maxCentrality, 3, 15);
     }
     let color: string;
     if (colorBy === "trait" && selectedTrait) {
       const v = traits[selectedTrait];
       color = getGradientColor(v !== undefined ? v : 0.5, 0, 1);
-    } else if (colorBy === "centrality") {
-      color = getGradientColor(node.degree_centrality ?? 0, minCentrality, minCentrality + centralityRange);
     } else if (colorBy === "age" && showAgeEncoding && node.age != null && Number.isFinite(node.age)) {
       color = getAgeColor(node.age);
     } else {
-      color = getGradientColor(node.degree_centrality ?? 0, minCentrality, minCentrality + centralityRange);
+      const v = selectedTrait ? (traits[selectedTrait] ?? 0.5) : 0.5;
+      color = getGradientColor(v, 0, 1);
     }
     const shape = showGenderEncoding ? getGenderShape(node.gender) : "circle";
     graph.addNode(id, {
@@ -79,7 +61,6 @@ export function buildGraphology(
       size,
       color,
       type: shape,
-      cluster: node.cluster ?? 0,
       degree: node.degree ?? 0,
       degree_centrality: node.degree_centrality ?? 0,
       betweenness_centrality: node.betweenness_centrality ?? 0,
@@ -114,9 +95,6 @@ export function applyFilters(
   graph.forEachNode((node) => {
     const attrs = graph.getNodeAttributes(node);
     let visible = true;
-    if (filters.clusters.length > 0 && !filters.clusters.includes(attrs.cluster as number)) {
-      visible = false;
-    }
     const degree = (attrs.degree as number) ?? 0;
     if (degree < filters.degreeRange[0] || degree > filters.degreeRange[1]) {
       visible = false;
@@ -141,53 +119,40 @@ export function applyFilters(
 
 export function applyVisualAttributes(
   graph: Graph,
-  colorBy: "age" | "trait" | "centrality",
-  sizeBy: "degree" | "centrality" | "level_of_care",
+  colorBy: "age" | "trait",
+  sizeBy: "degree" | "level_of_care",
   selectedTrait: string,
   _traitKeys: string[],
-  _clusterColors: string[],
   showAgeEncoding: boolean,
   showGenderEncoding: boolean
 ): void {
-  let minCentrality = Infinity;
-  let maxCentrality = 0;
   let maxDegree = 0;
   graph.forEachNode((_n, attrs) => {
-    const dc = (attrs.degree_centrality as number) ?? 0;
     const d = (attrs.degree as number) ?? 0;
-    if (dc < minCentrality) minCentrality = dc;
-    if (dc > maxCentrality) maxCentrality = dc;
     if (d > maxDegree) maxDegree = d;
   });
-  if (minCentrality === Infinity) minCentrality = 0;
-  const centralityRange = Math.max(0.001, maxCentrality - minCentrality);
   if (maxDegree === 0) maxDegree = 1;
 
   graph.forEachNode((node) => {
     const attrs = graph.getNodeAttributes(node);
     const age = attrs.age as number | undefined;
+    const traits = (attrs.traits as Record<string, number>) || {};
     let color: string;
     if (colorBy === "trait" && selectedTrait) {
-      const traits = (attrs.traits as Record<string, number>) || {};
       const v = traits[selectedTrait];
       color = getGradientColor(v ?? 0.5, 0, 1);
-    } else if (colorBy === "centrality") {
-      const dc = (attrs.degree_centrality as number) ?? 0;
-      color = getGradientColor(dc, minCentrality, minCentrality + centralityRange);
     } else if (colorBy === "age" && showAgeEncoding && age != null && Number.isFinite(age)) {
       color = getAgeColor(age);
     } else {
-      const dc = (attrs.degree_centrality as number) ?? 0;
-      color = getGradientColor(dc, minCentrality, minCentrality + centralityRange);
+      const v = selectedTrait ? (traits[selectedTrait] ?? 0.5) : 0.5;
+      color = getGradientColor(v, 0, 1);
     }
     let size = 8;
     if (sizeBy === "degree") {
       size = scaleLinear((attrs.degree as number) ?? 0, 0, maxDegree, 3, 15);
-    } else if (sizeBy === "level_of_care") {
+    } else {
       const loc = (attrs.level_of_care as number) ?? 0.5;
       size = computeCareSize(loc, 8);
-    } else {
-      size = scaleLinear((attrs.degree_centrality as number) ?? 0, 0, maxCentrality, 3, 15);
     }
     const shape = showGenderEncoding ? getGenderShape(attrs.gender as string | undefined) : "circle";
     graph.setNodeAttribute(node, "color", color);
@@ -216,7 +181,6 @@ export function exportFilteredSubgraph(graph: Graph): {
     nodes.push({
       agent_id: node,
       degree: (attrs.degree as number) ?? 0,
-      cluster: (attrs.cluster as number) ?? 0,
       traits: ((attrs.traits as Record<string, number>) || {}),
       degree_centrality: (attrs.degree_centrality as number) ?? 0,
       betweenness_centrality: (attrs.betweenness_centrality as number) ?? 0,

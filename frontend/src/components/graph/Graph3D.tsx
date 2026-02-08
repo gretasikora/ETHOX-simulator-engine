@@ -30,11 +30,6 @@ function shapeForKey(gender: string | undefined, showGender: boolean): ShapeKey 
   return "octahedron";
 }
 
-interface CentralityScale {
-  min: number;
-  max: number;
-}
-
 function scaleLinear(value: number, inMin: number, inMax: number, outMin: number, outMax: number): number {
   const t = inMax === inMin ? 0.5 : (value - inMin) / (inMax - inMin);
   return outMin + (outMax - outMin) * Math.max(0, Math.min(1, t));
@@ -49,25 +44,17 @@ interface Graph3DProps {
   onNodeHover: (id: string | null) => void;
   showAgeEncoding: boolean;
   showGenderEncoding: boolean;
-  colorBy: "age" | "trait" | "centrality";
+  colorBy: "age" | "trait";
   selectedTrait: string;
-  centralityScale: CentralityScale;
-  sizeBy: "degree" | "centrality" | "level_of_care";
+  sizeBy: "degree" | "level_of_care";
 }
 
 function getNodeColor(
   node: FGNode,
   showAge: boolean,
   colorBy: string,
-  selectedTrait: string,
-  centralityScale: CentralityScale
+  selectedTrait: string
 ): string {
-  const { min, max } = centralityScale;
-  const range = Math.max(0.001, max - min);
-  if (colorBy === "centrality") {
-    const v = node.degree_centrality ?? 0;
-    return getGradientColor(v, min, min + range);
-  }
   if (colorBy === "trait" && selectedTrait) {
     const v = node.traits?.[selectedTrait] ?? 0.5;
     return getGradientColor(v, 0, 1);
@@ -75,8 +62,8 @@ function getNodeColor(
   if (colorBy === "age" && showAge && node.age != null && Number.isFinite(node.age)) {
     return getAgeColor(node.age);
   }
-  const v = node.degree_centrality ?? 0;
-  return getGradientColor(v, min, min + range);
+  const v = selectedTrait ? (node.traits?.[selectedTrait] ?? 0.5) : 0.5;
+  return getGradientColor(v, 0, 1);
 }
 
 export function Graph3D({
@@ -90,7 +77,6 @@ export function Graph3D({
   showGenderEncoding,
   colorBy,
   selectedTrait,
-  centralityScale,
   sizeBy,
 }: Graph3DProps) {
   const fgRef = useRef<{
@@ -107,7 +93,7 @@ export function Graph3D({
     (node: FGNode) => {
       const isSelected = selectedNodeId === node.id;
       const isHovered = hoveredNodeId === node.id;
-      const color = getNodeColor(node, showAgeEncoding, colorBy, selectedTrait, centralityScale);
+      const color = getNodeColor(node, showAgeEncoding, colorBy, selectedTrait);
       const shape = shapeForKey(node.gender, showGenderEncoding);
       const loc = node.level_of_care ?? 0;
       const sizeScale =
@@ -132,13 +118,13 @@ export function Graph3D({
       }
       return group;
     },
-    [selectedNodeId, hoveredNodeId, showAgeEncoding, showGenderEncoding, colorBy, selectedTrait, centralityScale, sizeBy]
+    [selectedNodeId, hoveredNodeId, showAgeEncoding, showGenderEncoding, colorBy, selectedTrait, sizeBy]
   );
 
   const nodeColor = useCallback(
     (node: FGNode) =>
-      getNodeColor(node, showAgeEncoding, colorBy, selectedTrait, centralityScale),
-    [showAgeEncoding, colorBy, selectedTrait, centralityScale]
+      getNodeColor(node, showAgeEncoding, colorBy, selectedTrait),
+    [showAgeEncoding, colorBy, selectedTrait]
   );
 
   const linkColor = useCallback(

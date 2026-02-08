@@ -2,7 +2,8 @@
 Simulation service: runs full LLM pipeline and returns initial_graph and final_graph.
 
 Interface: run_simulation(trigger: str, num_agents: int) -> (initial_graph, final_graph)
-Agent data from synthetic_society_20.csv. level_of_care, effect_on_usage, text_opinion from LLM.
+Agents are generated on demand via BFI-2 personality sampling. level_of_care, effect_on_usage,
+text_opinion from LLM.
 """
 
 import sys
@@ -21,7 +22,6 @@ def run_simulation(trigger: str, num_agents: int) -> tuple[dict[str, Any], dict[
     """
     Run full simulation with LLM (broadcast trigger + social influence).
     Returns (initial_graph, final_graph).
-    num_agents is ignored; CSV size (20) is used.
     """
-    initial, final, _agents, _adjacency = run_full_simulation(trigger)
+    initial, final, _agents, _adjacency = run_full_simulation(trigger, num_agents)
     return initial, final

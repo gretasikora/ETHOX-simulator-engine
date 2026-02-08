@@ -5,7 +5,6 @@ export type GenderLabel = "male" | "female";
 export interface NodeData {
   agent_id: string;
   degree: number;
-  cluster: number;
   traits: Record<string, number>;
   degree_centrality: number;
   betweenness_centrality: number;
@@ -17,8 +16,14 @@ export interface NodeData {
   level_of_care?: number;
   /** Effect on usage (-5 to 5). Passed in with personality. */
   effect_on_usage?: number;
-  /** Text opinion string. Passed in with personality. */
+  /** Text opinion string. Passed in with personality (final after simulation). */
   text_opinion?: string;
+  /** Initial opinion string (after broadcast, before social influence). Set by run_full_simulation. */
+  initial_opinion?: string;
+  /** Initial level of care 0–1 (after broadcast). Set by run_full_simulation. */
+  initial_level_of_care?: number;
+  /** Initial effect on usage -5..5 (after broadcast). Set by run_full_simulation. */
+  initial_effect_on_usage?: number;
 }
 
 export interface EdgeData {
@@ -30,7 +35,6 @@ export interface EdgeData {
 export interface GraphMetadata {
   node_count: number;
   edge_count: number;
-  clusters: Record<string, number>;
   trait_keys: string[];
 }
 
@@ -43,7 +47,6 @@ export interface GraphResponse {
 export interface NeighborData {
   agent_id: string;
   weight: number;
-  cluster: number;
   degree: number;
 }
 
@@ -88,7 +91,6 @@ export interface RunSimulationRequest {
 export interface SimulationNodeData {
   agent_id: number;
   degree?: number;
-  cluster?: number;
   traits?: Record<string, number>;
   degree_centrality?: number;
   betweenness_centrality?: number;

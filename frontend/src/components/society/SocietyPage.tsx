@@ -4,11 +4,9 @@ import { usePlaybackStore } from "../../store/usePlaybackStore";
 import {
   computeStructuralMetrics,
   computeLiveMetrics,
-  computeClusterBreakdown,
 } from "../../utils/metrics";
 import { generateInsights } from "../../utils/insightRules";
 import { MetricCards } from "./MetricCards";
-import { ClusterBreakdownTable } from "./ClusterBreakdownTable";
 import { InsightsFeed } from "./InsightsFeed";
 
 export function SocietyPage() {
@@ -53,11 +51,6 @@ export function SocietyPage() {
     return generateInsights(structural, live, liveDay0 ?? null);
   }, [structural, live, liveDay0, recomputeKey]);
 
-  const clusterRows = useMemo(() => {
-    if (nodes.length === 0) return [];
-    return computeClusterBreakdown(nodes, edges, currentAgents ?? undefined);
-  }, [nodes, edges, currentAgents]);
-
   const recompute = useCallback(() => {
     setRecomputeKey((k) => k + 1);
   }, []);
@@ -89,20 +82,12 @@ export function SocietyPage() {
         />
       </section>
 
-      <div className="grid min-h-0 flex-1 grid-cols-1 gap-6 lg:grid-cols-2">
-        <section className="flex min-h-0 flex-col">
-          <h2 className="mb-3 text-sm font-medium uppercase tracking-wider text-aurora-text2">
-            Insights Feed
-          </h2>
-          <InsightsFeed insights={insights} onRecompute={recompute} />
-        </section>
-        <section className="flex min-h-0 flex-col">
-          <h2 className="mb-3 text-sm font-medium uppercase tracking-wider text-aurora-text2">
-            Breakdown
-          </h2>
-          <ClusterBreakdownTable rows={clusterRows} hasLive={live != null} />
-        </section>
-      </div>
+      <section className="flex min-h-0 flex-col">
+        <h2 className="mb-3 text-sm font-medium uppercase tracking-wider text-aurora-text2">
+          Insights Feed
+        </h2>
+        <InsightsFeed insights={insights} onRecompute={recompute} />
+      </section>
     </div>
   );
 }

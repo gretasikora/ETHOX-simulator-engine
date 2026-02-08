@@ -10,7 +10,6 @@ export interface FGNode {
   degree_centrality?: number;
   betweenness_centrality?: number;
   traits?: Record<string, number>;
-  cluster?: number;
   level_of_care?: number;
 }
 
@@ -27,9 +26,6 @@ function isNodeVisible(
   filters: GraphFilters,
   selectedTrait: string
 ): boolean {
-  if (filters.clusters.length > 0 && !filters.clusters.includes(node.cluster)) {
-    return false;
-  }
   const degree = node.degree ?? 0;
   if (degree < filters.degreeRange[0] || degree > filters.degreeRange[1]) {
     return false;
@@ -56,7 +52,6 @@ function toFGNode(node: NodeData): FGNode {
     degree_centrality: node.degree_centrality,
     betweenness_centrality: node.betweenness_centrality,
     traits: node.traits ? { ...node.traits } : undefined,
-    cluster: node.cluster,
     level_of_care: node.level_of_care,
   };
 }

@@ -29,7 +29,6 @@ export function ExperimentBuilder() {
   const setSelectedNode = useUIStore((s) => s.setSelectedNode);
   const nodes = useGraphStore((s) => s.nodes);
   const edges = useGraphStore((s) => s.edges);
-  const clusterList = useGraphStore((s) => s.clusterList);
 
   const experiment = activeExperimentId
     ? experiments.find((e) => e.id === activeExperimentId)
@@ -169,7 +168,6 @@ export function ExperimentBuilder() {
         experiment={experiment}
         nodes={nodes}
         edges={edges}
-        clusterList={clusterList}
         onExperimentUpdate={(patch) => updateExperiment(experiment.id, patch)}
         manualTargetIds={manualTargetIds}
         onClearManual={() => setManualTargetIds([])}

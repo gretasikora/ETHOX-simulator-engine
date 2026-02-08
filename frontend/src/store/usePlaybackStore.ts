@@ -4,7 +4,7 @@ import type { PlaybackRun, AgentFrameState } from "../types/playback";
 const SPEED_OPTIONS = [0.5, 1, 2, 4] as const;
 export type PlaybackSpeed = (typeof SPEED_OPTIONS)[number];
 
-export type PlaybackColorMode = "cluster" | "opinion";
+export type PlaybackColorMode = "opinion";
 
 interface PlaybackState {
   runs: PlaybackRun[];

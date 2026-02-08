@@ -8,15 +8,23 @@ import { easeInOutCubic } from "../utils/easing";
 import { computeCareSize, computeCareGlow } from "../utils/careSizing";
 
 function normalizeNode(n: SimulationNodeData): NodeData {
-  return {
-    ...n,
+  const node: NodeData = {
     agent_id: String(n.agent_id),
     degree: n.degree ?? 0,
-    cluster: n.cluster ?? 0,
     traits: n.traits ?? {},
     degree_centrality: n.degree_centrality ?? 0,
     betweenness_centrality: n.betweenness_centrality ?? 0,
   };
+  if (n.age != null && typeof n.age === "number") node.age = n.age;
+  if (n.gender != null && typeof n.gender === "string") node.gender = n.gender;
+  if (n.level_of_care != null && typeof n.level_of_care === "number") node.level_of_care = n.level_of_care;
+  if (n.effect_on_usage != null && typeof n.effect_on_usage === "number") node.effect_on_usage = n.effect_on_usage;
+  if (n.text_opinion != null && typeof n.text_opinion === "string") node.text_opinion = n.text_opinion;
+  const ext = n as { initial_opinion?: string; initial_level_of_care?: number; initial_effect_on_usage?: number };
+  if (ext.initial_opinion != null && typeof ext.initial_opinion === "string") node.initial_opinion = ext.initial_opinion;
+  if (ext.initial_level_of_care != null && typeof ext.initial_level_of_care === "number") node.initial_level_of_care = ext.initial_level_of_care;
+  if (ext.initial_effect_on_usage != null && typeof ext.initial_effect_on_usage === "number") node.initial_effect_on_usage = ext.initial_effect_on_usage;
+  return node;
 }
 
 function normalizeGraph(g: SimulationGraphData): { nodes: NodeData[]; edges: EdgeData[] } {

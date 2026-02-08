@@ -1,18 +1,3 @@
-/** Aurora Graph Lab cluster palette (used for cluster filters/experiments, not node color) */
-export const CLUSTER_COLORS = [
-  "#2AFADF", // teal
-  "#26C6FF", // cyan
-  "#7C3AED", // violet
-  "#34D399", // mint
-  "#FB7185", // rose
-  "#60A5FA", // blue
-  "#A78BFA", // light violet
-];
-
-export function getClusterColor(clusterId: number): string {
-  return CLUSTER_COLORS[clusterId % CLUSTER_COLORS.length];
-}
-
 /** Age → color: young = cool teal/cyan, middle = blue/violet, older = amber/orange. Missing/invalid = neutral. */
 const AGE_COLOR_LOW = "#2DD4BF";   // teal (young)
 const AGE_COLOR_MID = "#7C3AED";   // violet (middle)
