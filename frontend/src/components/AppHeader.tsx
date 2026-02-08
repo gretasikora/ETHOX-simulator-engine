@@ -75,9 +75,6 @@ export function AppHeader({ onSearchSelect }: AppHeaderProps) {
   return (
     <header className="top-bar group sticky top-0 z-20 flex min-h-12 shrink-0 flex-wrap items-center gap-2 border-b border-aurora-border/60 bg-aurora-bg1/90 px-4 py-2 backdrop-blur-sm sm:gap-3 md:gap-5 md:px-5">
       <div className="flex shrink-0 items-center gap-1 sm:gap-2">
-        <h1 className="text-sm font-semibold tracking-tight text-aurora-text0 sm:text-base">
-          Society Explorer
-        </h1>
         <button
           type="button"
           onClick={() => setHeaderCollapsed(true)}
@@ -88,19 +85,7 @@ export function AppHeader({ onSearchSelect }: AppHeaderProps) {
         </button>
       </div>
 
-      <div className="relative min-w-[120px] flex-1 max-w-sm basis-28 sm:basis-40">
-        <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-aurora-text2 sm:left-3" />
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={handleSearchChange}
-          onKeyDown={handleSearchKeyDown}
-          placeholder="Search agent..."
-          className="w-full rounded-lg border border-aurora-border/70 bg-aurora-surface0/80 py-1.5 pl-7 pr-2.5 text-sm text-aurora-text0 placeholder-aurora-text2 focus:border-aurora-accent1 focus:outline-none focus:ring-1 focus:ring-aurora-accent1/50 sm:rounded-lg sm:pl-8 sm:pr-3"
-        />
-      </div>
-
-      <div className="flex min-w-0 flex-1 flex-wrap items-center justify-end gap-3 sm:gap-5 opacity-85 transition-opacity duration-200 group-hover:opacity-100">
+      <div className="flex min-w-0 flex-1 items-center justify-end gap-3 sm:gap-5 opacity-85 transition-opacity duration-200 group-hover:opacity-100">
         <div className="flex items-center gap-2 sm:gap-3">
           <span className="hidden text-[10px] uppercase tracking-wider text-aurora-text2/80 sm:inline">Color</span>
           <div className="flex rounded-md bg-aurora-surface0/40 p-0.5">
