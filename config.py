@@ -12,6 +12,10 @@ MODEL = "gpt-4.1-mini"
 MAX_TOKENS = 200
 TEMPERATURE = 0.4
 
-TRIGGER_EVENT_MESSAGE = "The marketplace has reorganised its search functionality - it is better organised overall, but not intuitive at first."
+TRIGGER_EVENT_MESSAGE = '''Announcement of the government (PolicyTechnocrats):
+Today, we are announcing a responsible reform to secure the retirement system for future generations while protecting today’s retirees.
+This plan strengthens the system by adjusting eligibility rules for younger workers, asking the wealthiest retirees to contribute a fairer share, and increasing support for seniors who need it most.
+These changes ensure long-term stability without disrupting current benefits, and they preserve individual choice while restoring trust in the system.
+'''
 
 random.seed(SEED)

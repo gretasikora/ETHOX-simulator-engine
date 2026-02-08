@@ -5,7 +5,7 @@ import os
 def calculate_gender_ratio(csv_path=None):
     if csv_path is None:
         base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        csv_path = os.path.join(base, 'datasets', 'Amazon Customer Behavior Survey.csv')
+        csv_path = os.path.join(base, 'datasets', 'voter_opinion_survey_350.csv')
     df = pd.read_csv(csv_path)
     gender_counts = df[df['Gender'].isin(['Male', 'Female'])]['Gender'].value_counts()
     total_binary = gender_counts.sum()
@@ -20,16 +20,12 @@ def calculate_gender_ratio(csv_path=None):
 def calculate_age_group_ratios(csv_path=None):
     if csv_path is None:
         base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        csv_path = os.path.join(base, 'datasets', 'Amazon Customer Behavior Survey.csv')
+        csv_path = os.path.join(base, 'datasets', 'voter_opinion_survey_350.csv')
     df = pd.read_csv(csv_path)
-    df['age'] = pd.to_numeric(df['age'], errors='coerce')
-    df_age = df.dropna(subset=['age'])
-    under_25 = (df_age['age'] < 25).sum()
-    age_25_40 = ((df_age['age'] >= 25) & (df_age['age'] < 40)).sum()
-    age_40_plus = (df_age['age'] >= 40).sum()
-    total = len(df_age)
+    age_group_counts = df['AgeGroup'].value_counts()
+    total = age_group_counts.sum()
     return {
-        'Under 25': under_25 / total,
-        '25-40': age_25_40 / total,
-        '40+': age_40_plus / total
+        'Under 25': age_group_counts.get('Under 25', 0) / total,
+        '25-40': age_group_counts.get('25-40', 0) / total,
+        '40+': age_group_counts.get('40+', 0) / total
     }

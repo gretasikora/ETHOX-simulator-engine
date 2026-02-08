@@ -1,0 +1,351 @@
+AgeGroup,Gender,Region,Education,IncomeBand,Archetype,TurnoutLikelihood,PoliticalInterest,TrustInstitutions,TrustMedia,IssueSalience_Economy,IssueSalience_Healthcare,IssueSalience_Immigration,IssueSalience_Climate,Values_Stability,Values_Fairness,Values_Freedom,MediaDiet,MisinfoSusceptibility,IdentitySalience,CivilityPreference,PolicyComplexityTolerance,ContactPreference,VolunteerPropensity,DonationPropensity,IssuePriority_Top1
+40+,Female,Rural,SomeCollege,Med,PopulistSkeptics,8,6,3,3,10,3,10,0,8,6,8,CableNews,6,8,2,3,,8,4,Economy
+25-40,Male,Rural,SomeCollege,High,CommunityTraditionalists,10,4,5,6,9,6,7,6,8,7,7,Mix,5,8,8,5,Email,7,4,Economy
+Under 25,Female,Rural,SomeCollege,High,LowEngagementDrifters,5,3,5,5,5,8,2,3,8,7,7,Podcasts,7,4,5,3,Phone,3,1,Healthcare
+25-40,Female,Suburban,College,High,PolicyTechnocrats,6,8,6,6,6,7,4,5,4,6,6,CableNews,4,5,9,9,Email,6,8,Healthcare
+Under 25,Female,Suburban,HS,Low,InstitutionalModerates,9,5,8,9,7,8,5,4,8,7,6,YouTube,2,4,9,9,,8,7,Healthcare
+25-40,Female,Suburban,College,Med,InstitutionalModerates,10,10,6,4,6,4,3,4,8,7,8,Mix,5,3,7,8,Phone,10,7,Economy
+40+,Male,Suburban,Grad,Med,InstitutionalModerates,10,5,4,8,7,9,1,4,8,7,5,Podcasts,4,2,8,7,Door,6,4,Healthcare
+25-40,Female,Rural,SomeCollege,Med,CommunityTraditionalists,10,7,6,7,8,9,10,4,10,7,9,CableNews,3,7,9,1,Email,8,6,Immigration
+25-40,Male,Urban,Grad,High,PolicyTechnocrats,10,7,3,6,8,8,1,7,4,8,6,TikTok,1,2,6,9,,5,7,Economy
+25-40,Female,Urban,HS,Low,LowEngagementDrifters,6,3,3,3,4,8,4,4,6,6,6,LocalNews,7,5,5,2,,5,2,Healthcare
+25-40,Female,Suburban,College,High,InstitutionalModerates,9,6,10,8,7,6,1,5,7,5,5,CableNews,1,7,9,7,,9,8,Economy
+Under 25,Female,Rural,SomeCollege,Low,CommunityTraditionalists,10,4,4,7,10,4,8,3,8,5,6,TikTok,5,5,7,4,Text,6,5,Economy
+Under 25,Male,Suburban,Grad,Med,LowEngagementDrifters,5,1,5,5,4,6,3,6,5,4,4,Mix,6,4,5,4,Text,1,2,Healthcare
+25-40,Female,Suburban,SomeCollege,Low,InstitutionalModerates,5,8,6,8,5,8,6,1,7,8,6,LocalNews,4,3,8,7,Email,6,6,Healthcare
+40+,Female,Suburban,HS,Low,InstitutionalModerates,9,5,8,10,8,7,6,4,5,6,4,Mix,2,4,10,8,Text,7,7,Economy
+25-40,Female,Suburban,Grad,High,InstitutionalModerates,8,4,9,7,6,8,8,5,8,6,5,TikTok,4,3,8,6,,3,8,Healthcare
+40+,Female,Rural,HS,High,PopulistSkeptics,8,5,2,3,10,4,9,5,9,7,7,Twitter/X,5,5,5,5,Text,6,9,Economy
+Under 25,Female,Suburban,SomeCollege,High,YoungProgressives,6,7,6,6,6,6,4,10,7,10,5,TikTok,3,6,7,8,Text,7,6,Climate
+25-40,Male,Urban,HS,Low,YoungProgressives,4,4,6,5,4,5,2,10,5,6,6,TikTok,5,2,7,6,Text,3,7,Climate
+40+,Female,Rural,HS,High,PopulistSkeptics,9,7,1,7,9,5,8,3,8,4,7,TikTok,7,7,2,4,Text,7,5,Economy
+40+,Female,Suburban,College,Med,PolicyTechnocrats,6,8,3,5,5,10,5,9,7,6,5,Twitter/X,4,1,9,9,Text,6,6,Healthcare
+40+,Male,Rural,College,Med,InstitutionalModerates,7,7,6,7,5,8,4,4,9,6,4,CableNews,0,5,6,10,Door,6,8,Healthcare
+40+,Male,Suburban,HS,Low,PopulistSkeptics,8,9,3,2,8,5,8,0,6,6,8,Mix,7,8,4,3,Email,7,4,Economy
+Under 25,Female,Rural,HS,Med,PopulistSkeptics,7,9,4,2,10,7,10,0,6,4,8,YouTube,8,7,3,3,Text,6,6,Economy
+Under 25,Male,Urban,SomeCollege,Low,YoungProgressives,4,10,6,5,5,8,2,9,8,8,7,TikTok,4,6,10,5,Email,8,5,Climate
+Under 25,Female,Rural,College,Med,LowEngagementDrifters,7,2,5,4,7,5,2,6,7,7,7,TikTok,7,5,6,0,Email,5,3,Economy
+25-40,Male,Rural,Grad,High,InstitutionalModerates,8,4,5,8,7,8,4,5,9,6,6,LocalNews,2,3,8,7,Text,5,8,Healthcare
+Under 25,Male,Suburban,HS,Med,YoungProgressives,5,9,2,5,7,7,5,8,7,10,6,TikTok,4,8,9,5,Phone,7,7,Climate
+25-40,Female,Urban,College,Med,PolicyTechnocrats,7,9,9,4,8,8,4,8,5,7,6,YouTube,4,3,10,8,Phone,6,7,Economy
+25-40,Female,Urban,College,High,InstitutionalModerates,7,8,6,5,8,6,5,5,6,9,8,CableNews,2,3,8,8,Door,5,8,Economy
+40+,Female,Suburban,SomeCollege,Low,PolicyTechnocrats,7,10,5,6,7,10,8,6,5,8,7,Twitter/X,6,4,7,10,Door,7,7,Healthcare
+40+,Male,Rural,College,Med,InstitutionalModerates,10,8,8,6,7,9,3,6,7,7,8,Mix,3,4,6,8,Text,5,5,Healthcare
+40+,Male,Suburban,College,Med,InstitutionalModerates,8,6,8,6,6,7,6,3,8,6,8,LocalNews,0,3,9,10,,5,8,Healthcare
+40+,Female,Suburban,HS,Med,CommunityTraditionalists,9,6,5,3,9,6,6,2,10,7,7,Mix,8,4,5,3,,6,4,Economy
+40+,Female,Suburban,College,Low,CommunityTraditionalists,7,7,6,7,8,7,8,5,10,8,7,LocalNews,6,6,9,3,,7,5,Economy
+Under 25,Female,Suburban,HS,Med,LowEngagementDrifters,7,2,2,3,3,3,5,6,7,5,6,TikTok,6,2,8,4,Text,4,5,Climate
+40+,Female,Urban,HS,Med,PopulistSkeptics,6,7,6,3,8,6,10,4,8,4,9,YouTube,8,9,4,6,,8,3,Immigration
+Under 25,Female,Rural,SomeCollege,Med,InstitutionalModerates,7,9,7,5,6,7,5,6,7,7,9,Mix,6,5,8,7,,8,5,Healthcare
+Under 25,Female,Suburban,HS,Med,LowEngagementDrifters,5,4,4,7,4,3,4,7,8,5,7,LocalNews,6,4,7,4,,5,2,Climate
+40+,Male,Urban,College,Low,YoungProgressives,3,8,5,4,5,7,5,10,5,9,2,TikTok,7,3,6,4,Text,5,4,Climate
+40+,Male,Urban,College,Low,InstitutionalModerates,8,7,7,4,8,6,2,4,10,8,6,CableNews,2,4,10,8,Door,6,7,Economy
+25-40,Female,Suburban,SomeCollege,Low,YoungProgressives,7,8,5,6,6,7,0,10,5,9,2,YouTube,9,6,9,4,,6,4,Climate
+25-40,Male,Suburban,Grad,Med,InstitutionalModerates,8,6,9,7,7,8,8,5,8,8,7,LocalNews,5,5,6,10,Phone,7,4,Healthcare
+25-40,Male,Rural,Grad,Med,CommunityTraditionalists,7,6,7,8,9,6,9,6,7,7,8,LocalNews,4,8,7,4,Email,9,5,Economy
+40+,Female,Urban,HS,Med,PopulistSkeptics,6,4,2,0,10,6,7,7,9,5,5,CableNews,10,6,1,6,,6,2,Economy
+25-40,Male,Rural,College,Low,LowEngagementDrifters,8,4,6,4,6,4,4,2,6,5,5,Twitter/X,6,6,7,0,Email,8,3,Economy
+40+,Female,Suburban,HS,Med,PopulistSkeptics,8,5,2,3,7,6,8,4,8,7,8,CableNews,6,8,4,4,Email,5,5,Immigration
+Under 25,Male,Urban,College,High,YoungProgressives,6,5,4,4,7,7,5,8,5,7,9,TikTok,3,6,8,7,Email,5,5,Climate
+Under 25,Male,Urban,HS,Med,YoungProgressives,5,5,5,10,5,9,6,8,6,10,6,TikTok,5,5,5,5,,6,6,Healthcare
+Under 25,Female,Suburban,HS,Med,InstitutionalModerates,6,7,9,2,8,9,2,8,9,6,6,Mix,4,4,9,6,Text,6,6,Healthcare
+25-40,Male,Rural,HS,Low,CommunityTraditionalists,10,6,4,4,10,6,10,5,9,6,7,CableNews,5,7,8,3,Email,9,5,Economy
+Under 25,Female,Rural,SomeCollege,Med,LowEngagementDrifters,2,4,9,4,7,5,4,6,6,6,6,YouTube,5,5,6,2,Phone,4,4,Economy
+25-40,Male,Rural,HS,High,CommunityTraditionalists,9,6,9,6,8,4,5,4,8,6,7,Mix,6,6,8,4,Door,6,6,Economy
+25-40,Male,Suburban,SomeCollege,Med,CommunityTraditionalists,6,5,9,5,8,5,7,3,9,6,7,LocalNews,6,8,8,2,Email,6,5,Economy
+25-40,Female,Urban,SomeCollege,Low,PolicyTechnocrats,5,6,7,7,6,4,3,8,4,7,6,Mix,4,3,7,10,,3,5,Climate
+Under 25,Male,Rural,HS,Med,CommunityTraditionalists,9,3,3,8,8,5,9,3,10,7,6,LocalNews,9,5,8,4,,5,4,Immigration
+40+,Female,Suburban,HS,Med,InstitutionalModerates,10,6,6,6,5,6,6,4,7,8,8,YouTube,4,5,7,5,Text,8,5,Healthcare
+25-40,Male,Urban,College,Med,InstitutionalModerates,10,5,9,6,7,9,5,6,9,7,5,Mix,1,1,10,5,Email,6,7,Healthcare
+40+,Male,Urban,HS,Med,InstitutionalModerates,9,5,7,7,7,9,5,6,9,9,6,LocalNews,1,5,7,6,Text,7,6,Healthcare
+40+,Male,Rural,SomeCollege,Med,PopulistSkeptics,9,8,0,3,10,7,9,3,6,5,7,YouTube,6,9,6,5,Email,7,6,Economy
+40+,Male,Suburban,HS,Low,PopulistSkeptics,7,8,3,3,8,4,9,2,10,4,8,Twitter/X,9,6,0,2,Email,7,4,Immigration
+40+,Male,Urban,SomeCollege,Low,PopulistSkeptics,10,9,7,6,10,6,9,4,7,4,8,YouTube,7,7,4,6,,7,5,Economy
+40+,Female,Suburban,SomeCollege,Med,LowEngagementDrifters,4,3,8,5,5,8,6,6,6,5,6,CableNews,8,7,8,2,,6,3,Healthcare
+25-40,Female,Urban,HS,Med,PopulistSkeptics,6,8,3,1,7,6,7,1,4,5,10,Twitter/X,10,7,2,5,Text,6,5,Economy
+40+,Male,Urban,SomeCollege,Low,PopulistSkeptics,8,7,1,1,9,6,9,2,10,5,8,TikTok,6,4,4,5,Text,5,6,Economy
+Under 25,Male,Suburban,Grad,Low,YoungProgressives,6,4,4,6,4,7,1,10,5,6,8,TikTok,4,5,7,8,Email,5,6,Climate
+25-40,Female,Urban,Grad,High,InstitutionalModerates,7,6,5,1,8,8,0,3,9,10,6,Podcasts,2,4,10,6,Email,5,6,Economy
+Under 25,Female,Suburban,College,High,LowEngagementDrifters,3,3,2,6,6,5,9,5,5,5,7,YouTube,6,2,7,2,Text,4,6,Immigration
+40+,Male,Suburban,College,Med,InstitutionalModerates,9,5,6,8,7,6,2,6,10,6,6,CableNews,5,4,9,5,,5,5,Economy
+40+,Male,Suburban,HS,Med,CommunityTraditionalists,10,6,7,5,8,6,7,4,10,5,8,LocalNews,7,6,4,3,,6,5,Economy
+25-40,Male,Rural,SomeCollege,High,LowEngagementDrifters,4,2,4,2,8,5,6,7,7,5,7,CableNews,6,3,6,1,Email,1,3,Economy
+40+,Female,Urban,HS,High,InstitutionalModerates,10,7,5,6,10,6,3,6,8,7,7,Mix,4,6,9,7,,8,7,Economy
+40+,Female,Suburban,HS,High,InstitutionalModerates,5,7,6,6,7,7,5,4,9,7,7,YouTube,4,3,10,6,Email,4,7,Economy
+40+,Female,Urban,College,Med,LowEngagementDrifters,5,3,4,5,4,4,2,7,8,6,6,YouTube,6,6,5,3,Door,3,3,Climate
+Under 25,Male,Rural,SomeCollege,Med,LowEngagementDrifters,0,4,4,1,7,7,4,7,8,8,8,Podcasts,7,4,4,3,Email,4,5,Economy
+25-40,Male,Suburban,Grad,Med,LowEngagementDrifters,3,2,5,3,4,4,4,4,5,4,6,TikTok,3,5,6,1,Text,4,6,Economy
+Under 25,Female,Urban,HS,Low,LowEngagementDrifters,5,5,2,4,6,6,4,4,6,5,7,LocalNews,6,7,6,2,,6,4,Economy
+25-40,Male,Suburban,Grad,Med,InstitutionalModerates,6,5,7,9,8,7,3,2,7,7,5,Podcasts,3,4,8,6,Email,6,7,Economy
+40+,Male,Rural,SomeCollege,Low,PopulistSkeptics,9,7,5,3,8,6,6,3,8,5,8,CableNews,4,7,3,4,Door,8,5,Economy
+25-40,Male,Suburban,College,Med,InstitutionalModerates,6,4,9,8,6,9,4,5,8,7,7,Mix,4,1,10,4,Email,3,6,Healthcare
+40+,Female,Rural,SomeCollege,Low,CommunityTraditionalists,9,6,8,8,7,6,4,3,10,8,5,LocalNews,4,6,7,3,Text,6,3,Economy
+25-40,Female,Urban,College,Low,PolicyTechnocrats,8,9,5,6,9,9,4,8,6,9,6,Mix,3,4,6,7,Text,8,9,Economy
+40+,Male,Suburban,SomeCollege,High,PopulistSkeptics,5,6,2,1,9,4,5,4,7,5,10,YouTube,5,4,3,6,Email,5,7,Economy
+40+,Female,Urban,SomeCollege,Med,InstitutionalModerates,10,6,8,8,7,7,3,5,8,8,6,LocalNews,4,4,10,7,Phone,7,5,Economy
+40+,Male,Suburban,HS,Med,PopulistSkeptics,5,10,5,2,9,5,9,4,9,5,8,CableNews,7,8,5,5,Email,7,4,Economy
+40+,Male,Rural,HS,Med,PopulistSkeptics,3,6,4,0,7,4,9,5,9,6,9,YouTube,6,9,4,5,Phone,7,5,Immigration
+25-40,Female,Rural,College,Med,LowEngagementDrifters,4,2,4,4,5,5,1,5,6,5,7,TikTok,8,2,5,2,Phone,2,2,Economy
+40+,Female,Rural,College,Med,PolicyTechnocrats,5,10,4,6,7,10,2,2,6,9,8,Mix,3,2,9,7,Phone,6,8,Healthcare
+40+,Female,Rural,SomeCollege,Med,CommunityTraditionalists,9,2,5,4,7,6,6,6,9,6,7,CableNews,5,7,6,3,Email,7,4,Economy
+Under 25,Male,Urban,College,High,YoungProgressives,6,8,5,6,6,7,2,5,5,10,7,TikTok,7,8,7,6,,7,5,Healthcare
+25-40,Female,Urban,College,Med,InstitutionalModerates,8,7,4,2,6,5,3,5,7,9,6,TikTok,4,5,6,9,Email,5,7,Economy
+Under 25,Female,Suburban,SomeCollege,Med,LowEngagementDrifters,4,2,7,2,8,4,5,4,7,5,6,YouTube,6,2,7,2,Email,2,4,Economy
+Under 25,Female,Suburban,SomeCollege,Med,LowEngagementDrifters,0,3,9,5,6,5,4,6,4,7,7,LocalNews,7,5,6,4,Text,4,5,Economy
+Under 25,Male,Urban,HS,Med,PolicyTechnocrats,8,7,3,6,7,8,4,7,8,5,5,YouTube,3,1,8,10,Email,6,6,Healthcare
+Under 25,Male,Rural,Grad,Med,LowEngagementDrifters,2,2,4,3,8,6,2,5,7,7,8,Twitter/X,4,3,4,3,Text,2,3,Economy
+Under 25,Female,Suburban,College,Low,YoungProgressives,7,6,9,2,6,10,3,9,5,8,8,CableNews,1,8,5,6,Phone,6,7,Healthcare
+Under 25,Male,Suburban,Grad,Med,YoungProgressives,3,8,9,3,6,6,4,9,4,9,8,Twitter/X,5,7,5,4,Text,6,6,Climate
+25-40,Female,Suburban,SomeCollege,Med,YoungProgressives,7,5,6,7,5,6,3,8,5,10,6,LocalNews,4,5,8,6,Email,5,4,Climate
+40+,Female,Urban,College,High,InstitutionalModerates,5,8,6,7,4,8,2,6,8,6,5,CableNews,4,4,9,10,Door,6,8,Healthcare
+25-40,Male,Suburban,SomeCollege,High,InstitutionalModerates,5,6,9,6,9,5,4,3,8,8,5,CableNews,0,4,9,8,Email,4,10,Economy
+25-40,Female,Suburban,College,High,InstitutionalModerates,5,7,6,6,7,6,3,5,7,6,7,Twitter/X,1,5,9,4,Text,5,8,Economy
+25-40,Female,Suburban,Grad,High,PolicyTechnocrats,6,8,9,9,8,8,3,6,7,8,8,YouTube,4,1,10,7,Text,4,9,Economy
+40+,Female,Urban,SomeCollege,High,PopulistSkeptics,9,8,2,5,9,6,9,4,9,4,7,YouTube,5,9,4,5,Door,8,7,Economy
+40+,Male,Urban,SomeCollege,Med,YoungProgressives,9,7,5,2,6,8,4,10,5,8,5,YouTube,6,7,8,5,Text,8,5,Climate
+40+,Female,Suburban,HS,Low,CommunityTraditionalists,10,4,8,6,9,4,9,4,9,6,5,Mix,6,4,5,2,Email,6,3,Economy
+40+,Female,Suburban,HS,Med,PopulistSkeptics,10,5,5,2,8,5,9,5,10,5,6,Twitter/X,6,8,2,2,Email,4,6,Immigration
+Under 25,Female,Rural,HS,High,YoungProgressives,6,6,7,7,3,6,1,8,5,6,5,TikTok,3,6,7,5,Phone,5,6,Climate
+Under 25,Male,Rural,HS,Med,LowEngagementDrifters,4,1,6,5,4,6,6,3,5,7,6,LocalNews,7,5,7,1,Phone,3,4,Healthcare
+40+,Male,Rural,HS,Low,PopulistSkeptics,9,7,5,1,10,4,8,3,8,5,8,LocalNews,8,7,1,7,,9,3,Economy
+40+,Female,Urban,College,High,InstitutionalModerates,10,5,6,4,6,7,3,6,10,6,6,LocalNews,4,5,8,8,Text,6,6,Healthcare
+25-40,Male,Rural,SomeCollege,Low,PopulistSkeptics,9,7,5,6,8,3,8,4,8,7,6,Twitter/X,8,7,6,7,Email,8,5,Economy
+40+,Female,Urban,College,Low,InstitutionalModerates,7,6,4,6,6,6,6,3,9,7,6,LocalNews,4,5,9,9,Email,7,5,Economy
+25-40,Male,Suburban,HS,Med,CommunityTraditionalists,7,3,7,6,9,6,7,5,9,3,7,LocalNews,4,6,10,5,Text,4,4,Economy
+25-40,Female,Rural,College,Med,LowEngagementDrifters,3,4,3,5,5,4,4,7,7,4,6,Twitter/X,5,2,6,3,Email,3,6,Climate
+25-40,Female,Suburban,SomeCollege,Low,PolicyTechnocrats,9,10,3,3,10,9,3,8,3,7,6,LocalNews,5,1,8,8,Email,6,8,Economy
+25-40,Female,Suburban,SomeCollege,High,CommunityTraditionalists,9,5,3,4,8,10,5,6,10,6,9,LocalNews,6,7,7,6,Email,6,6,Healthcare
+25-40,Male,Rural,SomeCollege,High,LowEngagementDrifters,3,3,7,3,6,5,5,1,5,6,8,CableNews,5,1,7,2,Phone,2,4,Economy
+25-40,Male,Urban,SomeCollege,Med,InstitutionalModerates,6,7,5,6,7,8,5,4,8,8,8,YouTube,4,5,8,9,Email,5,5,Healthcare
+25-40,Female,Rural,SomeCollege,Low,CommunityTraditionalists,9,6,6,6,10,8,7,6,8,7,9,TikTok,5,5,6,2,Phone,9,5,Economy
+Under 25,Female,Urban,Grad,Low,YoungProgressives,5,6,8,6,7,6,4,7,6,8,7,TikTok,3,5,8,4,Email,6,6,Economy
+Under 25,Male,Suburban,HS,Med,LowEngagementDrifters,3,4,5,3,5,2,5,2,6,6,7,TikTok,5,4,7,4,Email,5,4,Economy
+25-40,Male,Rural,HS,Low,CommunityTraditionalists,10,6,7,3,8,6,7,5,10,7,5,LocalNews,6,8,8,6,Email,8,5,Economy
+40+,Male,Rural,College,High,PopulistSkeptics,7,10,2,5,10,3,9,0,9,6,7,YouTube,7,10,2,2,Text,7,7,Economy
+40+,Male,Urban,SomeCollege,Med,InstitutionalModerates,10,5,6,8,9,8,3,8,7,7,6,Twitter/X,6,5,9,8,Text,7,3,Economy
+40+,Female,Rural,SomeCollege,Med,PopulistSkeptics,9,7,6,5,8,5,8,2,8,4,7,CableNews,8,9,2,5,Email,9,4,Economy
+40+,Male,Urban,College,Med,YoungProgressives,5,6,5,5,5,7,1,8,5,8,6,TikTok,5,7,8,5,,5,5,Climate
+25-40,Female,Suburban,HS,Med,LowEngagementDrifters,3,3,6,3,5,4,4,4,7,4,6,CableNews,7,4,10,4,Door,4,4,Economy
+25-40,Female,Rural,HS,High,CommunityTraditionalists,7,5,5,8,8,9,8,5,9,7,4,CableNews,5,7,7,2,Text,7,8,Healthcare
+40+,Female,Suburban,SomeCollege,High,InstitutionalModerates,5,5,10,6,7,7,7,8,10,7,6,Mix,0,6,6,7,,7,8,Climate
+Under 25,Male,Urban,SomeCollege,Low,YoungProgressives,4,5,5,7,5,6,3,10,5,7,7,YouTube,3,7,8,6,Door,5,4,Climate
+Under 25,Male,Urban,HS,Med,YoungProgressives,5,8,1,4,6,6,2,8,5,8,3,Podcasts,1,5,8,2,Email,5,8,Climate
+40+,Male,Rural,SomeCollege,Low,PopulistSkeptics,7,7,0,3,9,6,10,0,10,5,8,CableNews,7,7,2,5,,7,4,Immigration
+40+,Male,Urban,HS,Med,InstitutionalModerates,7,7,6,7,8,10,4,6,8,9,5,CableNews,4,4,8,7,Email,7,6,Healthcare
+40+,Female,Suburban,SomeCollege,High,PopulistSkeptics,8,6,5,4,10,4,8,0,7,6,7,TikTok,8,8,3,2,Text,6,6,Economy
+25-40,Female,Rural,SomeCollege,Med,CommunityTraditionalists,10,6,7,8,7,8,8,4,10,5,6,CableNews,4,5,5,6,Email,5,7,Healthcare
+Under 25,Female,Rural,SomeCollege,Low,PopulistSkeptics,8,5,7,4,9,7,7,4,8,5,10,CableNews,8,8,1,2,Email,7,3,Economy
+Under 25,Male,Suburban,College,Med,YoungProgressives,8,8,5,5,5,7,3,7,5,8,4,YouTube,4,5,10,7,Email,7,8,Healthcare
+Under 25,Male,Suburban,SomeCollege,Med,LowEngagementDrifters,2,1,2,3,7,3,0,4,7,8,5,Podcasts,5,6,3,2,Email,3,5,Economy
+40+,Male,Urban,College,Low,PopulistSkeptics,4,6,4,0,9,6,7,3,7,5,9,TikTok,7,7,3,5,,7,3,Economy
+25-40,Female,Rural,College,Med,CommunityTraditionalists,6,5,5,8,7,5,7,2,8,6,7,YouTube,5,5,5,5,,5,7,Economy
+40+,Male,Rural,Grad,High,CommunityTraditionalists,9,6,4,8,8,8,6,7,10,7,7,LocalNews,5,8,7,1,,6,6,Economy
+40+,Male,Suburban,College,Med,PopulistSkeptics,6,4,4,2,10,4,10,5,9,5,9,YouTube,6,9,5,6,,8,3,Economy
+25-40,Male,Urban,Grad,Med,YoungProgressives,7,4,3,4,6,5,4,9,5,7,7,YouTube,8,5,6,7,,4,5,Climate
+40+,Male,Suburban,HS,Med,PopulistSkeptics,7,7,2,2,9,3,10,3,9,6,7,LocalNews,8,8,4,1,Text,6,7,Immigration
+Under 25,Female,Suburban,College,Med,PopulistSkeptics,8,6,5,1,5,4,6,0,6,5,10,Twitter/X,8,7,4,3,Text,8,4,Immigration
+25-40,Female,Suburban,College,Med,InstitutionalModerates,7,4,8,4,8,6,3,3,7,8,7,LocalNews,5,5,6,6,Email,5,4,Economy
+40+,Female,Urban,College,High,PolicyTechnocrats,8,10,5,7,10,7,2,4,7,5,6,YouTube,4,3,9,9,,7,7,Economy
+25-40,Male,Urban,College,High,YoungProgressives,8,5,4,4,7,8,4,10,3,10,8,LocalNews,6,9,5,5,Email,8,6,Climate
+40+,Male,Urban,College,High,InstitutionalModerates,8,4,5,8,8,7,3,2,7,9,4,LocalNews,3,6,6,7,Door,7,7,Economy
+40+,Male,Rural,HS,Low,PopulistSkeptics,10,7,4,3,8,5,5,4,8,6,9,LocalNews,8,8,2,3,Text,8,5,Economy
+40+,Male,Rural,SomeCollege,Low,CommunityTraditionalists,10,8,4,4,8,7,7,3,10,7,6,LocalNews,7,8,7,4,Text,10,5,Economy
+40+,Male,Urban,SomeCollege,Med,PopulistSkeptics,9,6,3,1,9,7,4,5,8,3,7,CableNews,10,7,1,6,Door,5,5,Economy
+Under 25,Male,Suburban,HS,Med,InstitutionalModerates,9,7,10,6,5,8,7,3,8,8,6,YouTube,1,6,10,7,Text,8,7,Healthcare
+Under 25,Female,Urban,College,Med,YoungProgressives,5,5,7,7,4,9,4,10,3,6,6,Twitter/X,6,9,8,6,Email,5,6,Climate
+Under 25,Male,Suburban,HS,Low,CommunityTraditionalists,7,8,5,8,9,6,6,3,10,6,6,Twitter/X,5,6,4,5,Text,8,5,Economy
+40+,Female,Suburban,HS,High,PopulistSkeptics,6,4,1,1,10,4,8,4,8,5,6,CableNews,9,10,0,2,Email,7,4,Economy
+Under 25,Female,Suburban,HS,Low,LowEngagementDrifters,7,5,5,6,8,4,3,5,7,6,4,Twitter/X,5,4,6,6,Phone,5,4,Economy
+Under 25,Male,Rural,College,Low,LowEngagementDrifters,2,7,4,5,7,5,4,6,3,7,6,TikTok,6,7,5,2,Email,6,5,Economy
+25-40,Male,Rural,HS,High,PopulistSkeptics,6,6,2,2,10,6,5,5,8,7,9,LocalNews,9,9,5,5,Email,8,4,Economy
+25-40,Male,Suburban,HS,Low,LowEngagementDrifters,4,3,4,4,8,6,2,5,5,5,5,TikTok,5,2,6,2,Text,4,5,Economy
+40+,Female,Suburban,HS,Med,PopulistSkeptics,10,10,3,4,9,3,7,3,7,5,8,Twitter/X,7,8,1,3,,8,5,Economy
+40+,Female,Suburban,Grad,Med,PolicyTechnocrats,5,10,8,5,3,7,4,5,5,9,7,CableNews,1,1,8,9,Email,5,7,Healthcare
+25-40,Female,Suburban,College,High,PolicyTechnocrats,7,8,8,5,7,8,3,5,6,7,7,Podcasts,2,5,7,10,Phone,7,10,Healthcare
+25-40,Male,Suburban,College,Low,YoungProgressives,3,9,1,6,3,6,6,8,3,8,9,CableNews,2,4,9,9,Door,5,8,Climate
+25-40,Female,Suburban,College,High,InstitutionalModerates,8,6,8,9,8,5,6,6,9,9,5,YouTube,3,3,6,8,Text,6,4,Economy
+Under 25,Male,Urban,SomeCollege,Low,LowEngagementDrifters,8,4,5,4,4,5,3,1,8,7,6,YouTube,6,6,6,4,,4,3,Healthcare
+40+,Male,Suburban,SomeCollege,Low,PopulistSkeptics,7,6,2,0,10,7,10,1,8,3,7,Mix,5,10,2,6,Email,8,3,Economy
+40+,Female,Urban,HS,Med,InstitutionalModerates,9,8,9,4,8,7,4,4,7,10,6,Mix,4,3,7,9,Email,6,5,Economy
+25-40,Male,Urban,Grad,Med,InstitutionalModerates,9,7,5,5,9,8,2,6,5,7,8,TikTok,1,3,9,5,Text,5,4,Economy
+25-40,Male,Suburban,Grad,High,PolicyTechnocrats,6,8,7,6,8,7,4,5,6,6,5,Twitter/X,3,3,9,8,,5,7,Economy
+40+,Male,Rural,HS,Med,LowEngagementDrifters,4,0,5,8,5,4,5,5,8,4,7,TikTok,7,4,7,5,Door,2,2,Economy
+40+,Female,Urban,Grad,High,InstitutionalModerates,9,8,7,4,6,7,6,6,7,10,6,LocalNews,5,4,9,8,Text,3,7,Healthcare
+Under 25,Female,Suburban,College,High,YoungProgressives,5,8,7,5,7,9,2,8,5,8,5,Twitter/X,7,7,7,4,Email,6,4,Healthcare
+25-40,Female,Rural,HS,Med,PopulistSkeptics,6,7,3,4,10,3,5,2,9,6,9,Podcasts,5,5,4,3,,5,6,Economy
+25-40,Female,Urban,College,High,PolicyTechnocrats,6,9,5,4,6,9,5,7,5,7,3,Mix,3,5,6,8,Phone,7,7,Healthcare
+Under 25,Female,Rural,SomeCollege,Low,InstitutionalModerates,9,8,6,5,4,7,7,5,8,7,6,LocalNews,2,5,8,7,Door,7,8,Healthcare
+40+,Female,Urban,College,Med,LowEngagementDrifters,5,2,7,3,5,4,1,6,4,4,3,YouTube,6,4,6,1,Email,3,5,Climate
+25-40,Female,Rural,HS,Low,PopulistSkeptics,6,7,5,3,8,5,8,3,8,5,8,YouTube,5,6,1,1,Phone,8,6,Economy
+40+,Female,Suburban,SomeCollege,Med,CommunityTraditionalists,10,6,4,6,7,6,5,1,9,6,6,LocalNews,3,5,7,4,Email,8,6,Economy
+40+,Female,Suburban,College,High,InstitutionalModerates,8,8,8,6,6,8,2,3,7,9,6,LocalNews,1,4,7,6,Text,8,10,Healthcare
+25-40,Female,Rural,SomeCollege,High,PopulistSkeptics,8,5,2,3,10,3,7,3,6,6,7,TikTok,7,7,2,4,Phone,6,3,Economy
+Under 25,Male,Suburban,Grad,Med,InstitutionalModerates,8,7,10,6,8,5,4,3,6,6,8,LocalNews,5,4,6,7,,7,4,Economy
+40+,Male,Rural,SomeCollege,Med,CommunityTraditionalists,5,5,6,7,9,7,6,1,8,7,9,LocalNews,6,7,8,3,Email,5,5,Economy
+25-40,Female,Rural,SomeCollege,Med,CommunityTraditionalists,9,6,5,2,8,7,6,2,9,6,8,TikTok,7,6,10,4,Email,7,7,Economy
+25-40,Female,Suburban,HS,Low,PopulistSkeptics,10,8,1,2,10,7,9,4,8,6,10,CableNews,5,7,2,5,Phone,9,5,Economy
+25-40,Male,Suburban,Grad,Low,PolicyTechnocrats,9,10,7,5,5,9,3,10,7,6,5,TikTok,3,3,10,9,Email,7,6,Climate
+25-40,Male,Suburban,Grad,Med,LowEngagementDrifters,3,4,6,1,9,7,3,3,6,6,6,Twitter/X,6,5,8,4,,5,3,Economy
+25-40,Female,Suburban,SomeCollege,Med,YoungProgressives,4,8,4,8,5,5,2,6,6,5,6,TikTok,1,6,9,7,Door,6,8,Climate
+Under 25,Male,Urban,Grad,Med,YoungProgressives,2,6,4,6,6,5,1,9,5,7,5,TikTok,6,5,7,9,Text,5,6,Climate
+40+,Female,Suburban,HS,Low,PopulistSkeptics,6,10,4,4,7,3,3,2,9,6,8,CableNews,7,7,3,5,,9,6,Economy
+25-40,Male,Urban,SomeCollege,Med,InstitutionalModerates,8,7,6,6,8,7,2,5,10,8,7,Mix,3,5,8,5,Door,8,6,Economy
+25-40,Male,Suburban,Grad,Med,CommunityTraditionalists,10,6,5,2,8,5,7,3,6,5,7,Twitter/X,6,5,10,1,,6,4,Economy
+Under 25,Male,Urban,SomeCollege,Low,CommunityTraditionalists,10,5,8,4,6,8,7,4,10,5,8,Podcasts,4,6,7,2,Phone,7,3,Healthcare
+25-40,Male,Rural,College,Med,PolicyTechnocrats,6,9,8,6,7,10,3,9,4,9,6,Podcasts,3,0,7,7,,6,7,Healthcare
+25-40,Female,Urban,SomeCollege,Med,PopulistSkeptics,7,10,2,5,9,5,10,5,8,4,8,Podcasts,8,9,3,5,Text,10,5,Immigration
+40+,Female,Rural,SomeCollege,High,PopulistSkeptics,10,6,3,2,10,5,7,5,8,6,7,YouTube,6,8,3,5,Email,7,4,Economy
+Under 25,Female,Suburban,College,Low,LowEngagementDrifters,6,2,2,4,5,4,4,6,6,6,8,YouTube,5,4,5,2,,3,3,Climate
+Under 25,Female,Urban,College,Med,CommunityTraditionalists,8,4,6,6,8,8,3,0,8,7,5,LocalNews,0,7,7,2,Text,7,6,Economy
+25-40,Female,Suburban,SomeCollege,Med,CommunityTraditionalists,10,0,4,3,8,5,8,1,9,7,9,Mix,4,6,4,0,Text,5,3,Economy
+Under 25,Male,Rural,College,Med,LowEngagementDrifters,5,6,6,4,6,3,6,4,7,4,4,YouTube,8,3,8,3,Door,4,5,Economy
+25-40,Female,Urban,Grad,Med,PolicyTechnocrats,7,10,7,6,9,8,4,5,6,8,5,YouTube,5,3,7,10,,8,7,Economy
+25-40,Female,Rural,Grad,High,InstitutionalModerates,8,6,8,7,4,5,5,5,7,5,5,LocalNews,0,4,7,5,Text,6,7,Healthcare
+40+,Male,Suburban,SomeCollege,Low,InstitutionalModerates,10,8,6,6,6,7,6,6,9,6,4,YouTube,3,6,6,5,,7,6,Healthcare
+25-40,Male,Suburban,HS,Low,CommunityTraditionalists,9,3,3,4,9,6,6,4,7,7,7,CableNews,4,8,5,6,Phone,6,3,Economy
+Under 25,Female,Suburban,HS,Med,PolicyTechnocrats,6,10,5,8,9,7,5,5,7,7,7,Twitter/X,2,1,9,6,Email,6,8,Economy
+40+,Male,Rural,College,Low,InstitutionalModerates,7,6,4,4,6,4,4,5,6,8,7,TikTok,3,4,9,8,,4,5,Economy
+Under 25,Male,Suburban,College,Med,InstitutionalModerates,7,6,6,6,5,6,2,5,9,8,3,YouTube,6,4,7,7,Email,5,3,Healthcare
+25-40,Female,Urban,HS,Low,LowEngagementDrifters,4,2,2,4,7,6,5,6,5,7,4,LocalNews,4,3,8,5,Text,3,5,Economy
+40+,Male,Rural,Grad,Med,InstitutionalModerates,7,7,7,8,7,6,5,6,7,7,5,LocalNews,0,4,9,7,Email,7,6,Economy
+Under 25,Female,Rural,SomeCollege,Med,InstitutionalModerates,5,8,9,4,5,7,3,5,7,5,3,YouTube,3,3,7,8,Email,6,7,Healthcare
+Under 25,Male,Suburban,College,Low,YoungProgressives,7,8,2,4,5,7,4,10,4,7,7,YouTube,6,8,7,4,Email,7,6,Climate
+25-40,Male,Suburban,HS,Med,LowEngagementDrifters,2,4,7,3,4,6,5,5,7,6,8,Twitter/X,8,5,7,4,,5,5,Healthcare
+Under 25,Male,Suburban,Grad,Med,PolicyTechnocrats,5,9,4,7,7,6,5,6,7,7,7,YouTube,1,2,7,10,Door,5,8,Economy
+40+,Male,Suburban,HS,Low,PopulistSkeptics,10,5,1,0,10,5,9,4,8,6,8,CableNews,5,10,2,3,Email,7,4,Economy
+Under 25,Male,Urban,HS,Low,LowEngagementDrifters,5,2,4,6,7,8,6,7,4,7,6,YouTube,5,4,7,4,Door,3,4,Healthcare
+40+,Female,Rural,Grad,High,PopulistSkeptics,7,7,2,2,10,4,10,0,7,5,9,TikTok,7,8,4,4,Text,9,6,Economy
+40+,Female,Rural,HS,Med,PopulistSkeptics,6,8,2,3,8,7,7,3,9,4,9,Twitter/X,5,10,3,3,Text,8,5,Economy
+Under 25,Female,Rural,SomeCollege,High,LowEngagementDrifters,4,1,8,3,7,5,2,5,7,6,8,LocalNews,8,5,5,1,,3,3,Economy
+40+,Male,Urban,College,Med,PolicyTechnocrats,7,10,7,8,7,9,7,9,5,7,6,Podcasts,4,4,7,9,Text,9,5,Healthcare
+Under 25,Female,Rural,College,High,LowEngagementDrifters,1,3,4,6,2,5,4,4,8,5,7,Mix,7,6,5,2,Text,2,4,Healthcare
+40+,Male,Suburban,College,Med,PolicyTechnocrats,6,4,7,4,4,4,5,7,6,9,7,YouTube,6,1,8,6,Phone,2,4,Climate
+40+,Male,Urban,Grad,Med,PolicyTechnocrats,7,8,4,6,6,10,4,6,5,8,6,Podcasts,2,5,7,9,Email,5,8,Healthcare
+40+,Female,Suburban,SomeCollege,High,InstitutionalModerates,9,4,8,4,8,9,5,5,8,6,8,YouTube,2,2,9,6,,5,7,Healthcare
+25-40,Male,Suburban,HS,Low,PopulistSkeptics,6,9,4,2,9,6,10,3,7,4,6,Podcasts,8,9,4,4,Email,8,6,Immigration
+25-40,Male,Rural,SomeCollege,Low,PopulistSkeptics,7,8,4,3,9,5,10,5,9,5,9,Podcasts,8,8,3,4,Text,9,4,Immigration
+Under 25,Female,Rural,SomeCollege,Low,PopulistSkeptics,3,5,4,3,10,4,8,1,9,6,9,Twitter/X,7,9,5,4,Email,6,5,Economy
+25-40,Female,Rural,SomeCollege,High,CommunityTraditionalists,9,4,5,6,6,8,6,5,7,7,8,LocalNews,6,5,7,2,Email,6,4,Healthcare
+40+,Male,Rural,HS,High,PopulistSkeptics,8,8,3,0,10,5,10,1,4,5,8,YouTube,4,7,7,4,Email,8,8,Economy
+25-40,Female,Rural,SomeCollege,Low,CommunityTraditionalists,9,5,6,3,9,3,4,5,10,6,5,LocalNews,4,6,5,3,Email,7,3,Economy
+40+,Female,Urban,College,Med,PolicyTechnocrats,8,10,5,7,7,10,3,8,6,7,6,Podcasts,2,3,8,9,,5,8,Healthcare
+40+,Male,Suburban,HS,High,LowEngagementDrifters,5,1,6,5,3,5,3,4,8,5,5,Twitter/X,6,5,6,5,,6,2,Healthcare
+Under 25,Male,Urban,HS,Low,YoungProgressives,7,3,10,6,6,9,7,10,6,8,6,Podcasts,4,5,6,4,Text,6,4,Climate
+25-40,Female,Suburban,College,Low,PolicyTechnocrats,7,8,10,8,5,8,3,5,4,8,5,Mix,5,4,10,8,Email,7,6,Healthcare
+Under 25,Male,Suburban,SomeCollege,Med,YoungProgressives,7,7,6,4,4,6,3,7,5,6,5,CableNews,6,7,6,4,Email,8,5,Climate
+25-40,Female,Urban,College,Med,InstitutionalModerates,8,5,6,8,8,7,2,5,9,7,8,Podcasts,5,6,8,8,,7,4,Economy
+Under 25,Female,Rural,College,Low,LowEngagementDrifters,6,5,1,7,8,4,5,5,8,7,4,LocalNews,7,4,6,2,,5,5,Economy
+40+,Male,Rural,HS,Low,PopulistSkeptics,8,9,4,4,9,3,8,5,8,6,8,CableNews,5,8,3,3,Text,8,6,Economy
+40+,Female,Suburban,College,High,InstitutionalModerates,8,4,3,3,5,9,4,6,5,5,7,YouTube,3,4,9,10,Door,6,6,Healthcare
+40+,Male,Urban,College,Med,PolicyTechnocrats,7,10,5,6,8,10,5,6,5,6,4,Podcasts,2,4,6,10,Email,7,8,Healthcare
+25-40,Male,Urban,SomeCollege,Med,InstitutionalModerates,9,6,7,6,6,4,7,5,9,7,5,Mix,3,2,10,5,Text,5,9,Immigration
+25-40,Male,Suburban,SomeCollege,Low,CommunityTraditionalists,10,6,7,9,10,5,10,5,10,4,7,Podcasts,4,7,9,1,Text,9,6,Economy
+25-40,Female,Rural,SomeCollege,High,CommunityTraditionalists,9,3,4,6,8,6,6,4,10,6,5,Mix,6,6,7,7,Email,6,6,Economy
+40+,Female,Rural,HS,Low,CommunityTraditionalists,10,3,6,5,8,7,8,6,8,6,7,LocalNews,3,7,10,4,Email,7,5,Economy
+Under 25,Female,Rural,College,Med,PopulistSkeptics,9,5,6,2,9,6,6,2,8,6,9,Mix,7,8,4,4,Text,9,4,Economy
+25-40,Male,Urban,SomeCollege,Med,InstitutionalModerates,8,4,7,7,9,6,1,6,6,6,6,LocalNews,3,5,7,7,Phone,6,3,Economy
+Under 25,Male,Rural,College,Med,CommunityTraditionalists,9,6,7,2,8,7,8,3,8,5,8,Mix,7,5,8,4,Email,7,4,Economy
+40+,Male,Urban,HS,High,YoungProgressives,10,6,6,4,5,7,3,10,5,7,6,YouTube,1,6,7,7,Email,8,7,Climate
+25-40,Female,Urban,College,Med,CommunityTraditionalists,10,5,4,4,7,7,10,2,7,6,7,Mix,5,5,7,5,Email,6,3,Immigration
+25-40,Male,Rural,College,Low,CommunityTraditionalists,8,8,5,5,9,5,4,3,10,6,6,Mix,7,6,6,4,Text,7,4,Economy
+25-40,Male,Suburban,SomeCollege,Low,LowEngagementDrifters,5,3,3,4,7,6,5,5,5,5,4,Podcasts,9,4,6,2,Email,4,0,Economy
+25-40,Male,Rural,College,Med,PopulistSkeptics,10,8,1,2,9,8,6,5,8,6,8,CableNews,6,9,4,6,Text,8,6,Economy
+25-40,Male,Suburban,College,High,PopulistSkeptics,8,5,2,1,7,4,6,2,7,3,10,Podcasts,9,7,3,5,Email,9,5,Economy
+25-40,Female,Rural,HS,High,LowEngagementDrifters,2,4,7,9,4,6,3,6,4,4,5,CableNews,6,3,7,5,Text,2,6,Healthcare
+40+,Male,Rural,SomeCollege,Low,PopulistSkeptics,9,10,4,0,8,7,8,3,9,6,8,CableNews,7,8,4,5,Email,8,6,Economy
+40+,Female,Suburban,HS,Low,InstitutionalModerates,8,8,6,6,6,7,2,5,8,8,6,YouTube,1,6,8,7,Text,9,6,Healthcare
+25-40,Female,Urban,Grad,Med,YoungProgressives,6,6,5,5,8,6,2,8,4,8,7,TikTok,3,7,4,5,Phone,7,4,Economy
+40+,Female,Rural,Grad,Med,CommunityTraditionalists,6,5,7,6,8,8,6,5,7,5,5,LocalNews,5,6,7,4,Door,5,3,Economy
+Under 25,Female,Urban,HS,Med,LowEngagementDrifters,3,2,8,2,4,3,4,6,7,9,3,YouTube,7,3,5,2,Text,3,2,Climate
+40+,Male,Urban,Grad,High,PolicyTechnocrats,9,7,4,2,6,8,4,7,4,8,6,LocalNews,4,0,8,7,Email,7,6,Healthcare
+40+,Male,Rural,SomeCollege,Low,InstitutionalModerates,7,6,9,5,6,6,5,4,9,7,3,LocalNews,2,2,8,5,Text,5,6,Economy
+25-40,Female,Rural,Grad,High,PolicyTechnocrats,6,6,5,5,7,8,5,6,6,9,6,Twitter/X,3,2,7,8,Email,7,6,Healthcare
+25-40,Male,Rural,SomeCollege,Low,CommunityTraditionalists,8,6,3,4,8,8,5,6,10,5,7,CableNews,3,6,7,5,Text,5,6,Economy
+25-40,Male,Suburban,SomeCollege,High,InstitutionalModerates,7,6,10,7,6,6,4,8,8,7,5,CableNews,5,7,9,7,Email,7,6,Climate
+Under 25,Female,Urban,Grad,Low,YoungProgressives,6,6,7,4,9,8,1,9,4,5,8,TikTok,6,7,7,4,Email,7,4,Economy
+40+,Female,Rural,College,Med,CommunityTraditionalists,9,5,6,6,9,6,9,2,10,7,5,LocalNews,2,5,6,5,,7,7,Economy
+Under 25,Female,Urban,SomeCollege,Low,LowEngagementDrifters,3,5,4,6,6,5,8,3,6,4,7,Mix,9,7,8,3,Email,5,2,Immigration
+Under 25,Male,Suburban,SomeCollege,Med,LowEngagementDrifters,2,4,5,5,6,3,4,7,6,7,5,TikTok,6,3,7,3,Email,3,5,Climate
+25-40,Female,Rural,HS,Med,LowEngagementDrifters,5,2,4,2,3,4,4,3,6,8,7,TikTok,9,5,8,2,Email,4,3,Healthcare
+25-40,Male,Suburban,SomeCollege,Med,PopulistSkeptics,7,7,2,3,10,3,9,3,8,6,8,LocalNews,7,8,4,5,,8,5,Economy
+25-40,Male,Suburban,SomeCollege,Low,PopulistSkeptics,8,8,6,4,9,4,4,3,8,6,8,Mix,6,5,2,5,Door,8,6,Economy
+25-40,Male,Rural,College,Low,LowEngagementDrifters,3,4,5,5,5,6,7,3,6,6,7,TikTok,5,0,8,4,Email,3,5,Immigration
+40+,Male,Suburban,SomeCollege,Low,LowEngagementDrifters,1,3,7,2,5,6,4,7,5,6,5,TikTok,6,2,5,1,,1,2,Climate
+40+,Male,Rural,HS,Med,CommunityTraditionalists,10,5,5,10,6,6,7,6,9,5,6,Mix,4,4,7,3,Email,6,5,Immigration
+25-40,Female,Rural,SomeCollege,Med,CommunityTraditionalists,7,6,4,8,9,5,6,4,10,6,7,LocalNews,5,5,6,1,,5,6,Economy
+25-40,Male,Suburban,College,High,YoungProgressives,6,5,7,6,7,6,4,9,6,6,5,TikTok,8,5,6,5,,5,4,Climate
+Under 25,Male,Urban,SomeCollege,Low,YoungProgressives,4,9,5,4,6,8,5,8,5,8,5,Mix,5,4,4,7,Text,7,6,Healthcare
+40+,Female,Rural,College,Med,LowEngagementDrifters,4,1,8,2,6,4,5,4,5,7,6,LocalNews,7,3,4,3,Phone,3,3,Economy
+25-40,Female,Rural,SomeCollege,Med,PolicyTechnocrats,6,10,4,7,5,9,3,7,7,5,5,Podcasts,4,6,8,10,Email,10,9,Healthcare
+25-40,Female,Suburban,SomeCollege,Med,LowEngagementDrifters,4,3,4,4,10,5,5,4,6,6,5,YouTube,9,6,6,0,Email,5,1,Economy
+25-40,Male,Suburban,HS,Med,LowEngagementDrifters,3,3,3,0,7,4,4,3,6,6,6,Mix,4,6,5,0,Email,4,5,Economy
+40+,Female,Urban,College,Low,CommunityTraditionalists,7,6,6,4,5,8,5,3,9,4,5,CableNews,1,7,6,9,Door,7,5,Healthcare
+25-40,Female,Suburban,HS,Med,PopulistSkeptics,6,5,0,0,8,5,7,5,10,5,6,Twitter/X,6,7,2,3,Text,5,5,Economy
+25-40,Female,Urban,SomeCollege,Med,PopulistSkeptics,10,5,0,3,8,5,4,5,9,3,6,LocalNews,10,7,2,0,Text,7,2,Economy
+40+,Male,Suburban,SomeCollege,Med,InstitutionalModerates,7,3,9,6,9,7,0,5,9,6,5,CableNews,3,0,10,6,Phone,4,5,Economy
+25-40,Female,Rural,College,Med,PolicyTechnocrats,8,6,7,4,9,8,5,7,4,6,7,Mix,3,5,9,7,Text,6,5,Economy
+40+,Male,Urban,SomeCollege,Med,InstitutionalModerates,7,8,4,8,10,5,5,5,6,8,7,YouTube,2,6,5,5,Text,6,6,Economy
+Under 25,Female,Urban,SomeCollege,Low,YoungProgressives,5,8,6,7,6,8,2,10,4,10,6,Mix,3,8,7,7,Text,6,5,Climate
+Under 25,Male,Suburban,SomeCollege,Low,YoungProgressives,8,8,1,6,5,9,4,9,6,7,8,Podcasts,8,7,9,5,Email,7,4,Healthcare
+40+,Male,Urban,HS,High,PopulistSkeptics,6,8,5,2,10,3,9,1,7,4,7,Twitter/X,6,8,4,3,Email,7,7,Economy
+25-40,Male,Suburban,Grad,Med,PolicyTechnocrats,4,10,4,10,7,8,6,7,7,10,6,Twitter/X,2,3,10,7,Text,7,8,Healthcare
+Under 25,Female,Urban,SomeCollege,Low,InstitutionalModerates,9,5,4,6,8,5,5,6,9,9,9,CableNews,2,4,7,7,,5,6,Economy
+25-40,Male,Urban,College,Med,InstitutionalModerates,10,7,10,6,8,10,5,5,9,7,9,Twitter/X,3,4,7,9,Phone,7,8,Healthcare
+25-40,Female,Rural,HS,Med,LowEngagementDrifters,4,4,8,3,4,4,2,7,8,6,8,Mix,6,4,6,3,Email,4,5,Climate
+Under 25,Female,Rural,HS,High,PopulistSkeptics,6,8,3,2,8,5,9,1,8,5,7,Mix,6,8,1,5,Email,5,6,Immigration
+40+,Female,Suburban,SomeCollege,Med,InstitutionalModerates,10,4,8,4,7,6,5,4,9,7,6,YouTube,3,3,8,9,Email,5,6,Economy
+25-40,Female,Suburban,SomeCollege,Med,YoungProgressives,5,10,5,4,4,9,2,9,6,7,6,TikTok,5,7,8,6,Phone,7,6,Healthcare
+Under 25,Female,Suburban,SomeCollege,Med,LowEngagementDrifters,3,2,6,5,6,4,4,2,6,7,4,YouTube,3,6,5,5,Text,3,4,Economy
+40+,Female,Suburban,College,Med,InstitutionalModerates,8,7,7,6,5,9,5,7,8,5,9,LocalNews,3,3,9,9,Text,6,5,Healthcare
+40+,Female,Suburban,SomeCollege,Med,PolicyTechnocrats,6,10,1,6,5,7,4,6,5,6,9,LocalNews,6,1,10,8,,6,7,Healthcare
+Under 25,Female,Suburban,SomeCollege,High,InstitutionalModerates,8,5,5,4,5,7,2,5,10,9,6,Mix,3,7,9,6,Text,6,6,Healthcare
+40+,Female,Urban,SomeCollege,High,InstitutionalModerates,8,5,7,2,7,8,3,5,7,7,6,Mix,1,6,9,6,Email,7,7,Healthcare
+25-40,Female,Suburban,SomeCollege,Low,YoungProgressives,7,10,6,4,3,9,1,7,5,10,7,TikTok,5,6,6,6,,9,5,Healthcare
+25-40,Female,Urban,College,Low,YoungProgressives,5,8,5,3,5,7,4,9,3,8,6,Twitter/X,5,7,9,5,Phone,8,6,Climate
+40+,Male,Urban,College,Med,PolicyTechnocrats,6,10,7,4,8,7,2,6,5,7,4,Podcasts,5,5,5,10,Email,5,6,Economy
+40+,Male,Suburban,SomeCollege,Med,LowEngagementDrifters,2,4,7,5,9,4,6,5,8,6,5,LocalNews,8,3,4,2,Phone,4,4,Economy
+40+,Female,Rural,SomeCollege,Low,CommunityTraditionalists,10,5,6,6,7,6,7,3,9,6,7,YouTube,5,6,6,6,Text,7,5,Economy
+Under 25,Male,Urban,SomeCollege,Low,YoungProgressives,3,7,9,2,3,5,4,10,4,9,8,TikTok,8,6,4,5,Door,5,5,Climate
+25-40,Male,Urban,SomeCollege,Med,PopulistSkeptics,7,7,5,3,9,6,8,6,6,4,8,TikTok,8,10,3,2,Email,8,5,Economy
+40+,Male,Rural,SomeCollege,Med,LowEngagementDrifters,1,2,3,5,6,3,5,3,6,5,6,YouTube,7,5,8,3,,3,2,Economy
+40+,Male,Urban,HS,Low,PopulistSkeptics,8,8,2,0,10,6,8,1,7,7,8,Mix,6,9,2,6,,8,8,Economy
+Under 25,Female,Suburban,Grad,Med,YoungProgressives,4,5,5,4,4,7,4,10,3,8,4,YouTube,7,7,6,5,,5,6,Climate
+25-40,Male,Rural,SomeCollege,Med,InstitutionalModerates,7,4,6,3,6,5,6,4,8,7,4,CableNews,3,5,6,8,,4,6,Economy
+Under 25,Female,Urban,SomeCollege,Med,InstitutionalModerates,8,5,7,2,4,8,6,4,8,7,7,LocalNews,0,3,8,8,Email,5,6,Healthcare
+25-40,Female,Rural,College,Med,CommunityTraditionalists,10,7,7,3,9,7,9,4,9,8,5,YouTube,6,4,9,4,Email,7,5,Economy
+Under 25,Female,Rural,SomeCollege,Low,LowEngagementDrifters,2,5,8,6,5,5,4,4,8,6,2,Twitter/X,7,3,6,2,Email,4,3,Economy
+25-40,Female,Rural,SomeCollege,Med,LowEngagementDrifters,5,4,6,7,8,4,5,3,7,5,5,LocalNews,6,0,3,3,Phone,4,6,Economy
+Under 25,Male,Suburban,SomeCollege,Med,YoungProgressives,6,9,6,4,6,5,3,10,6,10,6,YouTube,7,6,9,6,,7,6,Climate
+25-40,Female,Suburban,College,Med,InstitutionalModerates,9,9,6,6,9,6,2,5,6,7,6,YouTube,3,2,10,7,Text,7,6,Economy
+25-40,Female,Suburban,College,Med,InstitutionalModerates,10,5,4,8,6,6,1,8,6,7,7,LocalNews,4,4,5,6,,7,5,Climate
+40+,Male,Urban,Grad,High,PopulistSkeptics,8,5,7,3,9,7,10,1,8,2,8,Twitter/X,8,8,2,1,,8,6,Immigration
+Under 25,Male,Urban,College,Low,YoungProgressives,3,8,4,4,5,6,4,7,4,8,5,TikTok,8,5,6,4,,5,6,Climate
+Under 25,Female,Suburban,SomeCollege,Med,LowEngagementDrifters,7,2,6,3,9,3,6,5,6,7,5,Mix,7,0,5,2,,3,5,Economy
+25-40,Female,Urban,College,Med,LowEngagementDrifters,5,3,7,5,6,4,3,4,6,6,7,Twitter/X,6,4,6,2,Text,4,5,Economy
+25-40,Female,Suburban,HS,Med,PopulistSkeptics,7,7,4,3,7,6,10,1,7,7,8,Mix,3,6,3,2,Text,6,6,Immigration
+40+,Male,Urban,SomeCollege,Med,CommunityTraditionalists,10,5,2,6,9,6,10,5,10,7,7,Twitter/X,1,5,9,3,Text,6,3,Immigration
+40+,Female,Urban,SomeCollege,Med,LowEngagementDrifters,4,3,4,5,7,6,5,10,5,4,5,YouTube,3,2,4,2,Email,4,5,Climate
+25-40,Female,Urban,College,Low,YoungProgressives,7,6,5,6,3,4,4,10,8,8,7,YouTube,5,6,10,3,Email,7,5,Climate
+25-40,Male,Suburban,College,Low,PolicyTechnocrats,8,5,4,4,8,9,5,8,6,9,6,Podcasts,3,3,9,8,,5,5,Healthcare
+Under 25,Female,Suburban,College,Med,YoungProgressives,7,6,5,8,8,9,3,10,4,7,3,YouTube,8,5,7,5,,6,4,Climate
+25-40,Female,Suburban,HS,Med,PopulistSkeptics,9,5,3,0,7,5,7,6,10,4,9,YouTube,8,7,1,4,Phone,6,3,Economy
+Under 25,Male,Suburban,HS,Low,PopulistSkeptics,9,5,5,0,8,5,7,2,10,4,10,Twitter/X,8,8,4,8,Text,8,4,Economy
+40+,Female,Rural,SomeCollege,Med,LowEngagementDrifters,2,3,8,4,6,4,5,4,8,9,6,YouTube,6,6,8,2,Text,4,5,Economy
+25-40,Female,Suburban,Grad,Med,InstitutionalModerates,6,5,8,5,7,5,4,5,7,7,6,Podcasts,2,2,10,6,Text,4,7,Economy
+25-40,Female,Suburban,HS,Low,InstitutionalModerates,8,4,8,5,6,6,2,5,6,8,6,LocalNews,4,3,7,7,Email,5,5,Economy
+25-40,Male,Urban,SomeCollege,Med,InstitutionalModerates,7,8,9,4,5,10,7,5,8,6,7,LocalNews,2,1,6,7,Email,5,8,Healthcare
+Under 25,Female,Suburban,College,High,InstitutionalModerates,6,7,8,9,6,6,2,4,9,9,7,LocalNews,0,6,5,8,Text,6,8,Economy
+Under 25,Male,Rural,HS,Low,LowEngagementDrifters,2,5,2,3,5,3,4,8,9,6,7,LocalNews,6,5,5,3,Email,5,4,Climate
+25-40,Female,Urban,Grad,Med,LowEngagementDrifters,5,1,5,7,8,7,4,6,7,8,3,YouTube,4,6,6,2,Text,4,4,Economy
+Under 25,Female,Urban,SomeCollege,Low,YoungProgressives,7,9,7,7,5,7,4,8,5,9,7,TikTok,2,7,7,7,Phone,9,7,Climate
+40+,Male,Suburban,College,High,InstitutionalModerates,9,7,8,5,8,7,3,7,8,10,4,TikTok,2,4,10,8,Email,8,8,Economy
+Under 25,Female,Suburban,SomeCollege,High,YoungProgressives,4,6,6,3,8,9,0,8,2,7,7,YouTube,4,7,5,7,Email,5,7,Healthcare
+Under 25,Male,Suburban,SomeCollege,High,YoungProgressives,5,9,6,5,4,7,3,10,6,10,7,TikTok,4,6,7,4,Email,7,9,Climate
+25-40,Female,Urban,SomeCollege,Med,InstitutionalModerates,6,8,8,8,8,10,5,5,8,9,5,YouTube,2,4,5,7,,5,9,Healthcare
+Under 25,Male,Rural,HS,Med,YoungProgressives,3,6,8,2,8,8,0,10,5,7,4,Mix,5,6,7,6,Text,5,5,Climate
+25-40,Male,Rural,SomeCollege,Med,PopulistSkeptics,6,7,5,0,10,4,10,2,7,6,7,CableNews,6,7,3,6,Email,9,1,Economy
+40+,Female,Suburban,Grad,Med,PolicyTechnocrats,4,10,6,5,8,7,3,6,8,3,7,Podcasts,3,0,8,10,Door,4,9,Economy
+25-40,Male,Suburban,College,High,PolicyTechnocrats,6,10,5,2,9,7,3,6,6,7,7,Podcasts,1,2,8,10,Email,6,8,Economy
+25-40,Male,Rural,SomeCollege,Med,InstitutionalModerates,8,8,8,8,6,6,3,6,8,8,5,LocalNews,3,5,5,10,,8,6,Economy
+25-40,Male,Suburban,SomeCollege,High,PopulistSkeptics,8,9,4,3,10,5,10,1,8,5,9,Mix,6,5,3,4,Email,6,6,Economy
+40+,Female,Urban,College,Low,PolicyTechnocrats,9,9,7,5,9,6,1,9,3,7,10,Podcasts,3,1,8,9,Email,5,6,Economy
