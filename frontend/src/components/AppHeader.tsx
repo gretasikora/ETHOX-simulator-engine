@@ -51,16 +51,6 @@ export function AppHeader({ onSearchSelect: _onSearchSelect }: AppHeaderProps) {
         <img src="/logo.png" alt="" className="h-8 w-8 object-contain" aria-hidden />
         <img src="/epistemea.png" alt="EPISTEMEA" className="h-5 w-auto object-contain sm:h-6" />
       </Link>
-      <div className="flex shrink-0 items-center gap-1 sm:gap-2">
-        <button
-          type="button"
-          onClick={() => setHeaderCollapsed(true)}
-          className="rounded p-1.5 text-aurora-text2 hover:bg-aurora-surface2/80 hover:text-aurora-text0"
-          aria-label="Collapse menu"
-        >
-          <ChevronUp className="h-4 w-4" />
-        </button>
-      </div>
 
       <div className="flex min-w-0 flex-1 items-center justify-end gap-3 sm:gap-5 opacity-85 transition-opacity duration-200 group-hover:opacity-100">
         <div className="flex items-center gap-2 sm:gap-3">

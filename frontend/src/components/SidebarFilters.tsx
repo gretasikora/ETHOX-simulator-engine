@@ -106,6 +106,14 @@ export function SidebarFilters({
         <div className="flex items-center gap-1">
           <button
             type="button"
+            onClick={() => setSidebarCollapsed(true)}
+            className="rounded-md p-1.5 text-aurora-text2 hover:bg-aurora-surface2/80 hover:text-aurora-text1"
+            aria-label="Collapse filters"
+          >
+            <PanelRightOpen className="h-4 w-4" />
+          </button>
+          <button
+            type="button"
             onClick={() => setMobileOpen(false)}
             className="rounded-lg p-2 text-aurora-text1 hover:bg-aurora-surface2 hover:text-aurora-text0 lg:hidden"
             aria-label="Close filters"
