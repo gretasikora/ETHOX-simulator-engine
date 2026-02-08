@@ -23,9 +23,12 @@ Policy narrative or claim:
 {event_message}
 
 Return JSON only with these keys:
-  opinion: string - your critical opinion of the policy, whether that is negative/positive, and how you would interpret it given your profile
+  opinion: string - your critical and honest opinion of the policy/event, whether that is negative/positive. This should reflect how the policy/event affects you.
   care: number from 0 to 10 (how much you care about this policy/claim, 0 being indifferent, 10 being heavily care)
-  change_in_support: number from -5 to 5 (impact on your support, -5 being strongly oppose, 5 being strongly support)
+  change_in_support: number from -5 to 5 (impact on your support for the government/party who made the announcement compared to your initial support level, -5 being strongly oppose, 5 strongly support)
+
+You are receiving official political communications, so be critical - these are the polished, nice versions of the events/news.
+
 No extra text.
 """
 
@@ -109,12 +112,13 @@ Your self-weight is {self_weight:.3f}. The neighbors below have weighted interpr
 {neighbor_block}
 
 Return JSON only with these keys:
-  opinion: string (what you think this policy/claim means or does, one concise sentence)
-  care: number from 0 to 10 (how much you care)
-  change_in_support: number from -5 to 5 (impact on your support)
+  opinion: string - your critical and honest opinion of the policy/event. This should reflect how the policy/event affects you.
+  care: number from 0 to 10 (how much you care about this policy/claim, 0 being indifferent, 10 being heavily care)
+  change_in_support: number from -5 to 5 (impact on your support for the government/party who made the announcement compared to your initial support level, -5 being strongly oppose, 5 strongly support)
 No extra text. Use neighbor weights to update your interpretation:
  - Higher weights should influence you more.
- - If no neighbors, keep your interpretation unchanged.
+
+You are receiving official political communications, so be critical - these are the polished, nice versions of the events/news.
 """
 
 def update_opinion_from_neighbors(agent, event_message, neighbor_opinions, weights, self_weight=1.0):

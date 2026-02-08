@@ -8,9 +8,9 @@ MODEL = "gpt-4.1-mini"
 MAX_TOKENS = 200
 TEMPERATURE = 0.4
 
-TRIGGER_EVENT_MESSAGE = '''Announcement of the government (PolicyTechnocrats):
-Today, we are announcing a responsible reform to secure the retirement system for future generations while protecting today’s retirees.
-This plan strengthens the system by adjusting eligibility rules for younger workers, asking the wealthiest retirees to contribute a fairer share, and increasing support for seniors who need it most.
-These changes ensure long-term stability without disrupting current benefits, and they preserve individual choice while restoring trust in the system.
+TRIGGER_EVENT_MESSAGE = '''We recently identified unauthorised access to an internal government system and acted immediately to contain it.
+At this stage, there is no evidence that personal or financial information was compromised.
+We are conducting a full review and will provide further updates as appropriate.
+
 '''
 random.seed(SEED)
