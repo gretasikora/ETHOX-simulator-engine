@@ -15,10 +15,6 @@ Your personality shapes HOW you interact, make decisions, and react to situation
 Your personality:
 {agent.traits}
 
-You have been assigned a shopping behavior profile. Act accordingly.
-Your profile:
-{agent.customer_behavior}
-
 Event:
 {event_message}
 
@@ -89,9 +85,9 @@ Your personality shapes HOW you interact, make decisions, and react to situation
 Your personality:
 {agent.traits}
 
-You have been assigned a shopping behavior profile. Act accordingly.
+You have been assigned a voting behavior profile. Act accordingly.
 Your profile:
-{agent.customer_behavior}
+{agent.voter_profile}
 
 Event:
 {event_message}
@@ -176,7 +172,7 @@ Provide a comprehensive summary that includes:
 5. Unique customer perspectives
 6. Degree of consensus or polarization among the customer base{change_instruction}
 
-Write in a professional consulting tone addressing the client about their customer base. Do not mention individuals as each profile represents a subpopulation (archetype). Keep the summary concise but insightful (3-5 paragraphs).
+Write in a professional consulting tone addressing the client about their customer base. Do not mention individuals as each profile represents a subgroup of customers. Keep the summary concise but insightful (3-5 paragraphs).
 """
 
 
