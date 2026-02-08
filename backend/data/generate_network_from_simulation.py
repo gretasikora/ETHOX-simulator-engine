@@ -116,7 +116,7 @@ def build_network_data(agents, adjacency, agent_id_as_int: bool = False) -> dict
         cb = getattr(a, "customer_behavior", None) or {}
         age = _age_from_group(cb.get("age_group"))
         gender = _normalize_gender(cb.get("gender"))
-        # These come from the simulation (LLM), not the CSV. Agent uses care/usage_effect/opinion.
+        # These come from the simulation (LLM), not the CSV. Agent uses care/change_in_support/opinion.
         text_opinion = getattr(a, "text_opinion", None) or getattr(a, "opinion", None) or ""
         level_of_care = getattr(a, "level_of_care", None)
         if level_of_care is None and text_opinion:
@@ -124,7 +124,7 @@ def build_network_data(agents, adjacency, agent_id_as_int: bool = False) -> dict
             level_of_care = round(care / 10.0, 4) if care is not None else None
         effect_on_usage = getattr(a, "effect_on_usage", None)
         if effect_on_usage is None and text_opinion:
-            effect_on_usage = getattr(a, "usage_effect", None)
+            effect_on_usage = getattr(a, "change_in_support", None)
         node = {
             "agent_id": i if agent_id_as_int else str(i),
             "degree": degree[i],
@@ -148,7 +148,7 @@ def build_network_data(agents, adjacency, agent_id_as_int: bool = False) -> dict
         initial_care = getattr(a, "initial_care", None)
         if initial_care is not None:
             node["initial_level_of_care"] = round(float(initial_care) / 10.0, 4)
-        initial_usage = getattr(a, "initial_usage_effect", None)
+        initial_usage = getattr(a, "initial_change_in_support", None)
         if initial_usage is not None:
             node["initial_effect_on_usage"] = int(initial_usage)
         nodes.append(node)

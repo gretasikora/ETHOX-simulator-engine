@@ -14,10 +14,10 @@ class AgentProxy:
     id: int
     opinion: str
     care: float  # 0-10
-    usage_effect: float  # -5 to 5
+    change_in_support: float  # -5 to 5
     initial_opinion: str | None = None
     initial_care: float | None = None
-    initial_usage_effect: float | None = None
+    initial_change_in_support: float | None = None
 
 
 # simulation_id -> { "trigger": str, "agents": list[dict] }
@@ -39,7 +39,7 @@ def _node_to_agent_proxy(node: dict) -> AgentProxy:
 
     # effect_on_usage: -5..5 (already correct)
     effect = node.get("effect_on_usage")
-    usage_effect = float(effect) if effect is not None else 0.0
+    change_in_support = float(effect) if effect is not None else 0.0
 
     opinion = str(node.get("text_opinion") or node.get("opinion") or "")
 
@@ -54,10 +54,10 @@ def _node_to_agent_proxy(node: dict) -> AgentProxy:
         id=agent_id,
         opinion=opinion,
         care=care,
-        usage_effect=usage_effect,
+        change_in_support=change_in_support,
         initial_opinion=str(init_opinion) if init_opinion is not None else None,
         initial_care=initial_care,
-        initial_usage_effect=float(initial_usage) if initial_usage is not None else None,
+        initial_change_in_support=float(initial_usage) if initial_usage is not None else None,
     )
 
 

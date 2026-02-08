@@ -38,7 +38,7 @@ def run_full_simulation(trigger: str, num_agents: int) -> tuple[dict[str, Any], 
     for agent in agents:
         agent.initial_opinion = agent.opinion
         agent.initial_care = agent.care
-        agent.initial_usage_effect = agent.usage_effect
+        agent.initial_change_in_support = agent.change_in_support
 
     # Social influence: each agent updates based on neighbors
     for i, agent in enumerate(agents):
@@ -53,7 +53,7 @@ def run_full_simulation(trigger: str, num_agents: int) -> tuple[dict[str, Any], 
                 weights[other.id] = care
         update_opinion_from_neighbors(agent, trigger, neighbor_opinions, weights, self_weight=1.0)
 
-    # Final graph: after social influence (agents have opinion, care, usage_effect)
+    # Final graph: after social influence (agents have opinion, care, change_in_support)
     final = build_network_data(agents, adjacency, agent_id_as_int=True)
 
     return initial, final, agents, adjacency

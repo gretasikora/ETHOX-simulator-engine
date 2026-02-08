@@ -291,7 +291,7 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
       set({
         reportStatus: "ready",
         reportCareScore100: resp.care_score_100,
-        reportUsageEffect50: resp.usage_effect_50,
+        reportUsageEffect50: resp.change_in_support_50,
         reportText: resp.report_text,
         reportIncludeInitial: includeInitial,
         reportGeneratedAt: new Date().toISOString(),

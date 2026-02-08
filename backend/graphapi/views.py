@@ -183,9 +183,9 @@ class SimulationReportView(APIView):
 
         # Compute metrics from final agent outputs
         avg_care = sum(a.care for a in agents) / len(agents)
-        avg_usage = sum(a.usage_effect for a in agents) / len(agents)
+        avg_usage = sum(a.change_in_support for a in agents) / len(agents)
         care_score_100 = max(0, min(100, round(avg_care * 10)))
-        usage_effect_50 = max(-50, min(50, round(avg_usage * 10)))
+        change_in_support_50 = max(-50, min(50, round(avg_usage * 10)))
 
         try:
             from simulation.interaction import supervisor_summarize
@@ -199,6 +199,6 @@ class SimulationReportView(APIView):
         return Response({
             "simulation_id": simulation_id,
             "care_score_100": care_score_100,
-            "usage_effect_50": usage_effect_50,
+            "change_in_support_50": change_in_support_50,
             "report_text": report_text,
         })

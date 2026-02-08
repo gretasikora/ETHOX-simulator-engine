@@ -146,7 +146,7 @@ export interface SimulationReportRequest {
 export interface SimulationReportResponse {
   simulation_id: string;
   care_score_100: number;
-  usage_effect_50: number;
+  change_in_support_50: number;
   report_text: string;
 }
 
