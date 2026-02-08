@@ -179,7 +179,7 @@ export function AgentProfileDrawer({
                 </div>
                 <div>
                   <div className="mb-1 text-[10px] font-medium uppercase tracking-wider text-aurora-text2/80">
-                    Effect on usage
+                    Change in Support
                   </div>
                   <p className="text-sm text-aurora-text0">
                     {agent?.initial_effect_on_usage != null
@@ -232,7 +232,7 @@ export function AgentProfileDrawer({
                 </div>
                 <div>
                   <div className="mb-1 text-[10px] font-medium uppercase tracking-wider text-aurora-text2/80">
-                    Effect on usage
+                    Change in Support
                   </div>
                   <p className="text-sm text-aurora-text0">
                     {agent?.effect_on_usage != null ? String(agent.effect_on_usage) : "—"}

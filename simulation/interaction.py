@@ -118,6 +118,8 @@ No extra text. Use neighbor weights to update your interpretation:
 """
 
 def update_opinion_from_neighbors(agent, event_message, neighbor_opinions, weights, self_weight=1.0):
+    if not neighbor_opinions:
+        return agent.opinion
     prompt = build_opinion_update_prompt(agent, event_message, neighbor_opinions, weights, self_weight=self_weight)
     raw = llm_generate(prompt).strip()
     parsed = _parse_json_response(raw)

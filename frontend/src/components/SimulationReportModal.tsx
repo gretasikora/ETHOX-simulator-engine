@@ -163,7 +163,7 @@ export function SimulationReportModal() {
                       </div>
                       <div>
                         <p className="text-xs font-medium uppercase tracking-wider text-aurora-text2">
-                          Effect on usage
+                          Change in Support
                         </p>
                         <p className="mt-1 text-3xl font-semibold text-aurora-text0">
                           {reportUsageEffect50 ?? 0}
