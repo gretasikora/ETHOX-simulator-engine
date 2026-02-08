@@ -97,7 +97,7 @@ export function SimulationReportModal() {
               <h2 id="report-modal-title" className="text-xl font-semibold text-aurora-text0">
                 Simulation Report
               </h2>
-              <p className="mt-0.5 text-sm text-aurora-text2">Customer Reaction Summary</p>
+              <p className="mt-0.5 text-sm text-aurora-text2">Voter Reaction Summary</p>
             </div>
             <button
               type="button"
@@ -173,7 +173,7 @@ export function SimulationReportModal() {
                           </span>
                         </p>
                         <p className="mt-0.5 text-xs text-aurora-text2">
-                          Predicted impact on platform usage
+                          Predicted impact on voter support
                         </p>
                       </div>
                     </div>

@@ -64,14 +64,11 @@ def trigger_reaction(agent, event_message):
     if not isinstance(parsed, dict):
         agent.opinion = raw
         agent.care = 0
-        agent.usage_effect = 0
         agent.change_in_support = 0
         return
     agent.opinion = str(parsed.get("opinion", "")).strip()
     agent.care = _clamp(parsed.get("care", 0), 0, 10)
-    eff = _clamp(parsed.get("usage_effect", 0), -5, 5)
-    agent.usage_effect = eff
-    agent.change_in_support = eff  # keep in sync for build_network_data
+    agent.change_in_support = _clamp(parsed.get("change_in_support", 0), -5, 5)
 
 
 def broadcast_trigger(agents, event_message):
@@ -132,15 +129,12 @@ def update_opinion_from_neighbors(agent, event_message, neighbor_opinions, weigh
     if not isinstance(parsed, dict):
         print(agent.id, "\n", agent.opinion, "\n", raw)
         agent.care = 0
-        agent.usage_effect = 0
         agent.change_in_support = 0
         return agent.opinion
     updated = str(parsed.get("opinion", "")).strip()
     agent.care = _clamp(parsed.get("care", 0), 0, 10)
-    eff = _clamp(parsed.get("usage_effect", 0), -5, 5)
-    agent.usage_effect = eff
-    agent.change_in_support = eff
-    print("\n", agent.id, "\n", updated, agent.care, agent.usage_effect)
+    agent.change_in_support = _clamp(parsed.get("change_in_support", 0), -5, 5)
+    print("\n", agent.id, "\n", updated, agent.care, agent.change_in_support)
     agent.opinion = updated
     return updated
 
@@ -151,10 +145,10 @@ def build_supervisor_summary_prompt(agents, event_message, include_initial=False
     for agent in agents:
         if include_initial and hasattr(agent, 'initial_opinion'):
             opinion_lines.append(f"Customer {agent.id}:")
-            opinion_lines.append(f"  Initial: {agent.initial_opinion} (care: {agent.initial_care}, usage_effect: {agent.initial_usage_effect})")
-            opinion_lines.append(f"  Final: {agent.opinion} (care: {agent.care}, usage_effect: {agent.usage_effect})")
+            opinion_lines.append(f"  Initial: {agent.initial_opinion} (care: {agent.initial_care}, change_in_support: {agent.initial_change_in_support})")
+            opinion_lines.append(f"  Final: {agent.opinion} (care: {agent.care}, change_in_support: {agent.change_in_support})")
         else:
-            opinion_lines.append(f"Customer {agent.id}: {agent.opinion} (care: {agent.care}/10, usage_effect: {agent.usage_effect})")
+            opinion_lines.append(f"Customer {agent.id}: {agent.opinion} (care: {agent.care}/10, change_in_support: {agent.change_in_support})")
 
     opinions_block = "\n".join(opinion_lines)
 

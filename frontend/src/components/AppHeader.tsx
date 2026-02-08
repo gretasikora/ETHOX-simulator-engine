@@ -145,13 +145,6 @@ export function AppHeader({ onSearchSelect: _onSearchSelect }: AppHeaderProps) {
       </div>
 
       <div className="flex shrink-0 items-center gap-2 pl-2 sm:pl-4">
-        <Link
-          to="/run"
-          className="flex items-center gap-1.5 rounded-lg border border-aurora-accent1/60 bg-aurora-surface0/60 px-3 py-1.5 text-sm font-medium text-aurora-accent1 transition-all hover:bg-aurora-surface2/80 hover:text-aurora-accent0 active:scale-[0.98] sm:rounded-xl sm:px-4 sm:py-2"
-        >
-          <Pencil className="h-4 w-4" />
-          <span className="hidden sm:inline">Change simulation</span>
-        </Link>
         {simulationInput.trigger && (
           <button
             type="button"
