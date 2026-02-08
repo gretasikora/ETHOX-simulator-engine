@@ -1,11 +1,13 @@
 import { create } from "zustand";
-import { runSimulation as runSimulationApi } from "../api/client";
+import { runSimulation as runSimulationApi, fetchSimulationReport } from "../api/client";
 import type { NodeData, EdgeData } from "../api/client";
 import type { SimulationGraphData, SimulationNodeData, SimulationEdgeData } from "../api/client";
 import { useGraphStore } from "./useGraphStore";
 import { useUIStore } from "./useUIStore";
 import { easeInOutCubic } from "../utils/easing";
 import { computeCareSize, computeCareGlow } from "../utils/careSizing";
+
+export type ReportStatus = "idle" | "loading" | "ready" | "error";
 
 function normalizeNode(n: SimulationNodeData): NodeData {
   const node: NodeData = {
@@ -56,6 +58,7 @@ export interface CareGlowData {
 
 export interface SimulationState {
   simulationInput: { trigger: string; numAgents: number };
+  simulationId: string | null;
   initialGraph: { nodes: NodeData[]; edges: EdgeData[] } | null;
   finalGraph: { nodes: NodeData[]; edges: EdgeData[] } | null;
   status: SimulationStatus;
@@ -67,6 +70,14 @@ export interface SimulationState {
   careEdgeSweepIntensity: number;
   nodeSizeOverrideById: Record<string, number>;
   careGlowById: Record<string, CareGlowData>;
+  /** Report state */
+  reportStatus: ReportStatus;
+  reportCareScore100?: number;
+  reportUsageEffect50?: number;
+  reportText?: string;
+  reportIncludeInitial: boolean;
+  reportModalOpen: boolean;
+  reportGeneratedAt?: string;
   setSimulationInput: (trigger: string, numAgents: number) => void;
   runSimulation: (trigger: string, numAgents: number) => Promise<void>;
   revertToDefault: () => Promise<void>;
@@ -74,10 +85,16 @@ export interface SimulationState {
   startAnimation: () => void;
   finishAnimation: () => void;
   reset: () => void;
+  /** Report actions */
+  fetchReport: (simulationId: string, trigger: string, includeInitial: boolean) => Promise<void>;
+  openReportModal: () => void;
+  closeReportModal: () => void;
+  setReportIncludeInitial: (v: boolean) => void;
 }
 
 export const useSimulationStore = create<SimulationState>((set, get) => ({
   simulationInput: { trigger: "", numAgents: 100 },
+  simulationId: null,
   initialGraph: null,
   finalGraph: null,
   status: "idle",
@@ -89,6 +106,9 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
   careEdgeSweepIntensity: 0,
   nodeSizeOverrideById: {},
   careGlowById: {},
+  reportStatus: "idle",
+  reportIncludeInitial: false,
+  reportModalOpen: false,
 
   setSimulationInput: (trigger: string, numAgents: number) => {
     set({ simulationInput: { trigger, numAgents } });
@@ -103,6 +123,7 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
 
       set({
         simulationInput: { trigger, numAgents },
+        simulationId: resp.simulation_id,
         initialGraph: initial,
         finalGraph: final,
         status: "initial_ready",
@@ -110,6 +131,8 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
         error: null,
         animationProgress: 0,
         isAnimating: false,
+        reportStatus: "idle",
+        reportModalOpen: false,
       });
 
       useGraphStore.getState().setGraphData(initial.nodes, initial.edges);
@@ -232,6 +255,7 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
 
   reset: () => {
     set({
+      simulationId: null,
       initialGraph: null,
       finalGraph: null,
       status: "idle",
@@ -243,6 +267,33 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
       careEdgeSweepIntensity: 0,
       nodeSizeOverrideById: {},
       careGlowById: {},
+      reportStatus: "idle",
+      reportCareScore100: undefined,
+      reportUsageEffect50: undefined,
+      reportText: undefined,
+      reportGeneratedAt: undefined,
+      reportModalOpen: false,
     });
   },
+
+  fetchReport: async (simulationId: string, trigger: string, includeInitial: boolean) => {
+    set({ reportStatus: "loading" });
+    try {
+      const resp = await fetchSimulationReport(simulationId, trigger, includeInitial);
+      set({
+        reportStatus: "ready",
+        reportCareScore100: resp.care_score_100,
+        reportUsageEffect50: resp.usage_effect_50,
+        reportText: resp.report_text,
+        reportIncludeInitial: includeInitial,
+        reportGeneratedAt: new Date().toISOString(),
+      });
+    } catch {
+      set({ reportStatus: "error" });
+    }
+  },
+
+  openReportModal: () => set({ reportModalOpen: true }),
+  closeReportModal: () => set({ reportModalOpen: false }),
+  setReportIncludeInitial: (v) => set({ reportIncludeInitial: v }),
 }));

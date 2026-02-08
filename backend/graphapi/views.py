@@ -1,4 +1,11 @@
+import sys
 import uuid
+from pathlib import Path
+
+# Ensure project root for simulation imports
+ROOT = Path(__file__).resolve().parent.parent.parent
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -6,6 +13,7 @@ from rest_framework import status
 
 from .services import load_graph, get_metadata, get_node_detail, clear_cache
 from .simulation_service import run_simulation
+from .simulation_store import store_simulation, get_agents
 
 
 class GraphView(APIView):
@@ -129,8 +137,68 @@ class RunSimulationView(APIView):
             )
 
         simulation_id = str(uuid.uuid4())
+        store_simulation(simulation_id, trigger.strip(), final_graph)
+
         return Response({
             "simulation_id": simulation_id,
             "initial_graph": initial_graph,
             "final_graph": final_graph,
+        })
+
+
+class SimulationReportView(APIView):
+    def post(self, request):
+        data = request.data
+        if not isinstance(data, dict):
+            return Response(
+                {"detail": "Request body must be JSON object."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        simulation_id = data.get("simulation_id")
+        trigger = data.get("trigger", "")
+        include_initial = bool(data.get("include_initial", False))
+
+        if not simulation_id or not isinstance(simulation_id, str):
+            return Response(
+                {"detail": "Missing or invalid 'simulation_id'."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        result = get_agents(simulation_id)
+        if result is None:
+            return Response(
+                {"detail": "Simulation not found or expired."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        agents, stored_trigger = result
+        event_message = trigger.strip() or stored_trigger
+
+        if not agents:
+            return Response(
+                {"detail": "No agent data available for report."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # Compute metrics from final agent outputs
+        avg_care = sum(a.care for a in agents) / len(agents)
+        avg_usage = sum(a.usage_effect for a in agents) / len(agents)
+        care_score_100 = max(0, min(100, round(avg_care * 10)))
+        usage_effect_50 = max(-50, min(50, round(avg_usage * 10)))
+
+        try:
+            from simulation.interaction import supervisor_summarize
+            report_text = supervisor_summarize(agents, event_message, include_initial=include_initial)
+        except Exception as e:
+            return Response(
+                {"detail": f"Report generation failed: {e!s}"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+        return Response({
+            "simulation_id": simulation_id,
+            "care_score_100": care_score_100,
+            "usage_effect_50": usage_effect_50,
+            "report_text": report_text,
         })

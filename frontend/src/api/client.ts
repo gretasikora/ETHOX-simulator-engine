@@ -134,3 +134,39 @@ export async function runSimulation(
   }
   return res.json();
 }
+
+/** Report API request */
+export interface SimulationReportRequest {
+  simulation_id: string;
+  trigger: string;
+  include_initial: boolean;
+}
+
+/** Report API response */
+export interface SimulationReportResponse {
+  simulation_id: string;
+  care_score_100: number;
+  usage_effect_50: number;
+  report_text: string;
+}
+
+export async function fetchSimulationReport(
+  simulationId: string,
+  trigger: string,
+  includeInitial: boolean
+): Promise<SimulationReportResponse> {
+  const res = await fetch(`${BASE}/api/simulations/report/`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      simulation_id: simulationId,
+      trigger,
+      include_initial: includeInitial,
+    } satisfies SimulationReportRequest),
+  });
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    throw new Error((data.detail as string) || res.statusText || "Failed to generate report");
+  }
+  return res.json();
+}

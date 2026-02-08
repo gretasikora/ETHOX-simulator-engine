@@ -15,6 +15,8 @@ import { useSimulationStore } from "../store/useSimulationStore";
 import { exportVisibleGraphToForceGraphData } from "../utils/graphExport";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { PipelineStatusDebug } from "./PipelineStatusDebug";
+import { SimulationCompleteToast } from "./SimulationCompleteToast";
+import { SimulationReportModal } from "./SimulationReportModal";
 import type Graph from "graphology";
 
 export function AppShell() {
@@ -167,6 +169,9 @@ export function AppShell() {
       </ErrorBoundary>
 
       <ExperimentPanel />
+
+      <SimulationCompleteToast />
+      <SimulationReportModal />
 
       <PipelineStatusDebug />
       <ToastContainer />
