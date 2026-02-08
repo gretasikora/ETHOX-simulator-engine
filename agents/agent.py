@@ -1,6 +1,6 @@
 # agents/agent.py
 class Agent:
-    def __init__(self, id, traits, voter_profile=None, level_of_care=None, change_in_support=None, text_opinion=None):
+    def __init__(self, id, traits, voter_profile=None):
         self.id = id
         self.traits = traits
         self.voter_profile = voter_profile or {}

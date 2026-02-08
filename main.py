@@ -17,21 +17,21 @@ if __name__ == "__main__":
     backend_data = Path(__file__).parent / "backend" / "data"
     export_network_json(agents, adjacency, backend_data / "network.json")
 
-    out_dir = Path("simulation") / "outputs"
-    out_dir.mkdir(parents=True, exist_ok=True)
-    labels = {i: str(a.id) for i, a in enumerate(agents)}
-    visualize_adjacency_matrix(adjacency, out_dir / "network.png", labels=labels)
-
-    # Generate supervisor summary
-    print("\n" + "=" * 80)
-    print("SUPERVISOR SUMMARY")
-    print("=" * 80)
-    summary = supervisor_summarize(agents, TRIGGER_EVENT_MESSAGE, include_initial=True)
-    print(summary)
-    print("=" * 80)
+    print("\n\n\n\n")
 
     with open(out_dir / "supervisor_summary.txt", "w") as f:
         f.write(f"Event: {TRIGGER_EVENT_MESSAGE}\n\n")
         f.write(summary)
 
-    print("\nDONE")
+summary = supervisor_summarize(agents, TRIGGER_EVENT_MESSAGE, include_initial=True)
+print("\n" + "="*80)
+print("SUPERVISOR SUMMARY")
+print("="*80)
+print(summary)
+print("="*80)
+
+with open(out_dir / "supervisor_summary.txt", "w") as f:
+    f.write(f"Event: {TRIGGER_EVENT_MESSAGE}\n\n")
+    f.write(summary)
+
+print("\nDONE")
