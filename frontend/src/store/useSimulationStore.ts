@@ -47,6 +47,8 @@ export type SimulationStatus =
   | "animating"
   | "finished"
   | "error";
+/** Phases within a simulation run: pre_trigger (initial graph) → post_trigger (after Apply trigger) → animating → finished */
+export type SimulationPhase = "pre_trigger" | "post_trigger" | "animating" | "finished";
 export type SimulationViewMode = "simulation" | "default";
 
 export type CareAnimationStatus = "idle" | "animating" | "done";
@@ -60,8 +62,10 @@ export interface SimulationState {
   simulationInput: { trigger: string; numAgents: number };
   simulationId: string | null;
   initialGraph: { nodes: NodeData[]; edges: EdgeData[] } | null;
+  postTriggerGraph: { nodes: NodeData[]; edges: EdgeData[] } | null;
   finalGraph: { nodes: NodeData[]; edges: EdgeData[] } | null;
   status: SimulationStatus;
+  phase: SimulationPhase;
   viewMode: SimulationViewMode;
   error: string | null;
   animationProgress: number;
@@ -82,6 +86,9 @@ export interface SimulationState {
   runSimulation: (trigger: string, numAgents: number) => Promise<void>;
   revertToDefault: () => Promise<void>;
   applySimulationGraph: () => void;
+  /** Show post-trigger graph (initial reactions). Call after Run, before Let them talk. */
+  applyTrigger: () => void;
+  /** Animate from post-trigger to final (let agents talk). */
   startAnimation: () => void;
   finishAnimation: () => void;
   reset: () => void;
@@ -96,8 +103,10 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
   simulationInput: { trigger: "", numAgents: 100 },
   simulationId: null,
   initialGraph: null,
+  postTriggerGraph: null,
   finalGraph: null,
   status: "idle",
+  phase: "pre_trigger",
   viewMode: "default",
   error: null,
   animationProgress: 0,
@@ -119,18 +128,22 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
     try {
       const resp = await runSimulationApi(trigger, numAgents);
       const initial = normalizeGraph(resp.initial_graph);
+      const postTrigger = normalizeGraph(resp.post_trigger_graph);
       const final = normalizeGraph(resp.final_graph);
 
       set({
         simulationInput: { trigger, numAgents },
         simulationId: resp.simulation_id,
         initialGraph: initial,
+        postTriggerGraph: postTrigger,
         finalGraph: final,
         status: "initial_ready",
+        phase: "pre_trigger",
         viewMode: "simulation",
         error: null,
         animationProgress: 0,
         isAnimating: false,
+        careAnimationStatus: "idle",
         reportStatus: "idle",
         reportModalOpen: false,
       });
@@ -143,12 +156,21 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
     }
   },
 
+  applyTrigger: () => {
+    const { postTriggerGraph } = get();
+    if (!postTriggerGraph) return;
+    useGraphStore.getState().setGraphData(postTriggerGraph.nodes, postTriggerGraph.edges);
+    useUIStore.getState().setSizeBy("level_of_care");
+    set({ phase: "post_trigger" });
+  },
+
   startAnimation: () => {
-    const { initialGraph, finalGraph } = get();
-    if (!initialGraph || !finalGraph) return;
+    const { postTriggerGraph, finalGraph } = get();
+    if (!postTriggerGraph || !finalGraph) return;
 
     set({
       status: "animating",
+      phase: "animating",
       isAnimating: true,
       animationProgress: 0,
       careAnimationStatus: "animating",
@@ -168,7 +190,7 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
       glowByNode.set(id, { glowStrength: glow.glowStrength, borderColor: glow.borderColor });
     }
     // Nodes not in final graph: use base size and no glow
-    for (const n of initialGraph.nodes) {
+    for (const n of postTriggerGraph.nodes) {
       const id = String(n.agent_id);
       if (!targetSizesByNode.has(id)) {
         targetSizesByNode.set(id, baseSize);
@@ -177,8 +199,8 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
     }
 
     const start = performance.now();
-    const ANIMATION_DURATION_MS = 1200;
-    const EDGE_SWEEP_MS = 300;
+    const ANIMATION_DURATION_MS = 4000;  // Slower so the care impact is easier to follow
+    const EDGE_SWEEP_MS = 1000;
 
     const tick = () => {
       const elapsed = performance.now() - start;
@@ -232,6 +254,7 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
     }
     set({
       status: "finished",
+      phase: "finished",
       isAnimating: false,
       animationProgress: 1,
       careAnimationStatus: "done",
@@ -244,14 +267,12 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
   revertToDefault: async () => {
     const { initialGraph } = get();
     if (initialGraph) {
-      // Restore the original graph from before simulation effects (undo impacts of talking)
       useGraphStore.getState().setGraphData(initialGraph.nodes, initialGraph.edges);
       useUIStore.getState().setSizeBy("degree");
     } else {
-      // No simulation run yet; load the default graph from the API
       await useGraphStore.getState().loadGraph();
     }
-    set({ viewMode: "default" });
+    set({ viewMode: "default", phase: "pre_trigger" });
   },
 
   applySimulationGraph: () => {
@@ -265,8 +286,10 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
     set({
       simulationId: null,
       initialGraph: null,
+      postTriggerGraph: null,
       finalGraph: null,
       status: "idle",
+      phase: "pre_trigger",
       viewMode: "default",
       error: null,
       animationProgress: 0,

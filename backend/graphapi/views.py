@@ -129,7 +129,7 @@ class RunSimulationView(APIView):
             )
 
         try:
-            initial_graph, final_graph = run_simulation(trigger.strip(), num_agents)
+            initial_graph, post_trigger_graph, final_graph = run_simulation(trigger.strip(), num_agents)
         except Exception as e:
             return Response(
                 {"detail": f"Simulation failed: {e!s}"},
@@ -142,6 +142,7 @@ class RunSimulationView(APIView):
         return Response({
             "simulation_id": simulation_id,
             "initial_graph": initial_graph,
+            "post_trigger_graph": post_trigger_graph,
             "final_graph": final_graph,
         })
 

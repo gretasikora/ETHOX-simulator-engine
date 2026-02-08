@@ -116,6 +116,7 @@ export interface SimulationGraphData {
 export interface RunSimulationResponse {
   simulation_id: string;
   initial_graph: SimulationGraphData;
+  post_trigger_graph: SimulationGraphData;
   final_graph: SimulationGraphData;
 }
 

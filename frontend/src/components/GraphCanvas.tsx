@@ -29,6 +29,8 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const sigmaRef = useRef<Sigma | null>(null);
   const graphInstanceRef = useRef<Graph | null>(null);
+  const layoutPositionsRef = useRef<Map<string, { x: number; y: number }> | null>(null);
+  const prevGraphKeyRef = useRef<string | null>(null);
 
   const nodes = useGraphStore((s) => s.nodes);
   const edges = useGraphStore((s) => s.edges);
@@ -79,6 +81,7 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
   const careEdgeSweepIntensity = useSimulationStore((s) => s.careEdgeSweepIntensity);
   const careAnimationStatus = useSimulationStore((s) => s.careAnimationStatus);
   const animationProgress = useSimulationStore((s) => s.animationProgress);
+  const simulationPhase = useSimulationStore((s) => s.phase);
   const simulationInitialGraph = useSimulationStore((s) => s.initialGraph);
   const simulationFinalGraph = useSimulationStore((s) => s.finalGraph);
 
@@ -126,7 +129,8 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
   careGlowByIdRef.current = careGlowById;
   careEdgeSweepIntensityRef.current = careEdgeSweepIntensity;
   simulationInitialPhaseRef.current = Boolean(
-    simulationInitialGraph &&
+    simulationPhase === "pre_trigger" &&
+      simulationInitialGraph &&
       simulationFinalGraph &&
       careAnimationStatus === "idle" &&
       !simulationIsAnimating
@@ -149,6 +153,11 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
   useEffect(() => {
     if (!containerRef.current || nodes.length === 0) return;
 
+    const graphKey =
+      [...nodes.map((n) => String(n.agent_id))].sort().join(",") +
+      "|" +
+      [...edges.map((e) => [String(e.source), String(e.target)].sort().join("-"))].sort().join(",");
+
     const uiState: GraphUIState = {
       colorBy,
       sizeBy,
@@ -160,15 +169,29 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
     };
     const graph = buildGraphology(nodes, edges, uiState);
 
-    randomLayout.assign(graph);
-    forceAtlas2.assign(graph, {
-      iterations: 300,
-      settings: {
-        gravity: 1,
-        scalingRatio: 2,
-        barnesHutOptimize: graph.order > 200,
-      },
-    });
+    const storedPositions = layoutPositionsRef.current;
+    const usePreservedLayout = storedPositions && prevGraphKeyRef.current === graphKey;
+
+    if (usePreservedLayout && storedPositions) {
+      graph.forEachNode((node) => {
+        const p = storedPositions.get(node);
+        if (p) {
+          graph.setNodeAttribute(node, "x", p.x);
+          graph.setNodeAttribute(node, "y", p.y);
+        }
+      });
+    } else {
+      randomLayout.assign(graph);
+      forceAtlas2.assign(graph, {
+        iterations: 300,
+        settings: {
+          gravity: 1,
+          scalingRatio: 2,
+          barnesHutOptimize: graph.order > 200,
+        },
+      });
+    }
+    prevGraphKeyRef.current = graphKey;
 
     graphRef.current = graph;
     graphInstanceRef.current = graph;
@@ -375,6 +398,18 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
     onSigmaReady(resetCamera);
 
     return () => {
+      const g = graphInstanceRef.current;
+      if (g) {
+        const positions = new Map<string, { x: number; y: number }>();
+        g.forEachNode((node) => {
+          const attrs = g.getNodeAttributes(node);
+          if (typeof attrs.x === "number" && typeof attrs.y === "number") {
+            positions.set(node, { x: attrs.x, y: attrs.y });
+          }
+        });
+        layoutPositionsRef.current = positions;
+        prevGraphKeyRef.current = graphKey;
+      }
       sigma.kill();
       sigmaRef.current = null;
       graphRef.current = null;
@@ -430,6 +465,7 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
     simulationIsAnimating,
     careGlowById,
     careEdgeSweepIntensity,
+    simulationPhase,
     simulationInitialGraph,
     simulationFinalGraph,
     careAnimationStatus,

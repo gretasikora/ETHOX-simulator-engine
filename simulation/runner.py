@@ -17,12 +17,13 @@ from simulation.network import (
 )
 
 
-def run_full_simulation(trigger: str, num_agents: int) -> tuple[dict[str, Any], dict[str, Any]]:
+def run_full_simulation(trigger: str, num_agents: int) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
     """
     Run the full simulation with LLM: broadcast trigger, social influence.
-    Returns (initial_graph, final_graph, agents, adjacency).
+    Returns (initial_graph, post_trigger_graph, final_graph, agents, adjacency).
     - initial_graph: structure + traits, no level_of_care (agents haven't reacted yet).
-    - final_graph: structure + traits + level_of_care, effect_on_usage, text_opinion from LLM.
+    - post_trigger_graph: after broadcast_trigger (initial reactions, level_of_care from LLM).
+    - final_graph: after social influence (agents talked and updated opinions).
     """
     agents = init_agents(num_agents)
     context = precompute_personality_context(agents)
@@ -40,6 +41,9 @@ def run_full_simulation(trigger: str, num_agents: int) -> tuple[dict[str, Any], 
         agent.initial_care = agent.care
         agent.initial_change_in_support = agent.change_in_support
 
+    # Post-trigger graph: initial reactions (before agents talk to each other)
+    post_trigger = build_network_data(agents, adjacency, agent_id_as_int=True)
+
     # Social influence: each agent updates based on neighbors
     for i, agent in enumerate(agents):
         neighbor_opinions = []
@@ -51,9 +55,9 @@ def run_full_simulation(trigger: str, num_agents: int) -> tuple[dict[str, Any], 
                 neighbor_opinions.append((other.id, other.opinion))
                 care = similarity_score(agent, other, context) * compute_influencibility(agent.traits)
                 weights[other.id] = care
-        update_opinion_from_neighbors(agent, trigger, neighbor_opinions, weights, self_weight=1.0)
+        update_opinion_from_neighbors(agent, trigger, neighbor_opinions, weights, self_weight=0.5)
 
     # Final graph: after social influence (agents have opinion, care, change_in_support)
     final = build_network_data(agents, adjacency, agent_id_as_int=True)
 
-    return initial, final, agents, adjacency
+    return initial, post_trigger, final, agents, adjacency

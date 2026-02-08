@@ -54,16 +54,7 @@ export function AppShell() {
 
   const hoveredNodeId = useUIStore((s) => s.hoveredNodeId);
 
-  const simulationStatus = useSimulationStore((s) => s.status);
-  const startAnimation = useSimulationStore((s) => s.startAnimation);
-
   const open = selectedNodeId != null;
-
-  useEffect(() => {
-    if (simulationStatus === "initial_ready") {
-      startAnimation();
-    }
-  }, [simulationStatus, startAnimation]);
 
   useEffect(() => {
     if (selectedNodeId && visibleNodeIds.length > 0 && !visibleNodeIds.includes(selectedNodeId)) {

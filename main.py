@@ -11,7 +11,7 @@ from backend.data.generate_network_from_simulation import export_network_json
 
 if __name__ == "__main__":
     # Run full simulation (LLM calls)
-    initial, final, agents, adjacency = run_full_simulation(TRIGGER_EVENT_MESSAGE, NUM_AGENTS)
+    initial, _post_trigger, final, agents, adjacency = run_full_simulation(TRIGGER_EVENT_MESSAGE, NUM_AGENTS)
 
     # Export network for backend/website
     backend_data = Path(__file__).parent / "backend" / "data"
