@@ -76,6 +76,7 @@ export interface SimulationState {
   careGlowById: Record<string, CareGlowData>;
   /** Report state */
   reportStatus: ReportStatus;
+  reportError: string | null;
   reportCareScore100?: number;
   reportUsageEffect50?: number;
   reportText?: string;
@@ -116,6 +117,7 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
   nodeSizeOverrideById: {},
   careGlowById: {},
   reportStatus: "idle",
+  reportError: null,
   reportIncludeInitial: false,
   reportModalOpen: false,
 
@@ -150,6 +152,13 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
 
       useGraphStore.getState().setGraphData(initial.nodes, initial.edges);
       useUIStore.getState().setSizeBy("level_of_care");
+
+      // Run through full flow: show initial briefly, then apply trigger, then animate to final
+      const store = get();
+      setTimeout(() => {
+        store.applyTrigger();
+        setTimeout(() => store.startAnimation(), 300);
+      }, 100);
     } catch (e) {
       const msg = e instanceof Error ? e.message : "Simulation failed";
       set({ status: "error", error: msg });
@@ -300,6 +309,7 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
       nodeSizeOverrideById: {},
       careGlowById: {},
       reportStatus: "idle",
+      reportError: null,
       reportCareScore100: undefined,
       reportUsageEffect50: undefined,
       reportText: undefined,
@@ -309,23 +319,25 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
   },
 
   fetchReport: async (simulationId: string, trigger: string, includeInitial: boolean) => {
-    set({ reportStatus: "loading" });
+    set({ reportStatus: "loading", reportError: null });
     try {
       const resp = await fetchSimulationReport(simulationId, trigger, includeInitial);
       set({
         reportStatus: "ready",
+        reportError: null,
         reportCareScore100: resp.care_score_100,
         reportUsageEffect50: resp.change_in_support_50,
         reportText: resp.report_text,
         reportIncludeInitial: includeInitial,
         reportGeneratedAt: new Date().toISOString(),
       });
-    } catch {
-      set({ reportStatus: "error" });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Could not generate report.";
+      set({ reportStatus: "error", reportError: message });
     }
   },
 
-  openReportModal: () => set({ reportModalOpen: true }),
+  openReportModal: () => set({ reportModalOpen: true, reportError: null }),
   closeReportModal: () => set({ reportModalOpen: false }),
   setReportIncludeInitial: (v) => set({ reportIncludeInitial: v }),
 }));

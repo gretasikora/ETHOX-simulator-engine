@@ -1,0 +1,63 @@
+{
+"trigger": "Market has new selection of kicthens",
+"agents": [
+{
+"agent_id": 0,
+"degree": 1,
+"traits": {
+"Sociability": 0.475,
+"Assertiveness": 0.7,
+"Energy Level": 0.725,
+"Compassion": 0.85,
+"Respectfulness": 0.875,
+"Trust": 0.725,
+"Organization": 0.85,
+"Productiveness": 0.85,
+"Responsibility": 0.825,
+"Anxiety": 0.525,
+"Depression": 0.05,
+"Emotional Volatility": 0.325,
+"Intellectual Curiosity": 0.75,
+"Aesthetic Sensitivity": 0.575,
+"Creative Imagination": 0.7
+},
+"degree_centrality": 1.0,
+"betweenness_centrality": 0.0,
+"level_of_care": 0.73,
+"effect_on_usage": 3,
+"text_opinion": "A new selection of kitchens is a practical update that could improve home functionality and support healthier living, offering quality and innovative options for home improvement.",
+"initial_opinion": "A new selection of kitchens is a practical update that could improve home functionality and support healthier living.",
+"initial_level_of_care": 0.7,
+"initial_effect_on_usage": 3
+},
+{
+"agent_id": 1,
+"degree": 1,
+"traits": {
+"Sociability": 0.325,
+"Assertiveness": 0.55,
+"Energy Level": 0.475,
+"Compassion": 0.725,
+"Respectfulness": 0.8,
+"Trust": 0.65,
+"Organization": 0.45,
+"Productiveness": 0.65,
+"Responsibility": 0.6,
+"Anxiety": 0.5,
+"Depression": 0.475,
+"Emotional Volatility": 0.45,
+"Intellectual Curiosity": 0.775,
+"Aesthetic Sensitivity": 0.8,
+"Creative Imagination": 0.85
+},
+"degree_centrality": 1.0,
+"betweenness_centrality": 0.0,
+"level_of_care": 0.6,
+"effect_on_usage": 2,
+"text_opinion": "A new selection of kitchens is a practical update that could improve home functionality and support healthier living, offering quality and innovative options for home improvement.",
+"initial_opinion": "A new selection of kitchens could be a great opportunity to find quality and innovative options for home improvement.",
+"initial_level_of_care": 0.6,
+"initial_effect_on_usage": 2
+}
+]
+}

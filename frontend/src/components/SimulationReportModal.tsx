@@ -25,6 +25,7 @@ function truncateTrigger(trigger: string, maxLen: number): string {
 export function SimulationReportModal() {
   const reportModalOpen = useSimulationStore((s) => s.reportModalOpen);
   const reportStatus = useSimulationStore((s) => s.reportStatus);
+  const reportError = useSimulationStore((s) => s.reportError);
   const reportCareScore100 = useSimulationStore((s) => s.reportCareScore100);
   const reportUsageEffect50 = useSimulationStore((s) => s.reportUsageEffect50);
   const reportText = useSimulationStore((s) => s.reportText);
@@ -125,7 +126,7 @@ export function SimulationReportModal() {
           {reportStatus === "error" && (
             <div className="flex flex-col items-center justify-center gap-4 py-16">
               <p className="text-center text-aurora-text1">
-                Could not generate report. Try again.
+                {reportError || "Could not generate report. Try again."}
               </p>
               <button
                 type="button"

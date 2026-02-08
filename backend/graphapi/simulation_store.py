@@ -1,10 +1,21 @@
 """
-In-memory store for completed simulation agent outputs, keyed by simulation_id.
+Store for completed simulation agent outputs, keyed by simulation_id.
+Uses in-memory cache and file persistence so reports work across requests/restarts.
 Used by the report API to reconstruct AgentProxy objects for supervisor_summarize.
 """
 
+import json
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any
+
+
+def _simulations_dir() -> Path:
+    from django.conf import settings
+    d = getattr(settings, "DATA_DIR", None) or Path(__file__).resolve().parent.parent / "data"
+    sim_dir = d / "simulations"
+    sim_dir.mkdir(parents=True, exist_ok=True)
+    return sim_dir
 
 
 @dataclass
@@ -18,6 +29,9 @@ class AgentProxy:
     initial_opinion: str | None = None
     initial_care: float | None = None
     initial_change_in_support: float | None = None
+    # Aliases used by supervisor_summarize prompt
+    usage_effect: float = 0
+    initial_usage_effect: float | None = None
 
 
 # simulation_id -> { "trigger": str, "agents": list[dict] }
@@ -50,6 +64,7 @@ def _node_to_agent_proxy(node: dict) -> AgentProxy:
     initial_care = float(init_loc) * 10.0 if init_loc is not None else None
     initial_usage = int(init_effect) if init_effect is not None else None
 
+    init_support = float(initial_usage) if initial_usage is not None else None
     return AgentProxy(
         id=agent_id,
         opinion=opinion,
@@ -57,24 +72,41 @@ def _node_to_agent_proxy(node: dict) -> AgentProxy:
         change_in_support=change_in_support,
         initial_opinion=str(init_opinion) if init_opinion is not None else None,
         initial_care=initial_care,
-        initial_change_in_support=float(initial_usage) if initial_usage is not None else None,
+        initial_change_in_support=init_support,
+        usage_effect=change_in_support,
+        initial_usage_effect=init_support,
     )
 
 
 def store_simulation(simulation_id: str, trigger: str, final_graph: dict) -> None:
-    """Store agent outputs from final_graph keyed by simulation_id."""
+    """Store agent outputs from final_graph keyed by simulation_id (memory + file)."""
     nodes = final_graph.get("nodes") or []
-    # Preserve full node dict for _node_to_agent_proxy
     agents_data = [dict(n) for n in nodes]
-    _store[simulation_id] = {"trigger": trigger, "agents": agents_data}
+    entry = {"trigger": trigger, "agents": agents_data}
+    _store[simulation_id] = entry
+    try:
+        path = _simulations_dir() / f"{simulation_id}.json"
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(entry, f, indent=0)
+    except OSError:
+        pass  # keep in-memory only if file write fails
 
 
 def get_agents(simulation_id: str) -> tuple[list[AgentProxy], str] | None:
     """
     Retrieve stored agents and trigger for a simulation.
-    Returns (agents, trigger) or None if not found.
+    Checks in-memory first, then persisted file. Returns (agents, trigger) or None if not found.
     """
     entry = _store.get(simulation_id)
+    if not entry:
+        try:
+            path = _simulations_dir() / f"{simulation_id}.json"
+            if path.exists():
+                with open(path, encoding="utf-8") as f:
+                    entry = json.load(f)
+                _store[simulation_id] = entry
+        except (OSError, json.JSONDecodeError):
+            pass
     if not entry:
         return None
     agents = [_node_to_agent_proxy(a) for a in entry["agents"]]
