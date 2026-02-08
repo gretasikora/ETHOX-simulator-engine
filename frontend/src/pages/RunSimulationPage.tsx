@@ -34,14 +34,6 @@ export function RunSimulationPage() {
 
   return (
     <div className="flex min-h-screen w-full flex-col items-center justify-center bg-aurora-bg0 p-8">
-      <div className="mb-6 w-full max-w-lg text-left">
-        <Link
-          to="/explorer"
-          className="text-sm text-aurora-text2 transition-colors hover:text-aurora-accent1"
-        >
-          ← Skip to Explorer
-        </Link>
-      </div>
       <div className="surface-elevated w-full max-w-lg rounded-2xl border border-aurora-border/40 p-8 shadow-aurora-glow-sm">
         <h1 className="mb-6 text-xl font-semibold tracking-tight text-aurora-text0">
           Run Simulation
