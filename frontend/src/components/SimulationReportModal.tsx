@@ -179,13 +179,7 @@ export function SimulationReportModal() {
 
                     {/* Metadata grid */}
                     <div className="mt-8 space-y-4">
-                      <div className="grid gap-x-8 gap-y-3 text-sm sm:grid-cols-2 lg:grid-cols-4">
-                        <div>
-                          <p className="text-xs font-medium text-aurora-text2">Simulation ID</p>
-                          <p className="mt-0.5 font-mono text-xs text-aurora-text1 break-all">
-                            {simulationId ?? "—"}
-                          </p>
-                        </div>
+                      <div className="grid gap-x-8 gap-y-3 text-sm sm:grid-cols-2 lg:grid-cols-3">
                         <div>
                           <p className="text-xs font-medium text-aurora-text2">Agents</p>
                           <p className="mt-0.5 text-aurora-text1">
