@@ -111,15 +111,6 @@ export function GraphExploreControls() {
               <p className="mt-1 text-xs text-aurora-danger">Agent not visible under current filters</p>
             )}
           </div>
-          <label className="flex cursor-pointer items-center gap-2">
-            <input
-              type="checkbox"
-              checked={preferInfluence}
-              onChange={(e) => setPreferInfluence(e.target.checked)}
-              className="rounded border-aurora-border/70 bg-aurora-surface2/80 text-aurora-accent1 focus:ring-aurora-accent1/50"
-            />
-            <span className="text-[11px] text-aurora-text1/90">Prefer influence</span>
-          </label>
           <button
             type="button"
             onClick={handleFindPath}

@@ -106,14 +106,6 @@ export function SidebarFilters({
         <div className="flex items-center gap-1">
           <button
             type="button"
-            onClick={() => setSidebarCollapsed(true)}
-            className="rounded-md p-1.5 text-aurora-text2 hover:bg-aurora-surface2/80 hover:text-aurora-text1"
-            aria-label="Collapse filters"
-          >
-            <PanelRightOpen className="h-4 w-4" />
-          </button>
-          <button
-            type="button"
             onClick={() => setMobileOpen(false)}
             className="rounded-lg p-2 text-aurora-text1 hover:bg-aurora-surface2 hover:text-aurora-text0 lg:hidden"
             aria-label="Close filters"
@@ -133,15 +125,6 @@ export function SidebarFilters({
           />
           {filtersSectionOpen.nodeEncoding && (
           <div className="rounded-lg border border-aurora-border/60 bg-aurora-surface0/60 p-2.5 space-y-3">
-            <label className="flex items-center justify-between gap-3 cursor-pointer">
-              <span className="text-sm text-aurora-text1">Show age (color)</span>
-              <input
-                type="checkbox"
-                checked={showAgeEncoding}
-                onChange={(e) => setShowAgeEncoding(e.target.checked)}
-                className="h-4 w-4 rounded border-aurora-border text-aurora-accent1 focus:ring-aurora-accent1"
-              />
-            </label>
             {showAgeEncoding && (
               <div>
                 <p className="mb-1 text-xs text-aurora-text2">Age gradient</p>
@@ -156,15 +139,6 @@ export function SidebarFilters({
                 </p>
               </div>
             )}
-            <label className="flex items-center justify-between gap-3 cursor-pointer">
-              <span className="text-sm text-aurora-text1">Show gender (shape)</span>
-              <input
-                type="checkbox"
-                checked={showGenderEncoding}
-                onChange={(e) => setShowGenderEncoding(e.target.checked)}
-                className="h-4 w-4 rounded border-aurora-border text-aurora-accent1 focus:ring-aurora-accent1"
-              />
-            </label>
             {showGenderEncoding && (
               <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-aurora-text2">
                 <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full border border-current" /> Male</span>
