@@ -13,7 +13,7 @@ from rest_framework import status
 
 from .services import load_graph, get_metadata, get_node_detail, clear_cache
 from .simulation_service import run_simulation
-from .simulation_store import store_simulation, get_agents
+from .simulation_storage import save_simulation, get_agents
 
 
 class GraphView(APIView):
