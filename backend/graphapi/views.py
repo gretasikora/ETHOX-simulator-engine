@@ -136,8 +136,22 @@ class RunSimulationView(APIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
-        simulation_id = str(uuid.uuid4())
-        store_simulation(simulation_id, trigger.strip(), final_graph)
+        # Save to database (and file backup)
+        try:
+            from .simulation_storage import save_simulation
+            db_simulation = save_simulation(
+                trigger_event=trigger.strip(),
+                num_agents=num_agents,
+                initial_graph=initial_graph,
+                post_trigger_graph=post_trigger_graph,
+                final_graph=final_graph,
+                summary_text=""  # Will be filled when report is generated
+            )
+            simulation_id = str(db_simulation.id)
+        except Exception as e:
+            print(f"Warning: Failed to save to database: {e}")
+            # Fallback to UUID if database save fails
+            simulation_id = str(uuid.uuid4())
 
         return Response({
             "simulation_id": simulation_id,
