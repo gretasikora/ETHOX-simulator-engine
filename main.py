@@ -17,21 +17,13 @@ if __name__ == "__main__":
     backend_data = Path(__file__).parent / "backend" / "data"
     export_network_json(agents, adjacency, backend_data / "network.json")
 
-    print("\n\n\n\n")
+    # Generate supervisor summary
+    summary = supervisor_summarize(agents, TRIGGER_EVENT_MESSAGE, include_initial=True)
+    
+    print("\n" + "="*80)
+    print("SUPERVISOR SUMMARY")
+    print("="*80)
+    print(summary)
+    print("="*80)
 
-    with open(out_dir / "supervisor_summary.txt", "w") as f:
-        f.write(f"Event: {TRIGGER_EVENT_MESSAGE}\n\n")
-        f.write(summary)
-
-summary = supervisor_summarize(agents, TRIGGER_EVENT_MESSAGE, include_initial=True)
-print("\n" + "="*80)
-print("SUPERVISOR SUMMARY")
-print("="*80)
-print(summary)
-print("="*80)
-
-with open(out_dir / "supervisor_summary.txt", "w") as f:
-    f.write(f"Event: {TRIGGER_EVENT_MESSAGE}\n\n")
-    f.write(summary)
-
-print("\nDONE")
+    print("\nDONE")
