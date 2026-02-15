@@ -58,7 +58,7 @@ function ExplorerPage() {
         <div className="surface-elevated max-w-md rounded-lg p-6 text-center">
           <p className="text-aurora-danger">{error}</p>
           <p className="mt-2 text-sm text-aurora-text2">
-            Ensure the backend is running at http://127.0.0.1:8000, or run a simulation from /run
+            Ensure the backend is running at https://backend-production-def6.up.railway.app, or run a simulation from /run
           </p>
           <button
             type="button"

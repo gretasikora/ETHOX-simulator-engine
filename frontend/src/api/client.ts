@@ -1,4 +1,4 @@
-const BASE = "";
+const BASE = "https://backend-production-def6.up.railway.app";
 
 export type GenderLabel = "male" | "female";
 
