@@ -1,9 +1,31 @@
-openai>=1.0
+# Django & API
+django>=5.0
+djangorestframework>=3.15
+django-cors-headers>=4.3
+
+# Production server
+gunicorn>=21.2.0
+
+# Static file serving
+whitenoise>=6.6.0
+
+# PostgreSQL support (for production database)
+psycopg2-binary>=2.9.9
+
+# Environment management
 python-dotenv>=1.0
+dj-database-url>=2.1.0
+
+# AI & Simulation
+openai>=1.0
+
+# Data processing & analysis
 numpy>=1.24
 pandas>=2.0
 statsmodels>=0.14
 pyreadr>=0.4
+
+# Networking & visualization
 requests>=2.31
 networkx>=3.0
 matplotlib>=3.8
