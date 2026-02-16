@@ -1,6 +1,5 @@
 # Generated migration for graphapi models
 
-import uuid
 from django.db import migrations, models
 import django.db.models.deletion
 
@@ -16,7 +15,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='SimulationRun',
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
+                ('id', models.AutoField(primary_key=True, serialize=False)),
                 ('trigger_event', models.TextField()),
                 ('num_agents', models.IntegerField()),
                 ('status', models.CharField(choices=[('running', 'Running'), ('completed', 'Completed'), ('failed', 'Failed')], default='running', max_length=20)),
