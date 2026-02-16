@@ -58,12 +58,33 @@ TEMPLATES = [
     },
 ]
 
+# Database configuration using Supabase components
+SUPABASE_URL = os.environ.get("SUPABASE_URL")
+SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
+SUPABASE_DB_PASSWORD = os.environ.get("SUPABASE_DB_PASSWORD")
+
+if SUPABASE_URL and SUPABASE_DB_PASSWORD:
+    # Extract project ref from Supabase URL (e.g., https://najvyiajagdnoethwshg.supabase.co)
+    import re
+    from urllib.parse import quote_plus
+    
+    match = re.search(r'https://([^.]+)\.supabase\.co', SUPABASE_URL)
+    if match:
+        project_ref = match.group(1)
+        # Use connection pooler with properly encoded password
+        encoded_password = quote_plus(SUPABASE_DB_PASSWORD)
+        database_url = f"postgresql://postgres.{project_ref}:{encoded_password}@aws-0-us-east-1.pooler.supabase.com:6543/postgres"
+    else:
+        database_url = None
+else:
+    database_url = os.environ.get("DATABASE_URL")
+
 DATABASES = {
     "default": dj_database_url.config(
-        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
-        conn_max_age=600,  # Connection pooling - keeps connections alive for 10 minutes
-        conn_health_checks=True, 
-        )
+        default=database_url or f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
 }
 
 AUTH_PASSWORD_VALIDATORS = [
