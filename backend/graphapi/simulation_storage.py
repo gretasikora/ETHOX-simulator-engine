@@ -82,11 +82,16 @@ def save_simulation(trigger_event, num_agents, initial_graph, post_trigger_graph
         SimulationRun database object
     """
     # Create simulation run in database
+    print(f"🔍 Attempting to save simulation to database...")
+    print(f"   Trigger: {trigger_event}")
+    print(f"   Agents: {num_agents}")
+    
     simulation = SimulationRun.objects.create(
         trigger_event=trigger_event,
         num_agents=num_agents,
         status='running'
     )
+    print(f"✅ Created SimulationRun with ID: {simulation.id}")
     
     try:
         # Save agent states from all three stages
@@ -141,6 +146,7 @@ def save_simulation(trigger_event, num_agents, initial_graph, post_trigger_graph
         simulation.status = 'completed'
         simulation.completed_at = timezone.now()
         simulation.save()
+        print(f"✅ Simulation {simulation.id} marked as completed")
         
         # Also save to file as backup
         try:
@@ -158,6 +164,11 @@ def save_simulation(trigger_event, num_agents, initial_graph, post_trigger_graph
         return simulation
         
     except Exception as e:
+        print(f"❌ ERROR saving simulation to database: {e}")
+        print(f"   Exception type: {type(e).__name__}")
+        import traceback
+        traceback.print_exc()
+        raise
         simulation.status = 'failed'
         simulation.save()
         print(f"❌ Error saving simulation: {e}")
