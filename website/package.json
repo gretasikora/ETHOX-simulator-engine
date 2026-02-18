@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Epistemea landing page",
   "scripts": {
-    "start": "http-server -p $PORT -a 0.0.0.0"
+    "start": "http-server -p 8080 -a 0.0.0.0"
   },
   "dependencies": {
     "http-server": "^14.1.1"
