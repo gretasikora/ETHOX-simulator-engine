@@ -1,0 +1,11 @@
+{
+  "name": "epistemea-landing",
+  "version": "1.0.0",
+  "description": "Epistemea landing page",
+  "scripts": {
+    "start": "npx http-server -p ${PORT:-8090}"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT"
+}
