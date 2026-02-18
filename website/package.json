@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "description": "Epistemea landing page",
   "scripts": {
-    "start": "npx http-server -p ${PORT:-8090}"
+    "start": "http-server -p $PORT -a 0.0.0.0"
+  },
+  "dependencies": {
+    "http-server": "^14.1.1"
   },
   "keywords": [],
   "author": "",
