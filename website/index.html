@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Epistemea — Belief Dynamics Simulation</title>
+  <meta name="description" content="Epistemea models how populations interpret, misunderstand, and polarise around policy narratives — before real-world deployment." />
+  <link rel="icon" href="logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ─── NAV ─── -->
+  <nav id="nav">
+    <div class="nav-inner">
+      <a href="#" class="nav-brand">
+        <img src="logo.png" alt="" class="nav-logo" />
+        <img src="epistemea.png" alt="Epistemea" class="nav-wordmark" />
+      </a>
+      <div class="nav-links">
+        <a href="#how">How It Works</a>
+        <a href="#edge">Strengths</a>
+        <a href="#use-cases">Use Cases</a>
+        <a href="#architecture">Architecture</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ─── HERO ─── -->
+  <section id="hero">
+    <canvas id="network-canvas"></canvas>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-tag">Belief Dynamics Simulation</p>
+      <h1>Understand how <span class="gradient-text">meaning spreads</span></h1>
+      <p class="hero-sub">Epistemea models how populations interpret, misunderstand, and polarise around policy narratives&nbsp;— before real&#8209;world deployment.</p>
+      <div class="hero-actions">
+        <a href="#how" class="btn-primary">See how it works</a>
+        <a href="#use-cases" class="btn-ghost">Explore use cases</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── WHAT IT IS ─── -->
+  <section id="what" class="section">
+    <div class="container narrow">
+      <p class="section-tag">Core Purpose</p>
+      <h2>Policy Comprehension Lab</h2>
+      <p class="lead">Predict how different groups interpret a policy. Identify where misunderstandings arise. Test which clarifications stop misinformation from spreading.</p>
+    </div>
+    <div class="container">
+      <div class="card-grid three">
+        <div class="card">
+          <h3>Framing Effects</h3>
+          <p>How wording and headlines — "cuts" vs "stabilisation" — shift meaning and polarisation across demographics.</p>
+        </div>
+        <div class="card">
+          <h3>Misinformation Shocks</h3>
+          <p>How false or misleading claims propagate through social networks and which communities are most vulnerable.</p>
+        </div>
+        <div class="card">
+          <h3>Clarification Strategies</h3>
+          <p>Compare rebuttal styles, messenger types, and delivery methods — identify backfire‑risk segments.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── HOW IT WORKS ─── -->
+  <section id="how" class="section section-alt">
+    <div class="container narrow">
+      <p class="section-tag">Process</p>
+      <h2>How the System Works</h2>
+    </div>
+    <div class="container">
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">01</div>
+          <div class="step-body">
+            <h3>Create a Virtual Electorate</h3>
+            <p>Simulated voters with realistic demographics, personalities, values, trust levels, and media habits — grounded in survey data from real voters.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <div class="step-body">
+            <h3>Test Message Interpretation</h3>
+            <p>Every voter receives the same official message. Each interprets it through their own lens — values, trust, identity, and beliefs.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <div class="step-body">
+            <h3>Simulate Social Influence</h3>
+            <p>Voters are connected in a social network. Interpretations shift as people react to their neighbours, mirroring real&#8209;world diffusion.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">04</div>
+          <div class="step-body">
+            <h3>Identify Communication Failures</h3>
+            <p>Tracks where meanings diverge, harden, or polarise. Surfaces structural misunderstandings rather than blaming individuals.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── WHAT YOU LEARN ─── -->
+  <section id="learn" class="section">
+    <div class="container narrow">
+      <p class="section-tag">Outputs</p>
+      <h2>What You Learn</h2>
+      <p class="lead">The system produces a strategic intelligence report covering:</p>
+    </div>
+    <div class="container">
+      <div class="card-grid two">
+        <div class="card card-compact">
+          <h4>Semantic Divergence</h4>
+          <p>How different groups understand the same policy in radically different ways.</p>
+        </div>
+        <div class="card card-compact">
+          <h4>Misunderstanding Clusters</h4>
+          <p>Specific phrases that generate confusion or misinterpretation.</p>
+        </div>
+        <div class="card card-compact">
+          <h4>Engagement Patterns</h4>
+          <p>Who cares deeply, who is apathetic, and why.</p>
+        </div>
+        <div class="card card-compact">
+          <h4>Support Topology</h4>
+          <p>Where opposition and enthusiasm concentrate, and the psychological drivers behind them.</p>
+        </div>
+        <div class="card card-compact">
+          <h4>Social Dynamics</h4>
+          <p>Whether interpretations converge towards consensus or polarise through discussion.</p>
+        </div>
+        <div class="card card-compact">
+          <h4>Best Clarifications</h4>
+          <p>Concrete neutral rewrites that improve comprehension and reduce distortion by subgroup.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── STRENGTHS ─── -->
+  <section id="edge" class="section section-alt">
+    <div class="container narrow">
+      <p class="section-tag">Why Epistemea</p>
+      <h2>Epistemea excels when decisions are</h2>
+    </div>
+    <div class="container narrow">
+      <div class="comparison-single">
+        <ul>
+          <li><strong>Counterfactual &amp; novel</strong> — testing messages or policies with no historical labels</li>
+          <li><strong>Socially driven</strong> — opinions change through peer interaction, not in isolation</li>
+          <li><strong>Narrative‑heavy</strong> — you need to understand meanings, stories, and polarisation</li>
+          <li><strong>Data‑limited or biased</strong> — real behavioural data is sparse, noisy, or unrepresentative</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── VS POLLING ─── -->
+  <section id="vs" class="section">
+    <div class="container narrow center">
+      <p class="section-tag">Key Differentiator</p>
+      <h2>Why This Beats Polling&nbsp;&amp;&nbsp;ML</h2>
+      <div class="vs-box">
+        <div class="vs-item">
+          <span class="vs-label">Polling &amp; ML</span>
+          <p>Measure <em>support levels</em></p>
+        </div>
+        <div class="vs-divider">vs</div>
+        <div class="vs-item">
+          <span class="vs-label gradient-text">Epistemea</span>
+          <p>Models <em>belief dynamics over time</em> — how interpretations spread, mutate, and harden through peer influence, and which interventions contain them</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── USE CASES ─── -->
+  <section id="use-cases" class="section section-alt">
+    <div class="container narrow">
+      <p class="section-tag">Applications</p>
+      <h2>Practical Use Cases</h2>
+    </div>
+    <div class="container">
+      <div class="card-grid three">
+        <div class="card card-compact">
+          <h4>Pre‑release Testing</h4>
+          <p>Stress‑test policies or statements before public launch.</p>
+        </div>
+        <div class="card card-compact">
+          <h4>Message Refinement</h4>
+          <p>Identify ambiguous or high‑risk language before it goes out.</p>
+        </div>
+        <div class="card card-compact">
+          <h4>Audience Understanding</h4>
+          <p>Map voter archetypes and interpretation pathways.</p>
+        </div>
+        <div class="card card-compact">
+          <h4>Misinformation Resilience</h4>
+          <p>Anticipate which interpretations may mutate into false beliefs.</p>
+        </div>
+        <div class="card card-compact">
+          <h4>Coalition Building</h4>
+          <p>Identify shared frames that reduce polarisation across groups.</p>
+        </div>
+        <div class="card card-compact">
+          <h4>Why Not Focus Groups?</h4>
+          <p>No social‑desirability bias, no groupthink, scalable, transparent, and auditable.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── ARCHITECTURE ─── -->
+  <section id="architecture" class="section">
+    <div class="container narrow">
+      <p class="section-tag">Under the Hood</p>
+      <h2>Technical Architecture</h2>
+    </div>
+    <div class="container">
+      <div class="arch-grid">
+        <div class="arch-item">
+          <div class="arch-num">1</div>
+          <h4>Agent Synthesis</h4>
+          <p>Agents generated using the <strong>BFI‑2</strong> framework — 15 personality facets across 5 domains. Multivariate sampling with published correlation matrices and age / gender effects.</p>
+        </div>
+        <div class="arch-item">
+          <div class="arch-num">2</div>
+          <h4>Network Construction</h4>
+          <p>Social networks derived from <strong>personality similarity</strong>: whitening transformation, RBF kernel with Mahalanobis distance, trait‑based degree sampling. Homophily emerges naturally.</p>
+        </div>
+        <div class="arch-item">
+          <div class="arch-num">3</div>
+          <h4>Opinion Dynamics</h4>
+          <p><strong>Two‑stage LLM reasoning.</strong> Stage 1: cognitive processing (opinion, care, intent). Stage 2: social influence weighted by personality similarity and influencibility.</p>
+        </div>
+        <div class="arch-item">
+          <div class="arch-num">4</div>
+          <h4>Meta‑Analysis</h4>
+          <p>A <strong>supervisor agent</strong> performs synthesis: identifies semantic clusters, detects misunderstandings, measures polarisation, and produces consulting‑style reports.</p>
+        </div>
+      </div>
+    </div>
+    <div class="container narrow" style="margin-top:3rem;">
+      <div class="stack-bar">
+        <span>Python</span><span>NumPy</span><span>pandas</span><span>statsmodels</span><span>GPT‑4o</span><span>NetworkX</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── NAME ─── -->
+  <section id="name" class="section section-alt">
+    <div class="container narrow center">
+      <p class="section-tag">Etymology</p>
+      <h2>Why <em>Epistemea</em></h2>
+      <p class="lead">Derived from <strong>episteme</strong> — a term used by Michel Foucault to describe the underlying structure of knowledge that defines what is accepted as truth in a given period. Reflects a focus on how meaning is structured, transmitted, and stabilised — rather than on persuasion or opinion manipulation.</p>
+    </div>
+  </section>
+
+  <!-- ─── SCIENTIFIC FOUNDATIONS ─── -->
+  <section id="science" class="section">
+    <div class="container narrow">
+      <p class="section-tag">Scientific Basis</p>
+      <h2>Foundations</h2>
+    </div>
+    <div class="container">
+      <div class="foundations">
+        <span>Psychometrics (BFI‑2)</span>
+        <span>Social Network Science</span>
+        <span>Opinion Dynamics</span>
+        <span>Social Influence Theory</span>
+        <span>Computational Social Science</span>
+        <span>LLMs as Cognitive Simulators</span>
+      </div>
+      <p class="foundation-novel"><strong>Novel contribution:</strong> Combining validated psychological measurement with LLM‑based reasoning to achieve both statistical realism and behavioural realism.</p>
+    </div>
+  </section>
+
+  <!-- ─── FOOTER ─── -->
+  <footer>
+    <div class="container narrow center">
+      <img src="logo.png" alt="" class="footer-logo" />
+      <p class="footer-text">Epistemea does not replace human judgement — it augments it by revealing blind spots before real&#8209;world deployment.</p>
+      <p class="footer-copy">&copy; 2026 Epistemea</p>
+    </div>
+  </footer>
+
+  <script src="network.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
