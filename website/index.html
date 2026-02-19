@@ -24,7 +24,6 @@
         <a href="#how">How It Works</a>
         <a href="#edge">Strengths</a>
         <a href="#use-cases">Use Cases</a>
-        <a href="#architecture">Architecture</a>
       </div>
     </div>
   </nav>
@@ -216,71 +215,6 @@
           <p>No social‑desirability bias, no groupthink, scalable, transparent, and auditable.</p>
         </div>
       </div>
-    </div>
-  </section>
-
-  <!-- ─── ARCHITECTURE ─── -->
-  <section id="architecture" class="section">
-    <div class="container narrow">
-      <p class="section-tag">Under the Hood</p>
-      <h2>Technical Architecture</h2>
-    </div>
-    <div class="container">
-      <div class="arch-grid">
-        <div class="arch-item">
-          <div class="arch-num">1</div>
-          <h4>Agent Synthesis</h4>
-          <p>Agents generated using the <strong>BFI‑2</strong> framework — 15 personality facets across 5 domains. Multivariate sampling with published correlation matrices and age / gender effects.</p>
-        </div>
-        <div class="arch-item">
-          <div class="arch-num">2</div>
-          <h4>Network Construction</h4>
-          <p>Social networks derived from <strong>personality similarity</strong>: whitening transformation, RBF kernel with Mahalanobis distance, trait‑based degree sampling. Homophily emerges naturally.</p>
-        </div>
-        <div class="arch-item">
-          <div class="arch-num">3</div>
-          <h4>Opinion Dynamics</h4>
-          <p><strong>Two‑stage LLM reasoning.</strong> Stage 1: cognitive processing (opinion, care, intent). Stage 2: social influence weighted by personality similarity and influencibility.</p>
-        </div>
-        <div class="arch-item">
-          <div class="arch-num">4</div>
-          <h4>Meta‑Analysis</h4>
-          <p>A <strong>supervisor agent</strong> performs synthesis: identifies semantic clusters, detects misunderstandings, measures polarisation, and produces consulting‑style reports.</p>
-        </div>
-      </div>
-    </div>
-    <div class="container narrow" style="margin-top:3rem;">
-      <div class="stack-bar">
-        <span>Python</span><span>NumPy</span><span>pandas</span><span>statsmodels</span><span>GPT‑4o</span><span>NetworkX</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- ─── NAME ─── -->
-  <section id="name" class="section section-alt">
-    <div class="container narrow center">
-      <p class="section-tag">Etymology</p>
-      <h2>Why <em>Epistemea</em></h2>
-      <p class="lead">Derived from <strong>episteme</strong> — a term used by Michel Foucault to describe the underlying structure of knowledge that defines what is accepted as truth in a given period. Reflects a focus on how meaning is structured, transmitted, and stabilised — rather than on persuasion or opinion manipulation.</p>
-    </div>
-  </section>
-
-  <!-- ─── SCIENTIFIC FOUNDATIONS ─── -->
-  <section id="science" class="section">
-    <div class="container narrow">
-      <p class="section-tag">Scientific Basis</p>
-      <h2>Foundations</h2>
-    </div>
-    <div class="container">
-      <div class="foundations">
-        <span>Psychometrics (BFI‑2)</span>
-        <span>Social Network Science</span>
-        <span>Opinion Dynamics</span>
-        <span>Social Influence Theory</span>
-        <span>Computational Social Science</span>
-        <span>LLMs as Cognitive Simulators</span>
-      </div>
-      <p class="foundation-novel"><strong>Novel contribution:</strong> Combining validated psychological measurement with LLM‑based reasoning to achieve both statistical realism and behavioural realism.</p>
     </div>
   </section>
 
