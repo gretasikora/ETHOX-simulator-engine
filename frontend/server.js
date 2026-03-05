@@ -37,8 +37,8 @@ app.post('/api/login', (req, res) => {
   }
 });
 
-// Serve static files with auth
-app.use('/assets', checkAuth, express.static(path.join(__dirname, 'dist/assets')));
+// Serve static files WITHOUT auth (needed for login page to load)
+app.use('/assets', express.static(path.join(__dirname, 'dist/assets')));
 
 // Serve index.html without auth (it will handle the login UI)
 app.get('*', (req, res) => {
