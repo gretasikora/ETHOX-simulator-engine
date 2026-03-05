@@ -12,9 +12,6 @@ DATA_DIR = BASE_DIR / "data"
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
-if not SECRET_KEY:
-    raise ValueError("DJANGO_SECRET_KEY environment variable is required")
-
 DEBUG = os.environ.get("DEBUG", "False") == "True"
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
 
@@ -139,6 +136,7 @@ if not DEBUG:
         "user-agent",
         "x-csrftoken",
         "x-requested-with",
+        "x-session-token",
     ]
 else:
     CORS_ALLOW_ALL_ORIGINS = True
