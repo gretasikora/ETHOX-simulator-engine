@@ -1,7 +1,9 @@
 import { getAuthHeaders } from '../utils/auth';
 
-// Use Railway internal networking when available, fallback to public URL
-const BASE = import.meta.env.VITE_BACKEND_URL || "https://epistemea.railway.internal";
+// Backend URL configuration:
+// - Set VITE_BACKEND_URL in Railway environment variables for production
+// - Defaults to public URL for local development
+const BASE = import.meta.env.VITE_BACKEND_URL || "https://backend-production-def6.up.railway.app";
 
 export type GenderLabel = "male" | "female";
 
