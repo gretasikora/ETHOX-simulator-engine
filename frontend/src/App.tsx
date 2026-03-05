@@ -6,6 +6,8 @@ import { useUIStore } from "./store/useUIStore";
 import { AppShell } from "./components/AppShell";
 import { RunSimulationPage } from "./pages/RunSimulationPage";
 import { ErrorBoundary } from "./components/ErrorBoundary";
+import { LoginPage } from "./components/LoginPage";
+import { authAPI } from "./utils/auth";
 
 function ExplorerPage() {
   const loadGraph = useGraphStore((s) => s.loadGraph);
@@ -80,6 +82,11 @@ function ExplorerPage() {
 }
 
 export default function App() {
+  // Check authentication
+  if (!authAPI.isAuthenticated()) {
+    return <LoginPage />;
+  }
+
   return (
     <Routes>
       <Route path="/" element={<RunSimulationPage />} />

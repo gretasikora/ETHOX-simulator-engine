@@ -1,4 +1,7 @@
-const BASE = "https://backend-production-def6.up.railway.app";
+import { getAuthHeaders } from '../utils/auth';
+
+// Use Railway internal networking when available, fallback to public URL
+const BASE = import.meta.env.VITE_BACKEND_URL || "https://epistemea.railway.internal";
 
 export type GenderLabel = "male" | "female";
 
@@ -56,13 +59,17 @@ export interface NodeDetailResponse {
 }
 
 export async function fetchGraph(): Promise<GraphResponse> {
-  const res = await fetch(`${BASE}/api/graph/`);
+  const res = await fetch(`${BASE}/api/graph/`, {
+    headers: getAuthHeaders(),
+  });
   if (!res.ok) throw new Error(res.statusText || "Failed to fetch graph");
   return res.json();
 }
 
 export async function fetchNodeDetail(agentId: string): Promise<NodeDetailResponse> {
-  const res = await fetch(`${BASE}/api/nodes/${encodeURIComponent(agentId)}/`);
+  const res = await fetch(`${BASE}/api/nodes/${encodeURIComponent(agentId)}/`, {
+    headers: getAuthHeaders(),
+  });
   if (!res.ok) throw new Error(res.statusText || "Failed to fetch node");
   return res.json();
 }
@@ -72,6 +79,7 @@ export async function uploadGraph(file: File): Promise<{ metadata: GraphMetadata
   form.append("file", file);
   const res = await fetch(`${BASE}/api/graph/upload/`, {
     method: "POST",
+    headers: getAuthHeaders(),
     body: form,
   });
   if (!res.ok) {
@@ -126,7 +134,7 @@ export async function runSimulation(
 ): Promise<RunSimulationResponse> {
   const res = await fetch(`${BASE}/api/simulations/run/`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { ...getAuthHeaders(), "Content-Type": "application/json" },
     body: JSON.stringify({ trigger, num_agents: numAgents } satisfies RunSimulationRequest),
   });
   if (!res.ok) {
@@ -158,7 +166,7 @@ export async function fetchSimulationReport(
 ): Promise<SimulationReportResponse> {
   const res = await fetch(`${BASE}/api/simulations/report/`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { ...getAuthHeaders(), "Content-Type": "application/json" },
     body: JSON.stringify({
       simulation_id: simulationId,
       trigger,
