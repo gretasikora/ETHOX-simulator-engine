@@ -22,17 +22,17 @@ export function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-aurora-bg0 via-aurora-bg1 to-aurora-surface0 flex items-center justify-center p-4">
       <div className="max-w-md w-full">
-        <div className="bg-gray-800 rounded-lg shadow-xl p-8 border border-gray-700">
+        <div className="bg-aurora-surface1 rounded-lg shadow-aurora-glow p-8 border border-aurora-border-strong">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-white mb-2">ETHOX Simulator</h1>
-            <p className="text-gray-400">Enter password to access</p>
+            <h1 className="text-3xl font-bold text-aurora-text0 mb-2">Epistemea</h1>
+            <p className="text-aurora-text2">Enter password to access</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
+              <label htmlFor="password" className="block text-sm font-medium text-aurora-text1 mb-2">
                 Password
               </label>
               <input
@@ -40,7 +40,7 @@ export function LoginPage() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 bg-aurora-surface2 border border-aurora-border rounded-lg text-aurora-text0 placeholder-aurora-text2 focus:outline-none focus:ring-2 focus:ring-aurora-accent1 focus:border-transparent"
                 placeholder="Enter password"
                 required
                 autoFocus
@@ -48,7 +48,7 @@ export function LoginPage() {
             </div>
 
             {error && (
-              <div className="bg-red-900/50 border border-red-700 rounded-lg p-3 text-red-200 text-sm">
+              <div className="bg-aurora-danger/20 border border-aurora-danger rounded-lg p-3 text-aurora-danger text-sm">
                 {error}
               </div>
             )}
@@ -56,14 +56,14 @@ export function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800"
+              className="w-full bg-gradient-to-r from-aurora-accent1 to-aurora-accent0 hover:opacity-90 disabled:opacity-50 text-aurora-bg0 font-semibold py-3 px-4 rounded-lg transition-opacity duration-200 focus:outline-none focus:ring-2 focus:ring-aurora-accent1 focus:ring-offset-2 focus:ring-offset-aurora-bg1 shadow-aurora-glow-sm"
             >
               {loading ? 'Authenticating...' : 'Access Application'}
             </button>
           </form>
 
-          <div className="mt-6 text-center text-xs text-gray-500">
-            <p>Multi-agent simulation for policy narrative testing</p>
+          <div className="mt-6 text-center text-xs text-aurora-text2">
+            <p>Belief dynamics simulation</p>
           </div>
         </div>
       </div>
