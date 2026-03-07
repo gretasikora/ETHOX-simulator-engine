@@ -26,6 +26,11 @@ export function LoginPage() {
       <div className="max-w-md w-full">
         <div className="bg-aurora-surface1 rounded-lg shadow-aurora-glow p-8 border border-aurora-border-strong">
           <div className="text-center mb-8">
+            <img 
+              src="/logo-no-bg (1).png" 
+              alt="Epistemea" 
+              className="w-24 h-24 mx-auto mb-4"
+            />
             <h1 className="text-3xl font-bold text-aurora-text0 mb-2">Epistemea</h1>
             <p className="text-aurora-text2">Enter password to access</p>
           </div>
