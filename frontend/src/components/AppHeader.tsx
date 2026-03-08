@@ -48,7 +48,7 @@ export function AppHeader({ onSearchSelect: _onSearchSelect }: AppHeaderProps) {
   return (
     <header className="top-bar group sticky top-0 z-20 flex min-h-12 shrink-0 flex-wrap items-center gap-2 border-b border-aurora-border/60 bg-aurora-bg1/90 px-4 py-2 backdrop-blur-sm sm:gap-3 md:gap-5 md:px-5">
       <Link to="/" className="flex shrink-0 items-center gap-2 sm:gap-3">
-        <img src="/logo.png" alt="" className="h-8 w-8 object-contain" aria-hidden />
+        <img src="/logo-no-bg (1).png" alt="" className="h-8 w-8 object-contain" aria-hidden />
         <img src="/epistemea.png" alt="EPISTEMEA" className="h-5 w-auto object-contain sm:h-6" />
       </Link>
 

@@ -35,7 +35,7 @@ export function RunSimulationPage() {
   return (
     <div className="flex min-h-screen w-full flex-col items-center justify-center bg-aurora-bg0 p-8">
       <Link to="/" className="mb-8 flex items-center gap-3">
-        <img src="/logo.png" alt="" className="h-10 w-10 object-contain" aria-hidden />
+        <img src="/logo-no-bg (1).png" alt="" className="h-10 w-10 object-contain" aria-hidden />
         <img src="/epistemea.png" alt="EPISTEMEA" className="h-7 w-auto object-contain" />
       </Link>
       <div className="surface-elevated w-full max-w-lg rounded-2xl border border-aurora-border/40 p-8 shadow-aurora-glow-sm">
@@ -59,7 +59,7 @@ export function RunSimulationPage() {
               id="trigger"
               value={trigger}
               onChange={(e) => setTrigger(e.target.value)}
-              placeholder="e.g. The market has added a new selection of kitchenware..."
+              placeholder="e.g. We are proposing a reform to the retirement system..."
               rows={4}
               className="w-full rounded-lg border border-aurora-border/70 bg-aurora-surface0/80 px-3 py-2.5 text-sm text-aurora-text0 placeholder-aurora-text2 focus:border-aurora-accent1 focus:outline-none focus:ring-1 focus:ring-aurora-accent1/50"
             />

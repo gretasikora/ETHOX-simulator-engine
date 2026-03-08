@@ -132,7 +132,7 @@ export function AppShell() {
         {headerCollapsed ? (
           <div className="sticky top-0 z-20 flex h-9 shrink-0 items-center justify-between border-b border-aurora-border/50 bg-aurora-bg1/90 px-3 backdrop-blur-sm">
             <Link to="/" className="flex items-center gap-1.5">
-              <img src="/logo.png" alt="" className="h-6 w-6 object-contain" aria-hidden />
+              <img src="/logo-no-bg (1).png" alt="" className="h-6 w-6 object-contain" aria-hidden />
               <img src="/epistemea.png" alt="EPISTEMEA" className="h-4 w-auto object-contain" />
             </Link>
             <button
