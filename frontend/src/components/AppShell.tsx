@@ -1,9 +1,6 @@
 import { useRef, useState, useCallback, useEffect, useMemo } from "react";
 import { CareImpactOverlay } from "./CareImpactOverlay";
 import { CareLegend } from "./CareLegend";
-import { Link } from "react-router-dom";
-import { ChevronDown } from "lucide-react";
-import { AppHeader } from "./AppHeader";
 import { SidebarFilters } from "./SidebarFilters";
 import { GraphCanvas } from "./GraphCanvas";
 import { Graph3D } from "./graph/Graph3D";
@@ -33,9 +30,6 @@ export function AppShell() {
   const societyViewOpen = useUIStore((s) => s.societyViewOpen);
   const graphViewMode = useUIStore((s) => s.graphViewMode);
   const filters = useUIStore((s) => s.filters);
-  const sidebarCollapsed = useUIStore((s) => s.sidebarCollapsed);
-  const headerCollapsed = useUIStore((s) => s.headerCollapsed);
-  const setHeaderCollapsed = useUIStore((s) => s.setHeaderCollapsed);
   const selectedTrait = useUIStore((s) => s.selectedTrait);
   const showAgeEncoding = useUIStore((s) => s.showAgeEncoding);
   const showGenderEncoding = useUIStore((s) => s.showGenderEncoding);
@@ -118,9 +112,7 @@ export function AppShell() {
   }, []);
 
   return (
-    <div
-      className={`grid h-screen w-screen grid-cols-1 bg-aurora-bg0 ${sidebarCollapsed ? "lg:grid-cols-[52px_1fr]" : "lg:grid-cols-[260px_1fr]"}`}
-    >
+    <div className="grid h-screen w-screen grid-cols-1 bg-aurora-bg0 lg:grid-cols-[260px_1fr]">
       <div className="h-0 w-0 overflow-visible lg:h-auto lg:w-auto lg:min-w-0">
         <SidebarFilters
           graphRef={graphRef}
@@ -129,24 +121,6 @@ export function AppShell() {
         />
       </div>
       <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
-        {headerCollapsed ? (
-          <div className="sticky top-0 z-20 flex h-9 shrink-0 items-center justify-between border-b border-aurora-border/50 bg-aurora-bg1/90 px-3 backdrop-blur-sm">
-            <Link to="/" className="flex items-center gap-1.5">
-              <img src="/logo-no-bg (1).png" alt="" className="h-6 w-6 object-contain" aria-hidden />
-              <img src="/epistemea.png" alt="EPISTEMEA" className="h-4 w-auto object-contain" />
-            </Link>
-            <button
-              type="button"
-              onClick={() => setHeaderCollapsed(false)}
-              className="rounded p-1.5 text-aurora-text2 hover:bg-aurora-surface2/80 hover:text-aurora-text0"
-              aria-label="Expand menu"
-            >
-              <ChevronDown className="h-4 w-4 rotate-180" />
-            </button>
-          </div>
-        ) : (
-          <AppHeader onSearchSelect={handleSearchSelect} />
-        )}
         {societyViewOpen ? (
           <div className="relative flex-1 overflow-auto bg-aurora-bg0">
             <SocietyPage />

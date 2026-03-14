@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Listbox } from "@headlessui/react";
-import { PanelLeftClose, PanelRightOpen, Tag, ChevronDown, ChevronRight, HelpCircle, Home, Clock } from "lucide-react";
+import { PanelLeftClose, Tag, ChevronDown, ChevronRight, HelpCircle, Clock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useUIStore } from "../store/useUIStore";
 import { useGraphStore } from "../store/useGraphStore";
@@ -78,8 +78,6 @@ export function SidebarFilters({
   const setSelectedTrait = useUIStore((s) => s.setSelectedTrait);
   const showAgeEncoding = useUIStore((s) => s.showAgeEncoding);
   const showGenderEncoding = useUIStore((s) => s.showGenderEncoding);
-  const sidebarCollapsed = useUIStore((s) => s.sidebarCollapsed);
-  const setSidebarCollapsed = useUIStore((s) => s.setSidebarCollapsed);
   const filtersSectionOpen = useUIStore((s) => s.filtersSectionOpen);
   const setFiltersSectionOpen = useUIStore((s) => s.setFiltersSectionOpen);
   const graphViewMode = useUIStore((s) => s.graphViewMode);
@@ -178,25 +176,20 @@ export function SidebarFilters({
 
   const content = (
     <div className="flex h-full flex-col">
-      <div className="flex shrink-0 items-center justify-end p-3">
-        <div className="flex items-center gap-1">
-          <button
-            type="button"
-            onClick={() => setSidebarCollapsed(true)}
-            className="rounded-md p-1.5 text-aurora-text2 hover:bg-aurora-surface2/80 hover:text-aurora-text1"
-            aria-label="Collapse filters"
-          >
-            <PanelRightOpen className="h-4 w-4" />
-          </button>
-          <button
-            type="button"
-            onClick={() => setMobileOpen(false)}
-            className="rounded-lg p-2 text-aurora-text1 hover:bg-aurora-surface2 hover:text-aurora-text0 lg:hidden"
-            aria-label="Close filters"
-          >
-            <PanelLeftClose className="h-5 w-5" />
-          </button>
+      {/* Logo */}
+      <div className="flex shrink-0 items-center justify-between p-4">
+        <div className="flex items-center gap-3">
+          <img src="/logo-no-bg (1).png" alt="" className="h-9 w-9 object-contain" aria-hidden />
+          <img src="/epistemea.png" alt="EPISTEMEA" className="h-6 w-auto object-contain" />
         </div>
+        <button
+          type="button"
+          onClick={() => setMobileOpen(false)}
+          className="rounded-lg p-2 text-aurora-text1 hover:bg-aurora-surface2 hover:text-aurora-text0 lg:hidden"
+          aria-label="Close filters"
+        >
+          <PanelLeftClose className="h-5 w-5" />
+        </button>
       </div>
 
       <div className="min-h-0 flex-1 overflow-y-auto p-3">
@@ -391,9 +384,8 @@ export function SidebarFilters({
           <button
             type="button"
             onClick={() => navigate("/")}
-            className="aurora-gradient flex w-full items-center justify-center gap-2 rounded-lg px-4 py-3 text-base font-medium text-aurora-bg0 shadow-aurora-glow-sm transition-all hover:opacity-95 hover:shadow-aurora-glow active:scale-[0.98]"
+            className="aurora-gradient flex w-full items-center justify-center rounded-lg px-4 py-3 text-base font-medium text-aurora-bg0 shadow-aurora-glow-sm transition-all hover:opacity-95 hover:shadow-aurora-glow active:scale-[0.98]"
           >
-            <Home className="h-5 w-5" />
             New Simulation
           </button>
         </div>
@@ -401,26 +393,13 @@ export function SidebarFilters({
     </div>
   );
 
-  const rail = (
-    <div className="flex h-full w-full flex-col items-center bg-aurora-bg0/95 py-3">
-      <button
-        type="button"
-        onClick={() => setSidebarCollapsed(false)}
-        className="rounded-md p-2 text-aurora-text2 hover:bg-aurora-surface2/80 hover:text-aurora-text1"
-        aria-label="Expand filters"
-      >
-        <PanelRightOpen className="h-5 w-5 rotate-180" />
-      </button>
-    </div>
-  );
-
   return (
     <>
       <aside
         className="hidden shrink-0 flex-col bg-aurora-bg0/98 lg:flex"
-        style={{ width: sidebarCollapsed ? SIDEBAR_WIDTH_RAIL : SIDEBAR_WIDTH_EXPANDED }}
+        style={{ width: SIDEBAR_WIDTH_EXPANDED }}
       >
-        {sidebarCollapsed ? rail : content}
+        {content}
       </aside>
 
       <button
@@ -429,7 +408,7 @@ export function SidebarFilters({
         className="fixed bottom-6 left-6 z-20 flex h-12 w-12 items-center justify-center rounded-xl bg-aurora-surface1 shadow-card text-aurora-text1 hover:bg-aurora-surface2 hover:text-aurora-text0 lg:hidden"
         aria-label="Open sidebar"
       >
-        <PanelRightOpen className="h-5 w-5 rotate-180" />
+        <PanelLeftClose className="h-5 w-5 scale-x-[-1]" />
       </button>
 
       {mobileOpen && (
