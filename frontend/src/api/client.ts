@@ -128,6 +128,8 @@ export interface RunSimulationResponse {
   initial_graph: SimulationGraphData;
   post_trigger_graph: SimulationGraphData;
   final_graph: SimulationGraphData;
+  trigger_event?: string; // Only present when loading a saved simulation
+  num_agents?: number; // Only present when loading a saved simulation
 }
 
 export async function runSimulation(
