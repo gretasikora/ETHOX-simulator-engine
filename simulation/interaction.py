@@ -72,8 +72,23 @@ def trigger_reaction(agent, event_message):
 
 
 def broadcast_trigger(agents, event_message):
-    for agent in agents:
-        trigger_reaction(agent, event_message)
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+
+    # Parallelize all agent trigger reactions
+    with ThreadPoolExecutor(max_workers=min(len(agents), 20)) as executor:
+        # Submit all tasks
+        futures = {executor.submit(trigger_reaction, agent, event_message): agent for agent in agents}
+        # Wait for all to complete (as_completed processes results as they finish)
+        for future in as_completed(futures):
+            try:
+                future.result()  # This will raise any exceptions that occurred
+            except Exception as e:
+                agent = futures[future]
+                print(f"Error processing agent {agent.id}: {e}")
+                # Set default values on error
+                agent.opinion = ""
+                agent.care = 0
+                agent.change_in_support = 0
 
 
 def build_opinion_update_prompt(agent, event_message, neighbor_opinions, weights, self_weight=1.0):

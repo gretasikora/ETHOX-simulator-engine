@@ -94,9 +94,11 @@ def save_simulation(trigger_event, num_agents, initial_graph, post_trigger_graph
     print(f"✅ Created SimulationRun with ID: {simulation.id}")
     
     try:
-        # Save agent states from all three stages
+        # Prepare agent states from all three stages for bulk creation
+        agent_states_to_create = []
+
         for agent in initial_graph.get("nodes", []):
-            AgentState.objects.create(
+            agent_states_to_create.append(AgentState(
                 simulation=simulation,
                 agent_id=str(agent.get('agent_id', agent.get('id', ''))),
                 stage='initial',
@@ -104,10 +106,10 @@ def save_simulation(trigger_event, num_agents, initial_graph, post_trigger_graph
                 sentiment=agent.get('sentiment'),
                 opinion=agent.get('opinion', agent.get('text_opinion', '')),
                 data=agent
-            )
-        
+            ))
+
         for agent in post_trigger_graph.get("nodes", []):
-            AgentState.objects.create(
+            agent_states_to_create.append(AgentState(
                 simulation=simulation,
                 agent_id=str(agent.get('agent_id', agent.get('id', ''))),
                 stage='post_trigger',
@@ -115,10 +117,10 @@ def save_simulation(trigger_event, num_agents, initial_graph, post_trigger_graph
                 sentiment=agent.get('sentiment'),
                 opinion=agent.get('opinion', agent.get('text_opinion', '')),
                 data=agent
-            )
-        
+            ))
+
         for agent in final_graph.get("nodes", []):
-            AgentState.objects.create(
+            agent_states_to_create.append(AgentState(
                 simulation=simulation,
                 agent_id=str(agent.get('agent_id', agent.get('id', ''))),
                 stage='final',
@@ -126,7 +128,11 @@ def save_simulation(trigger_event, num_agents, initial_graph, post_trigger_graph
                 sentiment=agent.get('sentiment'),
                 opinion=agent.get('opinion', agent.get('text_opinion', '')),
                 data=agent
-            )
+            ))
+
+        # Bulk create all agent states at once (much faster than individual creates)
+        if agent_states_to_create:
+            AgentState.objects.bulk_create(agent_states_to_create, batch_size=100)
         
         # Save network snapshot (use edges from final graph)
         NetworkSnapshot.objects.create(

@@ -254,11 +254,6 @@ export function Graph3D({
         const halo = createHaloRing();
         group.add(halo);
       }
-      if (isHovered || isSelected) {
-        const label = createLabelSprite(`Agent ${node.id}`, 1.2);
-        label.position.y = 1.8;
-        group.add(label);
-      }
       return group;
     },
     [

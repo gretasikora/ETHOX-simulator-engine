@@ -16,10 +16,10 @@ if str(ROOT) not in sys.path:
 from simulation.runner import run_full_simulation
 
 
-def run_simulation(trigger: str, num_agents: int) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
+def run_simulation(trigger: str, num_agents: int) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any], list]:
     """
     Run full simulation with LLM (broadcast trigger + social influence).
-    Returns (initial_graph, post_trigger_graph, final_graph).
+    Returns (initial_graph, post_trigger_graph, final_graph, agents).
     """
-    initial, post_trigger, final, _agents, _adjacency = run_full_simulation(trigger, num_agents)
-    return initial, post_trigger, final
+    initial, post_trigger, final, agents, _adjacency = run_full_simulation(trigger, num_agents)
+    return initial, post_trigger, final, agents

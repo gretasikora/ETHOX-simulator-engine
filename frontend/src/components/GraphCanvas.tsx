@@ -501,7 +501,7 @@ export function GraphCanvas({ graphRef, onSigmaReady }: GraphCanvasProps) {
   const showCareLegend = careAnimationStatus === "done" || (simulationIsAnimating && animationProgress > 0);
 
   return (
-    <div className="absolute inset-0 flex flex-col overflow-hidden rounded-2xl border border-aurora-border/40 bg-aurora-surface0/30 shadow-sm">
+    <div className="absolute inset-0 flex flex-col overflow-hidden bg-aurora-surface0/30">
       <div className="relative min-h-0 flex-1">
         <div
           ref={containerRef}

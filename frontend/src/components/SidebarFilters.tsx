@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Listbox } from "@headlessui/react";
-import { PanelLeftClose, PanelRightOpen, Tag, ChevronDown, ChevronRight, HelpCircle, Home, Clock, Grid3x3, Layers3 } from "lucide-react";
+import { PanelLeftClose, PanelRightOpen, Tag, ChevronDown, ChevronRight, HelpCircle, Home, Clock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useUIStore } from "../store/useUIStore";
 import { useGraphStore } from "../store/useGraphStore";
@@ -206,32 +206,30 @@ export function SidebarFilters({
             <button
               type="button"
               onClick={() => setGraphViewMode("2d")}
-              className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-3 py-3 text-base font-medium transition-all ${
+              className={`flex flex-1 items-center justify-center rounded-lg px-3 py-3 text-base font-medium transition-all ${
                 graphViewMode === "2d"
                   ? "bg-aurora-accent1/20 text-aurora-accent1"
                   : "bg-aurora-surface1 text-aurora-text2 hover:bg-aurora-surface2 hover:text-aurora-text1"
               }`}
             >
-              <Grid3x3 className="h-5 w-5" />
               2D
             </button>
             <button
               type="button"
               onClick={() => setGraphViewMode("3d")}
-              className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-3 py-3 text-base font-medium transition-all ${
+              className={`flex flex-1 items-center justify-center rounded-lg px-3 py-3 text-base font-medium transition-all ${
                 graphViewMode === "3d"
                   ? "bg-aurora-accent1/20 text-aurora-accent1"
                   : "bg-aurora-surface1 text-aurora-text2 hover:bg-aurora-surface2 hover:text-aurora-text1"
               }`}
             >
-              <Layers3 className="h-5 w-5" />
               3D
             </button>
           </div>
         </div>
 
         {/* Visual Encoding */}
-        <div className="mb-5 rounded-lg bg-aurora-surface0/60 p-3 space-y-3">
+        <div className="mb-8 rounded-lg bg-aurora-surface0/60 p-3 space-y-3">
           {showAgeEncoding && (
             <div>
               <p className="mb-1.5 text-base text-aurora-text1">Color: Age</p>
@@ -248,7 +246,7 @@ export function SidebarFilters({
           </div>
         </div>
 
-        <div className="mt-5">
+        <div className="mt-8">
           <SectionHeader
             label="Degree range"
             open={filtersSectionOpen.degreeRange}
@@ -293,7 +291,7 @@ export function SidebarFilters({
           )}
         </div>
 
-        <div className="mt-5">
+        <div className="mt-8">
           <SectionHeader
             label="Trait filter"
             open={filtersSectionOpen.traitFilter}
@@ -340,7 +338,7 @@ export function SidebarFilters({
         </div>
 
         {/* Previous Simulations */}
-        <div className="mt-5">
+        <div className="mt-8">
           <SectionHeader
             label="Previous Simulations"
             open={filtersSectionOpen.previousSimulations}

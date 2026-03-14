@@ -45,8 +45,11 @@ def run_full_simulation(trigger: str, num_agents: int) -> tuple[dict[str, Any], 
     # Post-trigger graph: initial reactions (before agents talk to each other)
     post_trigger = build_network_data(agents, adjacency, agent_id_as_int=True)
 
-    # Social influence: each agent updates based on neighbors
-    for i, agent in enumerate(agents):
+    # Social influence: each agent updates based on neighbors (parallelized)
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+
+    def update_agent_opinion(i, agent):
+        """Update a single agent's opinion based on neighbors"""
         neighbor_opinions = []
         weights = {}
         for j, other in enumerate(agents):
@@ -57,6 +60,17 @@ def run_full_simulation(trigger: str, num_agents: int) -> tuple[dict[str, Any], 
                 care = similarity_score(agent, other, context) * compute_influencibility(agent.traits)
                 weights[other.id] = care
         update_opinion_from_neighbors(agent, trigger, neighbor_opinions, weights, self_weight=0.5)
+        return agent
+
+    # Parallelize social influence updates
+    with ThreadPoolExecutor(max_workers=min(len(agents), 20)) as executor:
+        futures = {executor.submit(update_agent_opinion, i, agent): agent for i, agent in enumerate(agents)}
+        for future in as_completed(futures):
+            try:
+                future.result()  # Will raise any exceptions
+            except Exception as e:
+                agent = futures[future]
+                print(f"Error updating opinion for agent {agent.id}: {e}")
 
     # Final graph: after social influence (agents have opinion, care, change_in_support)
     final = build_network_data(agents, adjacency, agent_id_as_int=True)

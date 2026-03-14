@@ -46,20 +46,20 @@ def _get_client() -> OpenAI:
 
 
 def llm_generate(prompt: str) -> str:
-    response = _get_client().responses.create(
+    response = _get_client().chat.completions.create(
         model=MODEL,
-        input=prompt,
-        max_output_tokens=MAX_TOKENS,
+        messages=[{"role": "user", "content": prompt}],
+        max_tokens=MAX_TOKENS,
         temperature=TEMPERATURE,
     )
-    return response.output_text
+    return response.choices[0].message.content
 
 
 def llm_supervisor(prompt: str) -> str:
-    response = _get_client().responses.create(
-        model="gpt-4.1",
-        input=prompt,
-        max_output_tokens=10000,
+    response = _get_client().chat.completions.create(
+        model="gpt-4o",  # Using gpt-4o instead of non-existent gpt-4.1
+        messages=[{"role": "user", "content": prompt}],
+        max_tokens=10000,
         temperature=0.3,
     )
-    return response.output_text
+    return response.choices[0].message.content

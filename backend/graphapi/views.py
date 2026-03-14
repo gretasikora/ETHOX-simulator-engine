@@ -129,14 +129,33 @@ class RunSimulationView(APIView):
             )
 
         try:
-            initial_graph, post_trigger_graph, final_graph = run_simulation(trigger.strip(), num_agents)
+            initial_graph, post_trigger_graph, final_graph, agents = run_simulation(trigger.strip(), num_agents)
         except Exception as e:
             return Response(
                 {"detail": f"Simulation failed: {e!s}"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
-        # Save to database (and file backup)
+        # Auto-generate report immediately after simulation
+        report_text = ""
+        care_score_100 = 0
+        change_in_support_50 = 0
+        try:
+            from simulation.interaction import supervisor_summarize
+
+            # Compute metrics from final agent outputs
+            avg_care = sum(a.care for a in agents) / len(agents) if agents else 0
+            avg_usage = sum(a.change_in_support for a in agents) / len(agents) if agents else 0
+            care_score_100 = max(0, min(100, round(avg_care * 10)))
+            change_in_support_50 = max(-50, min(50, round(avg_usage * 10)))
+
+            # Generate report (include_initial=False by default)
+            report_text = supervisor_summarize(agents, trigger.strip(), include_initial=False)
+        except Exception as e:
+            print(f"Warning: Failed to auto-generate report: {e}")
+            report_text = ""
+
+        # Save to database (and file backup) with report
         try:
             from .simulation_storage import save_simulation
             db_simulation = save_simulation(
@@ -145,9 +164,21 @@ class RunSimulationView(APIView):
                 initial_graph=initial_graph,
                 post_trigger_graph=post_trigger_graph,
                 final_graph=final_graph,
-                summary_text=""  # Will be filled when report is generated
+                summary_text=report_text
             )
             simulation_id = str(db_simulation.id)
+
+            # Save report metrics to database
+            if report_text:
+                from .models import SimulationSummary
+                summary, created = SimulationSummary.objects.get_or_create(simulation=db_simulation)
+                summary.summary_text = report_text
+                summary.metrics = {
+                    "care_score_100": care_score_100,
+                    "change_in_support_50": change_in_support_50,
+                    "include_initial": False,
+                }
+                summary.save()
         except Exception as e:
             print(f"Warning: Failed to save to database: {e}")
             # Fallback to UUID if database save fails
@@ -158,6 +189,12 @@ class RunSimulationView(APIView):
             "initial_graph": initial_graph,
             "post_trigger_graph": post_trigger_graph,
             "final_graph": final_graph,
+            "saved_report": {
+                "report_text": report_text,
+                "care_score_100": care_score_100,
+                "change_in_support_50": change_in_support_50,
+                "include_initial": False,
+            } if report_text else None,
         })
 
 
