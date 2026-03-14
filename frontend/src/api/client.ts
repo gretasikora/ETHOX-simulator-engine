@@ -123,6 +123,13 @@ export interface SimulationGraphData {
   edges: SimulationEdgeData[];
 }
 
+export interface SavedReport {
+  report_text: string;
+  care_score_100: number;
+  change_in_support_50: number;
+  include_initial: boolean;
+}
+
 export interface RunSimulationResponse {
   simulation_id: string;
   initial_graph: SimulationGraphData;
@@ -130,6 +137,7 @@ export interface RunSimulationResponse {
   final_graph: SimulationGraphData;
   trigger_event?: string; // Only present when loading a saved simulation
   num_agents?: number; // Only present when loading a saved simulation
+  saved_report?: SavedReport | null; // Only present when loading a saved simulation
 }
 
 export async function runSimulation(

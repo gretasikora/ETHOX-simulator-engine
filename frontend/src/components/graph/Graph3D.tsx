@@ -412,8 +412,10 @@ export function Graph3D({
         enableNodeDrag={false}
         showNavInfo={false}
         backgroundColor="rgba(5,11,16,0)"
-        d3VelocityDecay={0.92}
-        d3AlphaDecay={0.04}
+        d3VelocityDecay={0.3}
+        d3AlphaDecay={0.0228}
+        cooldownTicks={100}
+        cooldownTime={5000}
         onEngineTick={onEngineTick}
         onEngineStop={onEngineStop}
       />

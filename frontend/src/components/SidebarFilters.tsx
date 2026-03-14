@@ -152,6 +152,12 @@ export function SidebarFilters({
         status: "finished",
         phase: "finished",
         viewMode: "simulation",
+        // Load saved report if available
+        reportStatus: data.saved_report ? "ready" : "idle",
+        reportText: data.saved_report?.report_text,
+        reportCareScore100: data.saved_report?.care_score_100,
+        reportUsageEffect50: data.saved_report?.change_in_support_50,
+        reportIncludeInitial: data.saved_report?.include_initial ?? false,
       });
 
     } catch (err) {
@@ -217,12 +223,6 @@ export function SidebarFilters({
                 <p className="mt-0.5 flex justify-between text-xs text-aurora-text2">
                   {AGE_COLOR_MIN} → {AGE_COLOR_MAX}
                 </p>
-              </div>
-            )}
-            {showGenderEncoding && (
-              <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-aurora-text2">
-                <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full border border-current" /> Male</span>
-                <span className="flex items-center gap-1"><span className="h-2 w-2 border border-current" style={{ borderRadius: 2 }} /> Female</span>
               </div>
             )}
           </div>

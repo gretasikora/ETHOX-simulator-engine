@@ -211,6 +211,24 @@ class SimulationReportView(APIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
+        # Save the report to the database
+        from .models import SimulationRun, SimulationSummary
+        try:
+            sim_id = int(simulation_id)
+            simulation = SimulationRun.objects.get(id=sim_id)
+
+            # Store or update the summary
+            summary, created = SimulationSummary.objects.get_or_create(simulation=simulation)
+            summary.summary_text = report_text
+            summary.metrics = {
+                "care_score_100": care_score_100,
+                "change_in_support_50": change_in_support_50,
+                "include_initial": include_initial,
+            }
+            summary.save()
+        except (ValueError, SimulationRun.DoesNotExist):
+            pass  # If simulation not found in DB, just return the report without saving
+
         return Response({
             "simulation_id": simulation_id,
             "care_score_100": care_score_100,
@@ -252,6 +270,22 @@ class SimulationDetailView(APIView):
 
             initial_graph, post_trigger_graph, final_graph, trigger_event, num_agents = result
 
+            # Try to load saved report if available
+            saved_report = None
+            try:
+                from .models import SimulationRun
+                sim_id = int(simulation_id)
+                simulation = SimulationRun.objects.get(id=sim_id)
+                if hasattr(simulation, 'summary') and simulation.summary:
+                    saved_report = {
+                        "report_text": simulation.summary.summary_text,
+                        "care_score_100": simulation.summary.metrics.get("care_score_100"),
+                        "change_in_support_50": simulation.summary.metrics.get("change_in_support_50"),
+                        "include_initial": simulation.summary.metrics.get("include_initial", False),
+                    }
+            except:
+                pass
+
             return Response({
                 "simulation_id": simulation_id,
                 "trigger_event": trigger_event,
@@ -259,6 +293,7 @@ class SimulationDetailView(APIView):
                 "initial_graph": initial_graph,
                 "post_trigger_graph": post_trigger_graph,
                 "final_graph": final_graph,
+                "saved_report": saved_report,
             })
         except Exception as e:
             return Response(
