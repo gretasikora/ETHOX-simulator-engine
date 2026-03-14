@@ -31,13 +31,13 @@ export function LoginPage() {
               alt="Epistemea" 
               className="w-24 h-24 mx-auto mb-4"
             />
-            <h1 className="text-3xl font-bold text-aurora-text0 mb-2">Epistemea</h1>
-            <p className="text-aurora-text2">Enter password to access</p>
+            <h1 className="text-4xl font-bold text-aurora-text0 mb-2">Epistemea</h1>
+            <p className="text-base text-aurora-text2">Enter password to access</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-aurora-text1 mb-2">
+              <label htmlFor="password" className="block text-base font-medium text-aurora-text1 mb-2">
                 Password
               </label>
               <input
@@ -45,7 +45,7 @@ export function LoginPage() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 bg-aurora-surface2 border border-aurora-border rounded-lg text-aurora-text0 placeholder-aurora-text2 focus:outline-none focus:ring-2 focus:ring-aurora-accent1 focus:border-transparent"
+                className="w-full px-4 py-3 bg-aurora-surface2 border border-aurora-border rounded-lg text-base text-aurora-text0 placeholder-aurora-text2 focus:outline-none focus:ring-2 focus:ring-aurora-accent1 focus:border-transparent"
                 placeholder="Enter password"
                 required
                 autoFocus
@@ -53,7 +53,7 @@ export function LoginPage() {
             </div>
 
             {error && (
-              <div className="bg-aurora-danger/20 border border-aurora-danger rounded-lg p-3 text-aurora-danger text-sm">
+              <div className="bg-aurora-danger/20 border border-aurora-danger rounded-lg p-3 text-aurora-danger text-base">
                 {error}
               </div>
             )}
@@ -61,13 +61,13 @@ export function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-aurora-accent1 to-aurora-accent0 hover:opacity-90 disabled:opacity-50 text-aurora-bg0 font-semibold py-3 px-4 rounded-lg transition-opacity duration-200 focus:outline-none focus:ring-2 focus:ring-aurora-accent1 focus:ring-offset-2 focus:ring-offset-aurora-bg1 shadow-aurora-glow-sm"
+              className="w-full bg-gradient-to-r from-aurora-accent1 to-aurora-accent0 hover:opacity-90 disabled:opacity-50 text-aurora-bg0 font-semibold py-3 px-4 rounded-lg text-base transition-opacity duration-200 focus:outline-none focus:ring-2 focus:ring-aurora-accent1 focus:ring-offset-2 focus:ring-offset-aurora-bg1 shadow-aurora-glow-sm"
             >
               {loading ? 'Authenticating...' : 'Access Application'}
             </button>
           </form>
 
-          <div className="mt-6 text-center text-xs text-aurora-text2">
+          <div className="mt-6 text-center text-sm text-aurora-text2">
             <p>Belief dynamics simulation</p>
           </div>
         </div>

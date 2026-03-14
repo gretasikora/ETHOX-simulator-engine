@@ -17,11 +17,11 @@ function TraitRow({ label, value }: { label: string; value: number }) {
   const pct = Math.max(0, Math.min(1, safe)) * 100;
   return (
     <div className="space-y-1">
-      <div className="flex justify-between text-sm">
+      <div className="flex justify-between text-base">
         <span className="text-aurora-text1">{formatTraitLabel(label ?? "")}</span>
         <span className="text-aurora-text0 tabular-nums">{safe.toFixed(2)}</span>
       </div>
-      <div className="h-2 overflow-hidden rounded bg-aurora-surface2">
+      <div className="h-2.5 overflow-hidden rounded bg-aurora-surface2">
         <div
           className="aurora-gradient h-full rounded"
           style={{ width: `${pct}%` }}
@@ -111,10 +111,10 @@ export function AgentProfileDrawer({
       >
         <div className="flex items-start justify-between border-b border-aurora-border p-4">
           <div>
-            <h2 id="drawer-title" className="text-lg font-semibold text-aurora-text0">
+            <h2 id="drawer-title" className="text-xl font-semibold text-aurora-text0">
               Agent {agent?.agent_id ?? selectedNodeId ?? ""}
             </h2>
-            <div className="mt-1 flex flex-wrap gap-x-4 gap-y-0.5 text-sm text-aurora-text1">
+            <div className="mt-1 flex flex-wrap gap-x-4 gap-y-0.5 text-base text-aurora-text1">
               {agent?.age != null && <span>Age {agent.age}</span>}
               {agent?.gender != null && agent.gender !== "" && (
                 <span className="capitalize">{agent.gender.replace(/_/g, " ")}</span>
@@ -132,56 +132,56 @@ export function AgentProfileDrawer({
         </div>
 
         {!agent ? (
-          <div className="flex flex-1 items-center justify-center p-4 text-aurora-text2">
+          <div className="flex flex-1 items-center justify-center p-4 text-base text-aurora-text2">
             No agent selected
           </div>
         ) : (
           <div className="flex-1 overflow-y-auto p-4">
             <section className="mb-6">
-              <h3 className="mb-3 text-xs font-medium uppercase tracking-wider text-aurora-text2">
+              <h3 className="mb-3 text-sm font-medium uppercase tracking-wider text-aurora-text2">
                 Initial
               </h3>
               <div className="space-y-3 rounded-lg border border-aurora-border/60 bg-aurora-surface0/40 p-3">
                 <div>
-                  <div className="mb-1 text-[10px] font-medium uppercase tracking-wider text-aurora-text2/80">
+                  <div className="mb-1 text-xs font-medium uppercase tracking-wider text-aurora-text2/80">
                     Opinion
                   </div>
                   {initialOpinion != null ? (
                     <div className="flex items-center gap-2">
                       <span
-                        className="h-3 w-3 shrink-0 rounded-full"
+                        className="h-3.5 w-3.5 shrink-0 rounded-full"
                         style={{ backgroundColor: getOpinionColor(initialOpinion) }}
                       />
-                      <span className="text-sm font-medium text-aurora-text0 tabular-nums">
+                      <span className="text-base font-medium text-aurora-text0 tabular-nums">
                         {initialOpinion.toFixed(2)}
                       </span>
-                      <span className="text-sm text-aurora-text1">
+                      <span className="text-base text-aurora-text1">
                         ({formatOpinionLabel(initialOpinion)})
                       </span>
                     </div>
                   ) : agent?.initial_opinion != null && agent.initial_opinion !== "" ? (
-                    <p className="text-sm text-aurora-text0">{agent.initial_opinion}</p>
+                    <p className="text-base text-aurora-text0">{agent.initial_opinion}</p>
                   ) : (
-                    <p className="text-sm text-aurora-text2">
+                    <p className="text-base text-aurora-text2">
                       {run ? "—" : "Run a simulation"}
                     </p>
                   )}
                 </div>
                 <div>
-                  <div className="mb-1 text-[10px] font-medium uppercase tracking-wider text-aurora-text2/80">
+                  <div className="mb-1 text-xs font-medium uppercase tracking-wider text-aurora-text2/80">
                     Level of care
                   </div>
-                  <p className="text-sm text-aurora-text0">
+                  <p className="text-base text-aurora-text0">
                     {agent?.initial_level_of_care != null
                       ? `${(agent.initial_level_of_care * 10).toFixed(0)}/10`
                       : "—"}
                   </p>
                 </div>
                 <div>
-                  <div className="mb-1 text-[10px] font-medium uppercase tracking-wider text-aurora-text2/80">
+                  <div className="mb-1 text-xs font-medium uppercase tracking-wider text-aurora-text2/80">
                     Initial Support
                   </div>
-                  <p className="text-sm text-aurora-text0">
+                  <p className="text-base text-aurora-text0">
                     {agent?.initial_effect_on_usage != null
                       ? String(agent.initial_effect_on_usage)
                       : "—"}
@@ -191,50 +191,50 @@ export function AgentProfileDrawer({
             </section>
 
             <section className="mb-6">
-              <h3 className="mb-3 text-xs font-medium uppercase tracking-wider text-aurora-text2">
+              <h3 className="mb-3 text-sm font-medium uppercase tracking-wider text-aurora-text2">
                 Final
               </h3>
               <div className="space-y-3 rounded-lg border border-aurora-border/60 bg-aurora-surface0/40 p-3">
                 <div>
-                  <div className="mb-1 text-[10px] font-medium uppercase tracking-wider text-aurora-text2/80">
+                  <div className="mb-1 text-xs font-medium uppercase tracking-wider text-aurora-text2/80">
                     Opinion
                   </div>
                   {finalOpinion != null ? (
                     <div className="flex items-center gap-2">
                       <span
-                        className="h-3 w-3 shrink-0 rounded-full"
+                        className="h-3.5 w-3.5 shrink-0 rounded-full"
                         style={{ backgroundColor: getOpinionColor(finalOpinion) }}
                       />
-                      <span className="text-sm font-medium text-aurora-text0 tabular-nums">
+                      <span className="text-base font-medium text-aurora-text0 tabular-nums">
                         {finalOpinion.toFixed(2)}
                       </span>
-                      <span className="text-sm text-aurora-text1">
+                      <span className="text-base text-aurora-text1">
                         ({formatOpinionLabel(finalOpinion)})
                       </span>
                     </div>
                   ) : agent?.text_opinion != null && agent.text_opinion !== "" ? (
-                    <p className="text-sm text-aurora-text0">{agent.text_opinion}</p>
+                    <p className="text-base text-aurora-text0">{agent.text_opinion}</p>
                   ) : (
-                    <p className="text-sm text-aurora-text2">
+                    <p className="text-base text-aurora-text2">
                       {run ? "—" : "Run a simulation"}
                     </p>
                   )}
                 </div>
                 <div>
-                  <div className="mb-1 text-[10px] font-medium uppercase tracking-wider text-aurora-text2/80">
+                  <div className="mb-1 text-xs font-medium uppercase tracking-wider text-aurora-text2/80">
                     Level of care
                   </div>
-                  <p className="text-sm text-aurora-text0">
+                  <p className="text-base text-aurora-text0">
                     {agent?.level_of_care != null
                       ? `${(agent.level_of_care * 10).toFixed(0)}/10`
                       : "—"}
                   </p>
                 </div>
                 <div>
-                  <div className="mb-1 text-[10px] font-medium uppercase tracking-wider text-aurora-text2/80">
+                  <div className="mb-1 text-xs font-medium uppercase tracking-wider text-aurora-text2/80">
                     Final Support
                   </div>
-                  <p className="text-sm text-aurora-text0">
+                  <p className="text-base text-aurora-text0">
                     {agent?.effect_on_usage != null ? String(agent.effect_on_usage) : "—"}
                   </p>
                 </div>
@@ -242,11 +242,11 @@ export function AgentProfileDrawer({
             </section>
 
             <section className="mb-6">
-              <h3 className="mb-2 text-xs font-medium uppercase tracking-wider text-aurora-text2">
+              <h3 className="mb-2 text-sm font-medium uppercase tracking-wider text-aurora-text2">
                 Neighbours ({neighbours.length})
               </h3>
               {neighbours.length === 0 ? (
-                <p className="text-sm text-aurora-text2">No connections</p>
+                <p className="text-base text-aurora-text2">No connections</p>
               ) : (
                 <ul className="space-y-1">
                   {neighbours.map(({ agent_id, weight }) => (
@@ -254,10 +254,10 @@ export function AgentProfileDrawer({
                       <button
                         type="button"
                         onClick={() => setSelectedNode(agent_id)}
-                        className="flex w-full items-center justify-between rounded-lg border border-aurora-border/60 bg-aurora-surface0/60 px-3 py-2 text-left text-sm text-aurora-text0 transition-colors hover:bg-aurora-surface2/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-aurora-accent1"
+                        className="flex w-full items-center justify-between rounded-lg border border-aurora-border/60 bg-aurora-surface0/60 px-3 py-2 text-left text-base text-aurora-text0 transition-colors hover:bg-aurora-surface2/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-aurora-accent1"
                       >
                         <span>Agent {agent_id}</span>
-                        <span className="text-xs text-aurora-text2 tabular-nums">
+                        <span className="text-sm text-aurora-text2 tabular-nums">
                           weight {weight.toFixed(2)}
                         </span>
                       </button>
@@ -268,7 +268,7 @@ export function AgentProfileDrawer({
             </section>
 
             <section>
-              <h3 className="mb-3 text-xs font-medium uppercase tracking-wider text-aurora-text2">
+              <h3 className="mb-3 text-sm font-medium uppercase tracking-wider text-aurora-text2">
                 Traits
               </h3>
               {(() => {
@@ -278,7 +278,7 @@ export function AgentProfileDrawer({
                 return (
                   <div className="space-y-4">
                     <div>
-                      <h4 className="mb-2 text-sm font-medium text-aurora-text1">
+                      <h4 className="mb-2 text-base font-medium text-aurora-text1">
                         Top traits
                       </h4>
                       <div className="space-y-3">
@@ -289,7 +289,7 @@ export function AgentProfileDrawer({
                     </div>
                     {bottom3.length > 0 && (
                       <div>
-                        <h4 className="mb-2 text-sm font-medium text-aurora-text1">
+                        <h4 className="mb-2 text-base font-medium text-aurora-text1">
                           Lowest traits
                         </h4>
                         <div className="space-y-3">

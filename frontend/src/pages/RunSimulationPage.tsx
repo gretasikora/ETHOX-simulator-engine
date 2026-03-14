@@ -45,10 +45,10 @@ export function RunSimulationPage() {
         <img src="/epistemea.png" alt="EPISTEMEA" className="h-7 w-auto object-contain" />
       </Link>
       <div className="surface-elevated w-full max-w-lg rounded-2xl border border-aurora-border/40 p-8 shadow-aurora-glow-sm">
-        <h1 className="mb-6 text-xl font-semibold tracking-tight text-aurora-text0">
+        <h1 className="mb-6 text-2xl font-semibold tracking-tight text-aurora-text0">
           Run Simulation
         </h1>
-        <p className="mb-6 text-sm text-aurora-text2">
+        <p className="mb-6 text-base text-aurora-text2">
           Enter a trigger event and the number of agents. You&apos;ll go to the explorer and can run
           the simulation when ready.
         </p>
@@ -57,7 +57,7 @@ export function RunSimulationPage() {
           <div>
             <label
               htmlFor="trigger"
-              className="mb-2 block text-sm font-medium text-aurora-text1"
+              className="mb-2 block text-base font-medium text-aurora-text1"
             >
               Trigger / Event
             </label>
@@ -67,17 +67,17 @@ export function RunSimulationPage() {
               onChange={(e) => setTrigger(e.target.value)}
               placeholder="e.g. We are proposing a reform to the retirement system..."
               rows={4}
-              className="w-full rounded-lg border border-aurora-border/70 bg-aurora-surface0/80 px-3 py-2.5 text-sm text-aurora-text0 placeholder-aurora-text2 focus:border-aurora-accent1 focus:outline-none focus:ring-1 focus:ring-aurora-accent1/50"
+              className="w-full rounded-lg border border-aurora-border/70 bg-aurora-surface0/80 px-3 py-2.5 text-base text-aurora-text0 placeholder-aurora-text2 focus:border-aurora-accent1 focus:outline-none focus:ring-1 focus:ring-aurora-accent1/50"
             />
             {validationErrors.trigger && (
-              <p className="mt-1.5 text-xs text-aurora-danger">{validationErrors.trigger}</p>
+              <p className="mt-1.5 text-sm text-aurora-danger">{validationErrors.trigger}</p>
             )}
           </div>
 
           <div>
             <label
               htmlFor="numAgents"
-              className="mb-2 block text-sm font-medium text-aurora-text1"
+              className="mb-2 block text-base font-medium text-aurora-text1"
             >
               Number of agents
             </label>
@@ -88,20 +88,20 @@ export function RunSimulationPage() {
               value={numAgents}
               onChange={(e) => setNumAgents(e.target.value)}
               placeholder="e.g. 100"
-              className="w-full rounded-lg border border-aurora-border/70 bg-aurora-surface0/80 px-3 py-2.5 text-sm text-aurora-text0 placeholder-aurora-text2 focus:border-aurora-accent1 focus:outline-none focus:ring-1 focus:ring-aurora-accent1/50"
+              className="w-full rounded-lg border border-aurora-border/70 bg-aurora-surface0/80 px-3 py-2.5 text-base text-aurora-text0 placeholder-aurora-text2 focus:border-aurora-accent1 focus:outline-none focus:ring-1 focus:ring-aurora-accent1/50"
             />
-            <p className="mt-1 text-xs text-aurora-text2">
+            <p className="mt-1 text-sm text-aurora-text2">
               Any positive whole number
             </p>
             {validationErrors.numAgents && (
-              <p className="mt-1.5 text-xs text-aurora-danger">{validationErrors.numAgents}</p>
+              <p className="mt-1.5 text-sm text-aurora-danger">{validationErrors.numAgents}</p>
             )}
           </div>
 
           <button
             type="submit"
             disabled={!isFormValid}
-            className="aurora-gradient flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-medium text-aurora-bg0 shadow-aurora-glow-sm transition-all hover:opacity-95 hover:shadow-aurora-glow active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:opacity-50"
+            className="aurora-gradient flex items-center justify-center gap-2 rounded-xl px-6 py-3.5 text-base font-medium text-aurora-bg0 shadow-aurora-glow-sm transition-all hover:opacity-95 hover:shadow-aurora-glow active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:opacity-50"
           >
             Generate society
           </button>

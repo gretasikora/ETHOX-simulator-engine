@@ -41,7 +41,7 @@ interface UIState {
   headerCollapsed: boolean;
   setHeaderCollapsed: (v: boolean) => void;
   /** Which filter sections are expanded (persisted when sidebar collapses) */
-  filtersSectionOpen: { nodeEncoding: boolean; degreeRange: boolean; traitFilter: boolean };
+  filtersSectionOpen: { nodeEncoding: boolean; degreeRange: boolean; traitFilter: boolean; previousSimulations: boolean };
   setFiltersSectionOpen: (key: keyof UIState["filtersSectionOpen"], value: boolean) => void;
   /** Minimal UI density (default ON) – lighter controls, progressive disclosure */
   minimalMode: boolean;
@@ -107,7 +107,7 @@ export const useUIStore = create<UIState>((set, get) => ({
   societyViewOpen: false,
   sidebarCollapsed: false,
   headerCollapsed: false,
-  filtersSectionOpen: { nodeEncoding: true, degreeRange: false, traitFilter: false },
+  filtersSectionOpen: { nodeEncoding: true, degreeRange: false, traitFilter: false, previousSimulations: false },
   minimalMode: true,
 
   setSidebarCollapsed: (v) => set({ sidebarCollapsed: v }),

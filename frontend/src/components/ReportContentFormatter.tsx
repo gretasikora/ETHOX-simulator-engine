@@ -58,7 +58,7 @@ export function ReportContentFormatter({ text }: { text: string }) {
         elements.push(
           <h2
             key={key++}
-            className="mb-6 text-lg font-semibold text-aurora-text0"
+            className="mb-6 text-xl font-semibold text-aurora-text0"
           >
             {content}
           </h2>
@@ -68,7 +68,7 @@ export function ReportContentFormatter({ text }: { text: string }) {
         elements.push(
           <h3
             key={key++}
-            className="mt-8 mb-2 text-base font-semibold text-aurora-text0 first:mt-0"
+            className="mt-8 mb-2 text-lg font-semibold text-aurora-text0 first:mt-0"
           >
             {content}
           </h3>
@@ -81,7 +81,7 @@ export function ReportContentFormatter({ text }: { text: string }) {
     elements.push(
       <p
         key={key++}
-        className="text-[15px] leading-[1.7] text-aurora-text1 [&+p]:mt-3"
+        className="text-base leading-[1.7] text-aurora-text1 [&+p]:mt-3"
       >
         {parseInlineBold(trimmed)}
       </p>

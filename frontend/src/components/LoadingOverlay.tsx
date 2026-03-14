@@ -42,7 +42,7 @@ export function LoadingOverlay({ visible }: LoadingOverlayProps) {
           {LOADING_TEXTS.map((text, idx) => (
             <p
               key={text}
-              className={`absolute inset-0 flex items-center justify-center text-lg font-medium text-aurora-text0 transition-all duration-500 ${
+              className={`absolute inset-0 flex items-center justify-center text-xl font-medium text-aurora-text0 transition-all duration-500 ${
                 idx === textIndex
                   ? "opacity-100 translate-y-0"
                   : idx === (textIndex - 1 + LOADING_TEXTS.length) % LOADING_TEXTS.length

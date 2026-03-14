@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Listbox } from "@headlessui/react";
-import { Filter, PanelLeftClose, PanelRightOpen, Tag, ChevronDown, ChevronRight, HelpCircle, Home, Clock } from "lucide-react";
+import { PanelLeftClose, PanelRightOpen, Tag, ChevronDown, ChevronRight, HelpCircle, Home, Clock, Grid3x3, Layers3 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useUIStore } from "../store/useUIStore";
 import { useGraphStore } from "../store/useGraphStore";
@@ -37,13 +37,13 @@ function SectionHeader({
       <button
         type="button"
         onClick={onToggle}
-        className="flex flex-1 items-center gap-1.5 text-left text-[10px] font-medium uppercase tracking-[0.12em] text-aurora-text2/90 hover:text-aurora-text2"
+        className="flex flex-1 items-center gap-1.5 text-left text-xs font-medium uppercase tracking-[0.12em] text-aurora-text2/90 hover:text-aurora-text2"
       >
-        {open ? <ChevronDown className="h-3.5 w-3.5 shrink-0" /> : <ChevronRight className="h-3.5 w-3.5 shrink-0" />}
+        {open ? <ChevronDown className="h-4 w-4 shrink-0" /> : <ChevronRight className="h-4 w-4 shrink-0" />}
         <span>{label}</span>
       </button>
       {badge && (
-        <span className="shrink-0 rounded px-1 py-0.5 text-[9px] uppercase tracking-wider text-aurora-text2/60">
+        <span className="shrink-0 rounded px-1 py-0.5 text-[10px] uppercase tracking-wider text-aurora-text2/60">
           {badge}
         </span>
       )}
@@ -82,6 +82,8 @@ export function SidebarFilters({
   const setSidebarCollapsed = useUIStore((s) => s.setSidebarCollapsed);
   const filtersSectionOpen = useUIStore((s) => s.filtersSectionOpen);
   const setFiltersSectionOpen = useUIStore((s) => s.setFiltersSectionOpen);
+  const graphViewMode = useUIStore((s) => s.graphViewMode);
+  const setGraphViewMode = useUIStore((s) => s.setGraphViewMode);
 
   const setGraphData = useGraphStore((s) => s.setGraphData);
   const simulationStore = useSimulationStore();
@@ -176,11 +178,7 @@ export function SidebarFilters({
 
   const content = (
     <div className="flex h-full flex-col">
-      <div className="flex shrink-0 items-center justify-between border-b border-aurora-border/70 p-3 lg:justify-start lg:gap-2">
-        <div className="flex items-center gap-2">
-          <Filter className="h-4 w-4 text-aurora-text1/90" />
-          <h2 className="text-xs font-medium uppercase tracking-wider text-aurora-text1/90">Filters</h2>
-        </div>
+      <div className="flex shrink-0 items-center justify-end p-3">
         <div className="flex items-center gap-1">
           <button
             type="button"
@@ -202,41 +200,62 @@ export function SidebarFilters({
       </div>
 
       <div className="min-h-0 flex-1 overflow-y-auto p-3">
-        <div className="pt-3">
-          <SectionHeader
-            label="Node encoding"
-            open={filtersSectionOpen.nodeEncoding}
-            onToggle={() => setFiltersSectionOpen("nodeEncoding", !filtersSectionOpen.nodeEncoding)}
-            hint="Color = selected encoding (age or trait). Shape = gender when enabled."
-          />
-          {filtersSectionOpen.nodeEncoding && (
-          <div className="rounded-lg border border-aurora-border/60 bg-aurora-surface0/60 p-2.5 space-y-3">
-            {showAgeEncoding && (
-              <div>
-                <p className="mb-1 text-xs text-aurora-text2">Age gradient</p>
-                <div
-                  className="h-2 w-full rounded"
-                  style={{
-                    background: `linear-gradient(to right, ${getAgeColor(AGE_COLOR_MIN)}, ${getAgeColor((AGE_COLOR_MIN + AGE_COLOR_MAX) / 2)}, ${getAgeColor(AGE_COLOR_MAX)})`,
-                  }}
-                />
-                <p className="mt-0.5 flex justify-between text-xs text-aurora-text2">
-                  {AGE_COLOR_MIN} → {AGE_COLOR_MAX}
-                </p>
-              </div>
-            )}
+        {/* View Toggle */}
+        <div className="mb-5">
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => setGraphViewMode("2d")}
+              className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-3 py-3 text-base font-medium transition-all ${
+                graphViewMode === "2d"
+                  ? "bg-aurora-accent1/20 text-aurora-accent1"
+                  : "bg-aurora-surface1 text-aurora-text2 hover:bg-aurora-surface2 hover:text-aurora-text1"
+              }`}
+            >
+              <Grid3x3 className="h-5 w-5" />
+              2D
+            </button>
+            <button
+              type="button"
+              onClick={() => setGraphViewMode("3d")}
+              className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-3 py-3 text-base font-medium transition-all ${
+                graphViewMode === "3d"
+                  ? "bg-aurora-accent1/20 text-aurora-accent1"
+                  : "bg-aurora-surface1 text-aurora-text2 hover:bg-aurora-surface2 hover:text-aurora-text1"
+              }`}
+            >
+              <Layers3 className="h-5 w-5" />
+              3D
+            </button>
           </div>
-          )}
         </div>
 
-        <div className="mt-5 pt-5 border-t border-aurora-border/50">
+        {/* Visual Encoding */}
+        <div className="mb-5 rounded-lg bg-aurora-surface0/60 p-3 space-y-3">
+          {showAgeEncoding && (
+            <div>
+              <p className="mb-1.5 text-base text-aurora-text1">Color: Age</p>
+              <div
+                className="h-2.5 w-full rounded"
+                style={{
+                  background: `linear-gradient(to right, ${getAgeColor(AGE_COLOR_MIN)}, ${getAgeColor((AGE_COLOR_MIN + AGE_COLOR_MAX) / 2)}, ${getAgeColor(AGE_COLOR_MAX)})`,
+                }}
+              />
+            </div>
+          )}
+          <div>
+            <p className="text-base text-aurora-text1">Size: Influence</p>
+          </div>
+        </div>
+
+        <div className="mt-5">
           <SectionHeader
             label="Degree range"
             open={filtersSectionOpen.degreeRange}
             onToggle={() => setFiltersSectionOpen("degreeRange", !filtersSectionOpen.degreeRange)}
           />
           {filtersSectionOpen.degreeRange && (
-          <div className="rounded-lg border border-aurora-border/60 bg-aurora-surface0/60 p-2.5">
+          <div className="rounded-lg bg-aurora-surface0/60 p-2.5">
             <div className="flex items-center gap-2">
               <input
                 type="number"
@@ -250,7 +269,7 @@ export function SidebarFilters({
                     setDegreeRange([low, filters.degreeRange[1]]);
                   }
                 }}
-                className="w-full rounded-lg border border-aurora-border bg-aurora-surface1 px-3 py-2 text-sm text-aurora-text0 focus:outline-none focus:ring-1 focus:ring-aurora-accent1 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                className="w-full rounded-lg bg-aurora-surface1 px-3 py-2 text-sm text-aurora-text0 focus:outline-none focus:ring-1 focus:ring-aurora-accent1 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 aria-label="Degree min"
               />
               <span className="shrink-0 text-aurora-text2">–</span>
@@ -266,7 +285,7 @@ export function SidebarFilters({
                     setDegreeRange([filters.degreeRange[0], high]);
                   }
                 }}
-                className="w-full rounded-lg border border-aurora-border bg-aurora-surface1 px-3 py-2 text-sm text-aurora-text0 focus:outline-none focus:ring-1 focus:ring-aurora-accent1 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                className="w-full rounded-lg bg-aurora-surface1 px-3 py-2 text-sm text-aurora-text0 focus:outline-none focus:ring-1 focus:ring-aurora-accent1 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 aria-label="Degree max"
               />
             </div>
@@ -274,7 +293,7 @@ export function SidebarFilters({
           )}
         </div>
 
-        <div className="mt-5 pt-5 border-t border-aurora-border/50">
+        <div className="mt-5">
           <SectionHeader
             label="Trait filter"
             open={filtersSectionOpen.traitFilter}
@@ -282,18 +301,18 @@ export function SidebarFilters({
             badge="Advanced"
           />
           {filtersSectionOpen.traitFilter && (
-          <div className="rounded-lg border border-aurora-border/60 bg-aurora-surface0/60 p-2.5">
+          <div className="rounded-lg bg-aurora-surface0/60 p-2.5">
             <Listbox
               value={selectedTrait}
               onChange={setSelectedTrait}
               as="div"
               className="relative mb-3"
             >
-              <Listbox.Button className="flex w-full items-center gap-2 rounded-lg border border-aurora-border bg-aurora-surface1 px-3 py-2 text-left text-sm text-aurora-text0 focus:outline-none focus:ring-1 focus:ring-aurora-accent1">
+              <Listbox.Button className="flex w-full items-center gap-2 rounded-lg bg-aurora-surface1 px-3 py-2 text-left text-sm text-aurora-text0 focus:outline-none focus:ring-1 focus:ring-aurora-accent1">
                 <Tag className="h-4 w-4 shrink-0 text-aurora-text2" />
                 {selectedTrait || (traitKeys[0] ?? "Select trait")}
               </Listbox.Button>
-              <Listbox.Options className="absolute z-10 mt-1 max-h-48 w-full overflow-auto rounded-lg border border-aurora-border bg-aurora-surface1 py-1 shadow-card">
+              <Listbox.Options className="absolute z-10 mt-1 max-h-48 w-full overflow-auto rounded-lg bg-aurora-surface1 py-1 shadow-card">
                 {traitKeys.map((k) => (
                   <Listbox.Option
                     key={k}
@@ -321,20 +340,20 @@ export function SidebarFilters({
         </div>
 
         {/* Previous Simulations */}
-        <div className="mt-5 border-t border-aurora-border/50 pt-5">
+        <div className="mt-5">
           <SectionHeader
             label="Previous Simulations"
-            open={filtersSectionOpen.traitFilter}
-            onToggle={() => setFiltersSectionOpen("traitFilter", !filtersSectionOpen.traitFilter)}
+            open={filtersSectionOpen.previousSimulations}
+            onToggle={() => setFiltersSectionOpen("previousSimulations", !filtersSectionOpen.previousSimulations)}
           />
-          {filtersSectionOpen.traitFilter && (
+          {filtersSectionOpen.previousSimulations && (
             <div className="space-y-2">
               {loadingRecent ? (
                 <div className="flex items-center justify-center py-4">
                   <div className="h-5 w-5 animate-spin rounded-full border-2 border-aurora-accent1 border-t-transparent" />
                 </div>
               ) : recentSimulations.length === 0 ? (
-                <p className="py-3 text-center text-xs text-aurora-text2">No recent simulations</p>
+                <p className="py-3 text-center text-sm text-aurora-text2">No recent simulations</p>
               ) : (
                 recentSimulations.map((sim) => (
                   <button
@@ -342,18 +361,18 @@ export function SidebarFilters({
                     type="button"
                     onClick={() => handleLoadSimulation(sim.id)}
                     disabled={loadingSimId === sim.id}
-                    className="w-full rounded-lg border border-aurora-border/60 bg-aurora-surface1/80 px-3 py-2.5 text-left transition-all hover:bg-aurora-surface2 focus:outline-none focus:ring-1 focus:ring-aurora-accent1/60 disabled:opacity-50 disabled:cursor-wait"
+                    className="w-full rounded-lg bg-aurora-surface1/80 px-3 py-2.5 text-left transition-all hover:bg-aurora-surface2 focus:outline-none focus:ring-1 focus:ring-aurora-accent1/60 disabled:opacity-50 disabled:cursor-wait"
                   >
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs font-medium text-aurora-text0 line-clamp-2">
+                        <p className="text-sm font-medium text-aurora-text0 line-clamp-2">
                           {sim.trigger_event}
                         </p>
-                        <div className="mt-1 flex items-center gap-2 text-[10px] text-aurora-text2">
+                        <div className="mt-1 flex items-center gap-2 text-xs text-aurora-text2">
                           <span>{sim.num_agents} agents</span>
                           <span>•</span>
                           <span className="flex items-center gap-1">
-                            <Clock className="h-3 w-3" />
+                            <Clock className="h-3.5 w-3.5" />
                             {formatDate(sim.completed_at)}
                           </span>
                         </div>
@@ -370,13 +389,13 @@ export function SidebarFilters({
         </div>
 
         {/* New Simulation Button */}
-        <div className="mt-auto border-t border-aurora-border/50 pt-4">
+        <div className="mt-auto pt-4">
           <button
             type="button"
             onClick={() => navigate("/")}
-            className="aurora-gradient flex w-full items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-aurora-bg0 shadow-aurora-glow-sm transition-all hover:opacity-95 hover:shadow-aurora-glow active:scale-[0.98]"
+            className="aurora-gradient flex w-full items-center justify-center gap-2 rounded-lg px-4 py-3 text-base font-medium text-aurora-bg0 shadow-aurora-glow-sm transition-all hover:opacity-95 hover:shadow-aurora-glow active:scale-[0.98]"
           >
-            <Home className="h-4 w-4" />
+            <Home className="h-5 w-5" />
             New Simulation
           </button>
         </div>
@@ -385,7 +404,7 @@ export function SidebarFilters({
   );
 
   const rail = (
-    <div className="flex h-full w-full flex-col items-center border-r border-aurora-border/60 bg-aurora-bg0/95 py-3">
+    <div className="flex h-full w-full flex-col items-center bg-aurora-bg0/95 py-3">
       <button
         type="button"
         onClick={() => setSidebarCollapsed(false)}
@@ -394,18 +413,13 @@ export function SidebarFilters({
       >
         <PanelRightOpen className="h-5 w-5 rotate-180" />
       </button>
-      <div className="mt-2 flex flex-col gap-1">
-        <span className="rounded-md p-2 text-aurora-text2/70" title="Filters">
-          <Filter className="h-4 w-4" />
-        </span>
-      </div>
     </div>
   );
 
   return (
     <>
       <aside
-        className="hidden shrink-0 flex-col border-r border-aurora-border/70 bg-aurora-bg0/98 lg:flex"
+        className="hidden shrink-0 flex-col bg-aurora-bg0/98 lg:flex"
         style={{ width: sidebarCollapsed ? SIDEBAR_WIDTH_RAIL : SIDEBAR_WIDTH_EXPANDED }}
       >
         {sidebarCollapsed ? rail : content}
@@ -414,10 +428,10 @@ export function SidebarFilters({
       <button
         type="button"
         onClick={() => setMobileOpen(true)}
-        className="fixed bottom-6 left-6 z-20 flex h-12 w-12 items-center justify-center rounded-xl border border-aurora-border bg-aurora-surface1 shadow-card text-aurora-text1 hover:bg-aurora-surface2 hover:text-aurora-text0 lg:hidden"
-        aria-label="Open filters"
+        className="fixed bottom-6 left-6 z-20 flex h-12 w-12 items-center justify-center rounded-xl bg-aurora-surface1 shadow-card text-aurora-text1 hover:bg-aurora-surface2 hover:text-aurora-text0 lg:hidden"
+        aria-label="Open sidebar"
       >
-        <Filter className="h-5 w-5" />
+        <PanelRightOpen className="h-5 w-5 rotate-180" />
       </button>
 
       {mobileOpen && (
@@ -428,7 +442,7 @@ export function SidebarFilters({
             onClick={() => setMobileOpen(false)}
           />
           <div
-            className="fixed inset-y-0 left-0 z-40 flex w-[min(100%,260px)] flex-col border-r border-aurora-border/70 bg-aurora-bg0/98 shadow-xl lg:hidden"
+            className="fixed inset-y-0 left-0 z-40 flex w-[min(100%,260px)] flex-col bg-aurora-bg0/98 shadow-xl lg:hidden"
             role="dialog"
             aria-label="Filters"
           >

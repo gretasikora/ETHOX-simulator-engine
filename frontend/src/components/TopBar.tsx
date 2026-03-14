@@ -55,14 +55,14 @@ export function TopBar({ onSearchSelect }: TopBarProps) {
           onChange={handleSearchChange}
           onKeyDown={handleSearchKeyDown}
           placeholder="Search agent..."
-          className="w-full rounded-lg border border-dark-700 bg-dark-800 py-2 pl-9 pr-3 text-sm text-gray-200 placeholder-gray-500 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+          className="w-full rounded-lg border border-dark-700 bg-dark-800 py-2 pl-9 pr-3 text-base text-gray-200 placeholder-gray-500 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
         />
       </div>
 
       <button
         type="button"
         onClick={() => setSocietyViewOpen(!societyViewOpen)}
-        className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
+        className={`rounded-lg border px-3 py-2 text-base font-medium transition-colors ${
           societyViewOpen
             ? "border-accent bg-accent text-white"
             : "border-dark-700 bg-dark-800 text-gray-300 hover:bg-dark-700 hover:text-white"
@@ -84,7 +84,7 @@ export function TopBar({ onSearchSelect }: TopBarProps) {
           });
           setExperimentPanelOpen(true);
         }}
-        className="rounded-lg border border-amber-500/50 bg-amber-500/10 px-3 py-2 text-sm font-medium text-amber-400 hover:bg-amber-500/20"
+        className="rounded-lg border border-amber-500/50 bg-amber-500/10 px-3 py-2 text-base font-medium text-amber-400 hover:bg-amber-500/20"
       >
         New Experiment
       </button>
