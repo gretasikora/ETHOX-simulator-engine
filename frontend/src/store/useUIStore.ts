@@ -95,7 +95,7 @@ export const useUIStore = create<UIState>((set, get) => ({
   highlightedEdgeKeys: [],
   exploreStatus: "",
   searchQuery: "",
-  colorBy: "trait",
+  colorBy: "age",
   sizeBy: "degree",
   selectedTrait: "",
   showLabels: true,
@@ -137,8 +137,8 @@ export const useUIStore = create<UIState>((set, get) => ({
     set({ highlightedNodeIds: [], highlightedEdgeKeys: [], exploreStatus: "" }),
   setExploreStatus: (msg) => set({ exploreStatus: msg }),
   setSearchQuery: (q) => set({ searchQuery: q }),
-  setColorBy: (v) => set({ colorBy: v }),
-  setSizeBy: (v) => set({ sizeBy: v }),
+  setColorBy: () => {}, // No-op: color is always "age"
+  setSizeBy: () => {}, // No-op: size is always "degree"
   setSelectedTrait: (trait) => set({ selectedTrait: trait }),
   toggleLabels: () => set((s) => ({ showLabels: !s.showLabels })),
 

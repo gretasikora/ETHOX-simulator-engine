@@ -7,6 +7,7 @@ import { AppShell } from "./components/AppShell";
 import { RunSimulationPage } from "./pages/RunSimulationPage";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { LoginPage } from "./components/LoginPage";
+import { LoadingOverlay } from "./components/LoadingOverlay";
 import { authAPI } from "./utils/auth";
 
 function ExplorerPage() {
@@ -77,6 +78,7 @@ function ExplorerPage() {
   return (
     <ErrorBoundary>
       <AppShell />
+      <LoadingOverlay visible={simulationStatus === "loading_initial"} />
     </ErrorBoundary>
   );
 }

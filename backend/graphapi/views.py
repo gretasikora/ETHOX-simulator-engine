@@ -217,3 +217,51 @@ class SimulationReportView(APIView):
             "change_in_support_50": change_in_support_50,
             "report_text": report_text,
         })
+
+
+class RecentSimulationsView(APIView):
+    def get(self, request):
+        from .models import SimulationRun
+
+        recent = SimulationRun.objects.filter(
+            status='completed'
+        ).order_by('-completed_at')[:3]
+
+        data = [{
+            "id": str(sim.id),
+            "trigger_event": sim.trigger_event,
+            "num_agents": sim.num_agents,
+            "created_at": sim.created_at.isoformat() if sim.created_at else None,
+            "completed_at": sim.completed_at.isoformat() if sim.completed_at else None,
+        } for sim in recent]
+
+        return Response(data)
+
+
+class SimulationDetailView(APIView):
+    def get(self, request, simulation_id):
+        from .simulation_storage import load_simulation
+
+        try:
+            result = load_simulation(simulation_id)
+            if result is None:
+                return Response(
+                    {"detail": "Simulation not found."},
+                    status=status.HTTP_404_NOT_FOUND,
+                )
+
+            initial_graph, post_trigger_graph, final_graph, trigger_event, num_agents = result
+
+            return Response({
+                "simulation_id": simulation_id,
+                "trigger_event": trigger_event,
+                "num_agents": num_agents,
+                "initial_graph": initial_graph,
+                "post_trigger_graph": post_trigger_graph,
+                "final_graph": final_graph,
+            })
+        except Exception as e:
+            return Response(
+                {"detail": f"Failed to load simulation: {e!s}"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )

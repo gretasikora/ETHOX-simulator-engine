@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Listbox } from "@headlessui/react";
-import { Filter, PanelLeftClose, PanelRightOpen, RotateCcw, Tag, SlidersHorizontal, ChevronDown, ChevronRight, HelpCircle } from "lucide-react";
+import { Filter, PanelLeftClose, PanelRightOpen, Tag, ChevronDown, ChevronRight, HelpCircle, Home, Clock } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { useUIStore } from "../store/useUIStore";
 import { useGraphStore } from "../store/useGraphStore";
+import { useSimulationStore } from "../store/useSimulationStore";
 import { RangeSlider } from "./RangeSlider";
-import { exportFilteredSubgraph } from "../utils/graph";
 import { getAgeColor, AGE_COLOR_MIN, AGE_COLOR_MAX } from "../utils/color";
+import { fetchRecentSimulations, fetchSimulationById, type RecentSimulation } from "../api/client";
 import type Graph from "graphology";
 
 const SIDEBAR_WIDTH_EXPANDED = 260;
@@ -13,7 +15,7 @@ const SIDEBAR_WIDTH_RAIL = 52;
 
 interface SidebarFiltersProps {
   graphRef: React.MutableRefObject<Graph | null>;
-  onResetCamera: () => void;
+  onResetCamera?: () => void;
   onExportSubgraph?: () => void;
 }
 
@@ -62,7 +64,11 @@ export function SidebarFilters({
   onResetCamera,
   onExportSubgraph,
 }: SidebarFiltersProps) {
+  const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [recentSimulations, setRecentSimulations] = useState<RecentSimulation[]>([]);
+  const [loadingRecent, setLoadingRecent] = useState(false);
+  const [loadingSimId, setLoadingSimId] = useState<string | null>(null);
 
   const traitKeys = useGraphStore((s) => s.traitKeys);
   const filters = useUIStore((s) => s.filters);
@@ -70,30 +76,96 @@ export function SidebarFilters({
   const setDegreeRange = useUIStore((s) => s.setDegreeRange);
   const setTraitRange = useUIStore((s) => s.setTraitRange);
   const setSelectedTrait = useUIStore((s) => s.setSelectedTrait);
-  const resetFilters = useUIStore((s) => s.resetFilters);
-  const toggleLabels = useUIStore((s) => s.toggleLabels);
   const showAgeEncoding = useUIStore((s) => s.showAgeEncoding);
   const showGenderEncoding = useUIStore((s) => s.showGenderEncoding);
-  const setShowAgeEncoding = useUIStore((s) => s.setShowAgeEncoding);
-  const setShowGenderEncoding = useUIStore((s) => s.setShowGenderEncoding);
   const sidebarCollapsed = useUIStore((s) => s.sidebarCollapsed);
   const setSidebarCollapsed = useUIStore((s) => s.setSidebarCollapsed);
   const filtersSectionOpen = useUIStore((s) => s.filtersSectionOpen);
   const setFiltersSectionOpen = useUIStore((s) => s.setFiltersSectionOpen);
 
+  const setGraphData = useGraphStore((s) => s.setGraphData);
+  const simulationStore = useSimulationStore();
+
   const nodes = useGraphStore((s) => s.nodes);
   const degreeMax = Math.max(1, ...nodes.map((n) => n.degree), 0);
 
-  const handleExport = () => {
-    const g = graphRef.current;
-    if (!g) return;
-    const blob = exportFilteredSubgraph(g);
-    const str = JSON.stringify(blob, null, 2);
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(new Blob([str], { type: "application/json" }));
-    a.download = "subgraph.json";
-    a.click();
-    URL.revokeObjectURL(a.href);
+  // Fetch recent simulations on mount
+  useEffect(() => {
+    const loadRecent = async () => {
+      setLoadingRecent(true);
+      try {
+        const sims = await fetchRecentSimulations();
+        setRecentSimulations(sims);
+      } catch (err) {
+        console.error("Failed to load recent simulations:", err);
+      } finally {
+        setLoadingRecent(false);
+      }
+    };
+    loadRecent();
+  }, []);
+
+  const handleLoadSimulation = async (simId: string) => {
+    setLoadingSimId(simId);
+    try {
+      const data = await fetchSimulationById(simId);
+
+      // Normalize the data (same as in useSimulationStore)
+      const normalizeNode = (n: any) => ({
+        agent_id: String(n.agent_id),
+        degree: n.degree ?? 0,
+        traits: n.traits ?? {},
+        degree_centrality: n.degree_centrality ?? 0,
+        betweenness_centrality: n.betweenness_centrality ?? 0,
+        age: n.age,
+        gender: n.gender,
+        level_of_care: n.level_of_care,
+        effect_on_usage: n.effect_on_usage,
+        text_opinion: n.text_opinion,
+      });
+
+      const normalizeGraph = (g: any) => ({
+        nodes: g.nodes.map(normalizeNode),
+        edges: g.edges.map((e: any) => ({
+          source: String(e.source),
+          target: String(e.target),
+          weight: e.weight ?? 1,
+        })),
+      });
+
+      const initial = normalizeGraph(data.initial_graph);
+      const postTrigger = normalizeGraph(data.post_trigger_graph);
+      const final = normalizeGraph(data.final_graph);
+
+      // Load the simulation into the store
+      simulationStore.setSimulationInput(data.trigger_event || "", data.num_agents || 100);
+
+      // Set the graphs
+      setGraphData(final.nodes, final.edges);
+
+      // Update simulation store
+      useSimulationStore.setState({
+        simulationId: simId,
+        initialGraph: initial,
+        postTriggerGraph: postTrigger,
+        finalGraph: final,
+        status: "finished",
+        phase: "finished",
+        viewMode: "simulation",
+      });
+
+    } catch (err) {
+      console.error("Failed to load simulation:", err);
+      useUIStore.getState().addToast("Failed to load simulation", "error");
+    } finally {
+      setLoadingSimId(null);
+    }
+  };
+
+  const formatDate = (dateStr: string | null) => {
+    if (!dateStr) return "";
+    const date = new Date(dateStr);
+    return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
   };
 
   const content = (
@@ -248,40 +320,64 @@ export function SidebarFilters({
           )}
         </div>
 
-        <div className="mt-5 flex flex-col gap-1.5 border-t border-aurora-border/50 pt-5">
-          <span className="mb-1 text-[10px] font-medium uppercase tracking-[0.12em] text-aurora-text2/80">Actions</span>
+        {/* Previous Simulations */}
+        <div className="mt-5 border-t border-aurora-border/50 pt-5">
+          <SectionHeader
+            label="Previous Simulations"
+            open={filtersSectionOpen.traitFilter}
+            onToggle={() => setFiltersSectionOpen("traitFilter", !filtersSectionOpen.traitFilter)}
+          />
+          {filtersSectionOpen.traitFilter && (
+            <div className="space-y-2">
+              {loadingRecent ? (
+                <div className="flex items-center justify-center py-4">
+                  <div className="h-5 w-5 animate-spin rounded-full border-2 border-aurora-accent1 border-t-transparent" />
+                </div>
+              ) : recentSimulations.length === 0 ? (
+                <p className="py-3 text-center text-xs text-aurora-text2">No recent simulations</p>
+              ) : (
+                recentSimulations.map((sim) => (
+                  <button
+                    key={sim.id}
+                    type="button"
+                    onClick={() => handleLoadSimulation(sim.id)}
+                    disabled={loadingSimId === sim.id}
+                    className="w-full rounded-lg border border-aurora-border/60 bg-aurora-surface1/80 px-3 py-2.5 text-left transition-all hover:bg-aurora-surface2 focus:outline-none focus:ring-1 focus:ring-aurora-accent1/60 disabled:opacity-50 disabled:cursor-wait"
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-medium text-aurora-text0 line-clamp-2">
+                          {sim.trigger_event}
+                        </p>
+                        <div className="mt-1 flex items-center gap-2 text-[10px] text-aurora-text2">
+                          <span>{sim.num_agents} agents</span>
+                          <span>•</span>
+                          <span className="flex items-center gap-1">
+                            <Clock className="h-3 w-3" />
+                            {formatDate(sim.completed_at)}
+                          </span>
+                        </div>
+                      </div>
+                      {loadingSimId === sim.id && (
+                        <div className="h-4 w-4 shrink-0 animate-spin rounded-full border-2 border-aurora-accent1 border-t-transparent" />
+                      )}
+                    </div>
+                  </button>
+                ))
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* New Simulation Button */}
+        <div className="mt-auto border-t border-aurora-border/50 pt-4">
           <button
             type="button"
-            onClick={toggleLabels}
-            className="flex items-center gap-2 rounded-lg border border-aurora-border/60 bg-aurora-surface1/80 px-2.5 py-2 text-xs font-medium text-aurora-text0 transition-all hover:bg-aurora-surface2 focus:outline-none focus:ring-1 focus:ring-aurora-accent1/60"
+            onClick={() => navigate("/")}
+            className="aurora-gradient flex w-full items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-aurora-bg0 shadow-aurora-glow-sm transition-all hover:opacity-95 hover:shadow-aurora-glow active:scale-[0.98]"
           >
-            <SlidersHorizontal className="h-3.5 w-3.5" />
-            Toggle Labels
-          </button>
-          <button
-            type="button"
-            onClick={resetFilters}
-            className="flex items-center gap-2 rounded-lg px-2.5 py-2 text-xs font-medium text-aurora-text1 transition-all hover:bg-aurora-surface2/80 hover:text-aurora-text0"
-          >
-            <RotateCcw className="h-3.5 w-3.5" />
-            Reset Filters
-          </button>
-          <button
-            type="button"
-            onClick={onResetCamera}
-            className="flex items-center gap-2 rounded-lg border border-aurora-border/60 bg-aurora-surface1/80 px-2.5 py-2 text-xs font-medium text-aurora-text0 transition-all hover:bg-aurora-surface2 focus:outline-none focus:ring-1 focus:ring-aurora-accent1/60"
-          >
-            Reset Camera
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              handleExport();
-              onExportSubgraph?.();
-            }}
-            className="flex items-center gap-2 rounded-lg border border-aurora-border/60 bg-aurora-surface1/80 px-2.5 py-2 text-xs font-medium text-aurora-text0 transition-all hover:bg-aurora-surface2 focus:outline-none focus:ring-1 focus:ring-aurora-accent1/60"
-          >
-            Export Subgraph
+            <Home className="h-4 w-4" />
+            New Simulation
           </button>
         </div>
       </div>

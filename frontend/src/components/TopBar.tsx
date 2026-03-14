@@ -1,4 +1,3 @@
-import { Listbox } from "@headlessui/react";
 import { useUIStore } from "../store/useUIStore";
 import { useGraphStore } from "../store/useGraphStore";
 import { useExperimentStore } from "../store/useExperimentStore";
@@ -10,16 +9,7 @@ interface TopBarProps {
 export function TopBar({ onSearchSelect }: TopBarProps) {
   const searchQuery = useUIStore((s) => s.searchQuery);
   const setSearchQuery = useUIStore((s) => s.setSearchQuery);
-  const colorBy = useUIStore((s) => s.colorBy);
-  const setColorBy = useUIStore((s) => s.setColorBy);
-  const sizeBy = useUIStore((s) => s.sizeBy);
-  const setSizeBy = useUIStore((s) => s.setSizeBy);
-  const selectedTrait = useUIStore((s) => s.selectedTrait);
-  const setSelectedTrait = useUIStore((s) => s.setSelectedTrait);
-  const traitKeys = useGraphStore((s) => s.traitKeys);
   const nodes = useGraphStore((s) => s.nodes);
-  const exploreMode = useUIStore((s) => s.exploreMode);
-  const setExploreMode = useUIStore((s) => s.setExploreMode);
   const experiments = useExperimentStore((s) => s.experiments);
   const addExperiment = useExperimentStore((s) => s.addExperiment);
   const setExperimentPanelOpen = useExperimentStore((s) => s.setExperimentPanelOpen);
@@ -67,78 +57,6 @@ export function TopBar({ onSearchSelect }: TopBarProps) {
           placeholder="Search agent..."
           className="w-full rounded-lg border border-dark-700 bg-dark-800 py-2 pl-9 pr-3 text-sm text-gray-200 placeholder-gray-500 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
         />
-      </div>
-
-      <div className="flex items-center gap-2">
-        <span className="text-xs text-gray-500">Color by</span>
-        <div className="flex rounded-lg border border-dark-700 p-0.5">
-          {(["age", "trait"] as const).map((opt) => (
-            <button
-              key={opt}
-              type="button"
-              onClick={() => setColorBy(opt)}
-              className={`rounded-md px-3 py-1.5 text-xs font-medium capitalize transition-colors ${
-                colorBy === opt
-                  ? "bg-accent text-white"
-                  : "text-gray-400 hover:bg-dark-700 hover:text-gray-200"
-              }`}
-            >
-              {opt}
-            </button>
-          ))}
-        </div>
-        {colorBy === "trait" && (
-          <Listbox value={selectedTrait} onChange={setSelectedTrait} as="div" className="relative">
-            <Listbox.Button className="rounded border border-dark-700 bg-dark-700 px-2 py-1.5 text-xs text-gray-200 focus:outline-none focus:ring-1 focus:ring-accent">
-              {selectedTrait || traitKeys[0] || "Trait"}
-            </Listbox.Button>
-            <Listbox.Options className="absolute right-0 top-full z-20 mt-1 max-h-48 min-w-[120px] overflow-auto rounded border border-dark-700 bg-dark-800 py-1">
-              {traitKeys.map((k) => (
-                <Listbox.Option key={k} value={k} className="cursor-pointer px-3 py-1.5 text-xs text-gray-200 hover:bg-dark-700">
-                  {k}
-                </Listbox.Option>
-              ))}
-            </Listbox.Options>
-          </Listbox>
-        )}
-      </div>
-
-      <div className="flex items-center gap-2">
-        <span className="text-xs text-gray-500">Size by</span>
-        <div className="flex rounded-lg border border-dark-700 p-0.5">
-          {(["degree", "level_of_care"] as const).map((opt) => (
-            <button
-              key={opt}
-              type="button"
-              onClick={() => setSizeBy(opt)}
-              className={`rounded-md px-3 py-1.5 text-xs font-medium capitalize transition-colors ${
-                sizeBy === opt
-                  ? "bg-accent text-white"
-                  : "text-gray-400 hover:bg-dark-700 hover:text-gray-200"
-              }`}
-            >
-              {opt === "level_of_care" ? "Level of care" : opt}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="flex items-center gap-1 rounded-lg border border-dark-700 p-0.5">
-        <span className="px-2 text-xs text-gray-500">Explore</span>
-        {(["none", "path", "neighborhood"] as const).map((mode) => (
-          <button
-            key={mode}
-            type="button"
-            onClick={() => setExploreMode(mode)}
-            className={`rounded px-2 py-1.5 text-xs font-medium capitalize ${
-              exploreMode === mode
-                ? "bg-accent text-white"
-                : "text-gray-400 hover:bg-dark-700 hover:text-gray-200"
-            }`}
-          >
-            {mode === "none" ? "None" : mode === "path" ? "Path" : "Neighborhood"}
-          </button>
-        ))}
       </div>
 
       <button

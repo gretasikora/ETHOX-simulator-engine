@@ -214,15 +214,15 @@ def get_agents(simulation_id: str) -> tuple[list[AgentProxy], str] | None:
 def get_simulation_results(simulation_id: int) -> dict:
     """
     Retrieve complete simulation results from database
-    
+
     Args:
         simulation_id: Database ID of simulation
-    
+
     Returns:
         Dictionary with all simulation data
     """
     simulation = SimulationRun.objects.get(id=simulation_id)
-    
+
     return {
         'id': simulation.id,
         'trigger_event': simulation.trigger_event,
@@ -236,3 +236,36 @@ def get_simulation_results(simulation_id: int) -> dict:
         'network': simulation.network_snapshots.filter(stage='final').first().adjacency_matrix if simulation.network_snapshots.filter(stage='final').exists() else [],
         'summary': simulation.summary.summary_text if hasattr(simulation, 'summary') else None
     }
+
+
+def load_simulation(simulation_id: str) -> tuple[dict, dict, dict, str, int] | None:
+    """
+    Load simulation graphs from database
+
+    Args:
+        simulation_id: ID of simulation to load
+
+    Returns:
+        Tuple of (initial_graph, post_trigger_graph, final_graph, trigger_event, num_agents) or None
+    """
+    try:
+        sim_id = int(simulation_id)
+        simulation = SimulationRun.objects.get(id=sim_id)
+
+        # Build graph dictionaries from agent states
+        initial_nodes = [agent.data for agent in simulation.agent_states.filter(stage='initial')]
+        post_trigger_nodes = [agent.data for agent in simulation.agent_states.filter(stage='post_trigger')]
+        final_nodes = [agent.data for agent in simulation.agent_states.filter(stage='final')]
+
+        # Get edges from network snapshot
+        network_snapshot = simulation.network_snapshots.filter(stage='final').first()
+        edges = network_snapshot.adjacency_matrix if network_snapshot else []
+
+        initial_graph = {"nodes": initial_nodes, "edges": edges}
+        post_trigger_graph = {"nodes": post_trigger_nodes, "edges": edges}
+        final_graph = {"nodes": final_nodes, "edges": edges}
+
+        return initial_graph, post_trigger_graph, final_graph, simulation.trigger_event, simulation.num_agents
+
+    except (ValueError, SimulationRun.DoesNotExist):
+        return None

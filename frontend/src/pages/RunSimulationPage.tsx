@@ -7,7 +7,7 @@ export function RunSimulationPage() {
   const setSimulationInput = useSimulationStore((s) => s.setSimulationInput);
 
   const [trigger, setTrigger] = useState("");
-  const [numAgents, setNumAgents] = useState(100);
+  const [numAgents, setNumAgents] = useState<string>("");
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
 
   const validate = (): boolean => {
@@ -15,11 +15,15 @@ export function RunSimulationPage() {
     if (!trigger.trim()) {
       errs.trigger = "Trigger is required.";
     }
-    const n = Number(numAgents);
-    if (Number.isNaN(n) || !Number.isInteger(n)) {
-      errs.numAgents = "Must be a whole number.";
-    } else if (n < 1) {
-      errs.numAgents = "Must be at least 1.";
+    if (!numAgents.trim()) {
+      errs.numAgents = "Number of agents is required.";
+    } else {
+      const n = Number(numAgents);
+      if (Number.isNaN(n) || !Number.isInteger(n)) {
+        errs.numAgents = "Must be a whole number.";
+      } else if (n < 1) {
+        errs.numAgents = "Must be at least 1.";
+      }
     }
     setValidationErrors(errs);
     return Object.keys(errs).length === 0;
@@ -31,6 +35,8 @@ export function RunSimulationPage() {
     setSimulationInput(trigger.trim(), Number(numAgents));
     navigate("/explorer");
   };
+
+  const isFormValid = trigger.trim() !== "" && numAgents.trim() !== "" && Number(numAgents) >= 1;
 
   return (
     <div className="flex min-h-screen w-full flex-col items-center justify-center bg-aurora-bg0 p-8">
@@ -80,8 +86,9 @@ export function RunSimulationPage() {
               type="number"
               min={1}
               value={numAgents}
-              onChange={(e) => setNumAgents(Number(e.target.value) || 1)}
-              className="w-full rounded-lg border border-aurora-border/70 bg-aurora-surface0/80 px-3 py-2.5 text-sm text-aurora-text0 focus:border-aurora-accent1 focus:outline-none focus:ring-1 focus:ring-aurora-accent1/50"
+              onChange={(e) => setNumAgents(e.target.value)}
+              placeholder="e.g. 100"
+              className="w-full rounded-lg border border-aurora-border/70 bg-aurora-surface0/80 px-3 py-2.5 text-sm text-aurora-text0 placeholder-aurora-text2 focus:border-aurora-accent1 focus:outline-none focus:ring-1 focus:ring-aurora-accent1/50"
             />
             <p className="mt-1 text-xs text-aurora-text2">
               Any positive whole number
@@ -93,7 +100,8 @@ export function RunSimulationPage() {
 
           <button
             type="submit"
-            className="aurora-gradient flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-medium text-aurora-bg0 shadow-aurora-glow-sm transition-all hover:opacity-95 hover:shadow-aurora-glow active:scale-[0.98]"
+            disabled={!isFormValid}
+            className="aurora-gradient flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-medium text-aurora-bg0 shadow-aurora-glow-sm transition-all hover:opacity-95 hover:shadow-aurora-glow active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:opacity-50"
           >
             Generate society
           </button>

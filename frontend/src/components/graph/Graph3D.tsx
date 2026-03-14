@@ -41,13 +41,8 @@ const MAX_LINK_WIDTH = 2.5;
 
 type ShapeKey = "sphere" | "box" | "cone" | "octahedron";
 
-function shapeForKey(gender: string | undefined, showGender: boolean): ShapeKey {
-  if (!showGender) return "sphere";
-  const s = getGenderShape(gender);
-  if (s === "circle") return "sphere";
-  if (s === "square") return "box";
-  if (s === "triangle") return "cone";
-  return "octahedron";
+function shapeForKey(_gender: string | undefined, _showGender: boolean): ShapeKey {
+  return "sphere"; // Always use spheres for 3D nodes
 }
 
 function scaleLinear(value: number, inMin: number, inMax: number, outMin: number, outMax: number): number {

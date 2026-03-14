@@ -257,7 +257,7 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
   },
 
   finishAnimation: () => {
-    const { finalGraph } = get();
+    const { finalGraph, simulationId, simulationInput } = get();
     if (finalGraph) {
       useGraphStore.getState().setGraphData(finalGraph.nodes, finalGraph.edges);
       useUIStore.getState().setSizeBy("level_of_care");
@@ -272,6 +272,11 @@ export const useSimulationStore = create<SimulationState>((set, get) => ({
       nodeSizeOverrideById: {},
       careGlowById: {},
     });
+
+    // Auto-generate report after simulation completes
+    if (simulationId && simulationInput.trigger) {
+      get().fetchReport(simulationId, simulationInput.trigger, false);
+    }
   },
 
   revertToDefault: async () => {

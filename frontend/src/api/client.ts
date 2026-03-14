@@ -181,3 +181,37 @@ export async function fetchSimulationReport(
   }
   return res.json();
 }
+
+/** Recent simulation list item */
+export interface RecentSimulation {
+  id: string;
+  trigger_event: string;
+  num_agents: number;
+  created_at: string | null;
+  completed_at: string | null;
+}
+
+/** Fetch recent simulations (last 3) */
+export async function fetchRecentSimulations(): Promise<RecentSimulation[]> {
+  const res = await fetch(`${BASE}/api/simulations/recent/`, {
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) {
+    throw new Error(res.statusText || "Failed to fetch recent simulations");
+  }
+  return res.json();
+}
+
+/** Fetch a specific simulation by ID */
+export async function fetchSimulationById(
+  simulationId: string
+): Promise<RunSimulationResponse> {
+  const res = await fetch(`${BASE}/api/simulations/${encodeURIComponent(simulationId)}/`, {
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    throw new Error((data.detail as string) || res.statusText || "Failed to load simulation");
+  }
+  return res.json();
+}

@@ -53,9 +53,9 @@ export function buildGraphology(
       const v = selectedTrait ? (traits[selectedTrait] ?? 0.5) : 0.5;
       color = getGradientColor(v, 0, 1);
     }
-    const shape = showGenderEncoding ? getGenderShape(node.gender) : "circle";
+    const shape = "circle"; // Always use circles for nodes
     graph.addNode(id, {
-      label: "Agent " + id,
+      label: id, // Show only the number, not "Agent"
       x: 0,
       y: 0,
       size,
@@ -154,7 +154,7 @@ export function applyVisualAttributes(
       const loc = (attrs.level_of_care as number) ?? 0.5;
       size = computeCareSize(loc, 8);
     }
-    const shape = showGenderEncoding ? getGenderShape(attrs.gender as string | undefined) : "circle";
+    const shape = "circle"; // Always use circles for nodes
     graph.setNodeAttribute(node, "color", color);
     graph.setNodeAttribute(node, "size", size);
     graph.setNodeAttribute(node, "type", shape);
