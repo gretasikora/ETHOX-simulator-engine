@@ -1,9 +1,9 @@
 # config.py
 import random
 
-SEED = 42
+SEED = 123
 NUM_AGENTS = 20
-TRAIT_VARIANCE_SCALE = 0.65
+TRAIT_VARIANCE_SCALE = 1.0  # Use full Soto & John (2017) variance for valid population representation
 MODEL = "gpt-4o-mini"
 MAX_TOKENS = 200
 TEMPERATURE = 0.4
